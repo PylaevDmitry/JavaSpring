@@ -17,8 +17,14 @@ public class FileTasksDao implements IStorage {
     private String owner;
     private long lastIndex = 0;
 
+    @Override
     public void setOwner (String owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public String getOwner ( ) {
+        return owner;
     }
 
     public FileTasksDao (String path) {

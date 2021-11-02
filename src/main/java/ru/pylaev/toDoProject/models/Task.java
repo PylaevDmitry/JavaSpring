@@ -1,14 +1,26 @@
 package ru.pylaev.toDoProject.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity
 public class Task implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private final String owner;
-    private final String text;
-    private final String date;
+
+    private String owner = null;
+    private String text = null;
+    private String date = null;
     private String status;
+
+    public Task ( ) {
+    }
 
     public Task (String owner, String text, Date date, String status) {
         this.id = 0;
@@ -29,6 +41,7 @@ public class Task implements Serializable {
     public void setId (long id) { this.id = id; }
 
     public void setStatus (String status) { this.status = status; }
+
 
     public long getId ( ) { return id; }
 

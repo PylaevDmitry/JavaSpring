@@ -17,8 +17,14 @@ public class DbTasksDao implements IStorage {
         this.dbPass = dbPass;
     }
 
+    @Override
     public void setOwner (String owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public String getOwner ( ) {
+        return owner;
     }
 
     private Connection getDbConnection() throws SQLException {
@@ -31,7 +37,7 @@ public class DbTasksDao implements IStorage {
     @Override
     public Task[] getAll ( ) {
         String firstRequest = """
-                CREATE TABLE IF NOT EXISTS tasks (
+                CREATE TABLE IF NOT EXISTS task (
                 id SERIAL,
                 owner VARCHAR(50),
                 text VARCHAR(50),
@@ -47,7 +53,7 @@ public class DbTasksDao implements IStorage {
             System.out.println(ToDoMain.properties.getPropertyContent("storageError"));
         }
 
-        String request = "SELECT * FROM tasks WHERE owner=?;";
+        String request = "SELECT * FROM task WHERE owner=?;";
         var result = new ArrayList<Task>();
         try (Connection dbConnection = getDbConnection()) {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(request);
@@ -76,7 +82,7 @@ public class DbTasksDao implements IStorage {
 
     @Override
     public void add (Task data) {
-        String request = "INSERT INTO tasks (owner, text, date, status) VALUES (?,?,?,?);";
+        String request = "INSERT INTO task (owner, text, date, status) VALUES (?,?,?,?);";
 
         try (Connection dbConnection = getDbConnection()) {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(request, new String[] {});
@@ -96,7 +102,7 @@ public class DbTasksDao implements IStorage {
 
     @Override
     public void setStatus (long id, String status) {
-        String request = "UPDATE tasks SET status=? WHERE id=?;";
+        String request = "UPDATE task SET status=? WHERE id=?;";
         try (Connection dbConnection = getDbConnection()) {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(request);
             preparedStatement.setString(1, status);
