@@ -1,5 +1,7 @@
 package ru.pylaev.toDoProject.dal;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.abstractions.IStorage;
 import ru.pylaev.toDoProject.models.Task;
@@ -12,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+@Component
 public class FileTasksDao implements IStorage {
     private final String path;
     private String owner;
@@ -27,7 +30,7 @@ public class FileTasksDao implements IStorage {
         return owner;
     }
 
-    public FileTasksDao (String path) {
+    public FileTasksDao (@Value("${filePath}") String path) {
         this.path = path;
         try {
             if (!Files.exists(Paths.get(path))) Files.createFile(Paths.get(path));

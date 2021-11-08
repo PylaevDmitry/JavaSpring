@@ -1,9 +1,11 @@
 package ru.pylaev.toDoProject.userInterfaces;
 
+import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.abstractions.IUserInterface;
 
 import java.util.Scanner;
 
+@Component
 public class ConsoleUserInterface implements IUserInterface {
 
     private final Scanner _scanner;

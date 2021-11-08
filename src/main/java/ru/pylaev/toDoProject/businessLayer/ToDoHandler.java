@@ -1,5 +1,8 @@
 package ru.pylaev.toDoProject.businessLayer;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.abstractions.IStorage;
 import ru.pylaev.toDoProject.abstractions.IUserInterface;
@@ -12,9 +15,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Component
 public class ToDoHandler implements Runnable {
 
+    @Autowired
+    @Qualifier("fileTasksDao")
     private final IStorage storage;
+
+    @Autowired
+    @Qualifier("consoleUserInterface")
     private final IUserInterface ui;
 
     public ToDoHandler (IUserInterface ui, IStorage storage) {
@@ -35,7 +44,8 @@ public class ToDoHandler implements Runnable {
         storage.setOwner(owner);
 
         while (ui.isRunning()) {
-            List<Task> list = Arrays.stream(storage.getAll()).filter(task -> !task.getStatus().equals("ARCH")).collect(Collectors.toList());
+            String finalOwner = owner;
+            List<Task> list = Arrays.stream(storage.getAll()).filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(finalOwner)).collect(Collectors.toList());
             IntStream.range(0, list.size()).forEach(i -> ui.show(i + 1 + " " + list.get(i)));
 
             if (list.size()==0 || userInput.equals("NEW")) {

@@ -7,16 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.abstractions.IStorage;
-import ru.pylaev.toDoProject.dal.DbTasksDao;
 import ru.pylaev.toDoProject.models.Task;
 import ru.pylaev.toDoProject.repo.TaskRepository;
-//import ru.pylaev.toDoProject.repo.TaskRepository;
 
 import java.time.temporal.ValueRange;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -24,28 +22,15 @@ import java.util.stream.IntStream;
 public class MainController {
 
     public static String message = ToDoMain.properties.getPropertyContent("askOwner");
-    public static String input;
     public static int taskIndex;
     public static String owner = "";
     public static String[] arrTasks;
-//    private final IStorage storage;
 
     @Autowired
     private TaskRepository taskRepository;
 
-//    @Autowired
-//    public MainController() {
-//        this.storage = new FileTasksDao(ToDoMain.environmentVars.get("filePath"));
-//    }
-
-//    @Autowired
-//    public MainController() {
-//        this.storage = new DbTasksDao(ToDoMain.environmentVars.get("dbUserName"), ToDoMain.environmentVars.get("dbUserPass"));
-//    }
-
     @GetMapping("/")
-    public String home(Model model) {
-
+    public String show (Model model) {
         model.addAttribute("arrTasks", arrTasks);
         model.addAttribute("message", message);
         model.addAttribute("input", "");
@@ -53,73 +38,72 @@ public class MainController {
     }
 
     @PostMapping()
-    public String send(@RequestParam("answer") String answer) {
-        MainController.input = answer;
-        run();
+    public String processUserInput (@RequestParam("userInput") String userInput) {
+        process(userInput);
         return "redirect:/";
     }
 
-    public void run () {
+    public void process (String userInput) {
         String[] invalidNameSymbols = new String[]{" ", "\\", "|", "/", ":", "?", "\"", "<", ">"};
         String[] commands = new String[] {"ARCH", "DONE", "WAIT", "BACK", "EXIT"};
         String[] tasksStates = new String[] {"ARCH", "DONE", "WAIT"};
-        String userInput = input;
 
         if (owner.equals("")) {
-            if (inputCheck(invalidNameSymbols, input) < 0) {
-                owner = input;
-//                storage.setOwner(owner);
+            if (inputCheck(invalidNameSymbols, userInput) < 0) {
+                owner = userInput;
             }
             else return;
         }
 
-//        List<Task> list = Arrays.stream(storage.getAll()).filter(task -> !task.getStatus().equals("ARCH")).collect(Collectors.toList());
-//
-//        if ((list.size()==0 && message.equals(ToDoMain.properties.getPropertyContent("askOwner")))
-//            || (userInput.equals("NEW") && message.equals(ToDoMain.properties.getPropertyContent("askNumber")))) {
-//            if (!userInput.equals("BACK")) {
-//                message = ToDoMain.properties.getPropertyContent("askNew");
-//            }
-//            return;
-//        }
-//
-//        if (message.equals(ToDoMain.properties.getPropertyContent("askNew"))) {
-//            if (!userInput.equals("BACK")) {
-//                storage.add(new Task(owner, userInput, new Date(), "WAIT"));
-//            }
-//            message = ToDoMain.properties.getPropertyContent("askNumber");
-//        }
-//
-//        else if (message.equals(ToDoMain.properties.getPropertyContent("askOwner"))) {
-//            message = ToDoMain.properties.getPropertyContent("askNumber");
-//        }
-//
-//        else if (message.equals(ToDoMain.properties.getPropertyContent("askNumber"))) {
-//            if (!userInput.equals("BACK")) {
-//                taskIndex = getIndex(userInput, list);
-//                if ((taskIndex != -1)&&(inputCheck(commands, userInput)<=0)) {
-//                    message = ToDoMain.properties.getPropertyContent("askStatus");
-//                }
-//            }
-//        }
-//
-//        else if (message.equals(ToDoMain.properties.getPropertyContent("askStatus"))) {
-//            if (!userInput.equals("BACK")) {
-//                if (inputCheck(tasksStates, userInput)>0) {
-//                    storage.setStatus(list.get(taskIndex-1).getId(),userInput);
-//                    message = ToDoMain.properties.getPropertyContent("askNumber");
-//                }
-//            }
-//            else {
-//                message = ToDoMain.properties.getPropertyContent("askNumber");
-//            }
-//        }
-//
-//        List<Task> finalList = Arrays.stream(storage.getAll()).filter(task -> !task.getStatus().equals("ARCH")).collect(Collectors.toList());
-//        arrTasks = new String[finalList.size()];
-//        IntStream.range(0, finalList.size()).forEach(i -> arrTasks[i] = i + 1 + " " + finalList.get(i));
+        String finalOwner = owner;
+        List<Task> list = ((List<Task>) taskRepository.findAll()).stream().filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(finalOwner)).collect(Collectors.toList());
 
-        List<Task> finalList = ((List<Task>) taskRepository.findAll()).stream().filter(task -> !task.getStatus().equals("ARCH")).collect(Collectors.toList());
+        if ((list.size()==0 && message.equals(ToDoMain.properties.getPropertyContent("askOwner")))
+            || (userInput.equals("NEW") && message.equals(ToDoMain.properties.getPropertyContent("askNumber")))) {
+            if (!userInput.equals("BACK")) {
+                message = ToDoMain.properties.getPropertyContent("askNew");
+            }
+            return;
+        }
+
+        if (message.equals(ToDoMain.properties.getPropertyContent("askNew"))) {
+            if (!userInput.equals("BACK")) {
+                taskRepository.save(new Task(owner, userInput, new Date(), "WAIT"));
+            }
+            message = ToDoMain.properties.getPropertyContent("askNumber");
+        }
+
+        else if (message.equals(ToDoMain.properties.getPropertyContent("askOwner"))) {
+            message = ToDoMain.properties.getPropertyContent("askNumber");
+        }
+
+        else if (message.equals(ToDoMain.properties.getPropertyContent("askNumber"))) {
+            if (!userInput.equals("BACK")) {
+                taskIndex = getIndex(userInput, list);
+                if ((taskIndex != -1)&&(inputCheck(commands, userInput)<=0)) {
+                    message = ToDoMain.properties.getPropertyContent("askStatus");
+                }
+            }
+        }
+
+        else if (message.equals(ToDoMain.properties.getPropertyContent("askStatus"))) {
+            if (!userInput.equals("BACK")) {
+                if (inputCheck(tasksStates, userInput)>0) {
+                    Optional<Task> optionalTask = taskRepository.findById(list.get(taskIndex-1).getId());
+                    if (optionalTask.isPresent()) {
+                        Task task = optionalTask.get();
+                        task.setStatus(userInput);
+                        taskRepository.save(task);
+                        message = ToDoMain.properties.getPropertyContent("askNumber");
+                    }
+                }
+            }
+            else {
+                message = ToDoMain.properties.getPropertyContent("askNumber");
+            }
+        }
+
+        List<Task> finalList = ((List<Task>) taskRepository.findAll()).stream().filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(finalOwner)).collect(Collectors.toList());
         arrTasks = new String[finalList.size()];
         IntStream.range(0, finalList.size()).forEach(i -> arrTasks[i] = i + 1 + " " + finalList.get(i));
     }
