@@ -18,15 +18,11 @@ import java.util.stream.IntStream;
 @Component
 public class ToDoHandler implements Runnable {
 
-    @Autowired
-    @Qualifier("fileTasksDao")
     private final IStorage storage;
-
-    @Autowired
-    @Qualifier("consoleUserInterface")
     private final IUserInterface ui;
 
-    public ToDoHandler (IUserInterface ui, IStorage storage) {
+    @Autowired
+    public ToDoHandler (@Qualifier("consoleUserInterface") IUserInterface ui, @Qualifier("dbTasksDao") IStorage storage) {
         this.storage = storage;
         this.ui = ui;
     }

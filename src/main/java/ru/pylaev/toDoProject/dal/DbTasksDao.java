@@ -1,5 +1,7 @@
 package ru.pylaev.toDoProject.dal;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.abstractions.IStorage;
 import ru.pylaev.toDoProject.models.Task;
@@ -7,12 +9,13 @@ import ru.pylaev.toDoProject.models.Task;
 import java.sql.*;
 import java.util.ArrayList;
 
+@Component
 public class DbTasksDao implements IStorage {
     private final String dbUser;
     private final String dbPass;
     private String owner;
 
-    public DbTasksDao (String dbUser, String dbPass) {
+    public DbTasksDao (@Value("${spring.datasource.username}") String dbUser, @Value("${spring.datasource.password}") String dbPass) {
         this.dbUser = dbUser;
         this.dbPass = dbPass;
     }
