@@ -5,19 +5,26 @@ import java.io.PrintWriter;
 import java.util.Random;
 
 public class Generator {
-    private final String fileName;
+    private final Random random;
 
-    public Generator (String fileName) {
-        this.fileName = fileName;
+    public Generator () {
+        random = new Random();
     }
 
-    public void generate (int n) throws FileNotFoundException {
+    public void generateToFile (String fileName, int n, int max) throws FileNotFoundException {
         PrintWriter printWriter = new PrintWriter(fileName);
-        Random random = new Random();
         printWriter.println(n);
         for (int i = 0; i < n; i++) {
-            printWriter.print(random.nextInt() + " ");
+            printWriter.print(random.nextInt(max) + " ");
         }
         printWriter.close();
+    }
+
+    public int[] generateToArray (int n, int max) {
+        int[] result = new int[n];
+        for (int i = 0; i < n; i++) {
+            result[i] = random.nextInt(max);
+        }
+        return result;
     }
 }

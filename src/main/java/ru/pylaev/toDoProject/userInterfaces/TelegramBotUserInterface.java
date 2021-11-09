@@ -1,15 +1,18 @@
 package ru.pylaev.toDoProject.userInterfaces;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.pylaev.toDoProject.abstractions.IUserInterface;
 
+@Component
 public class TelegramBotUserInterface implements IUserInterface {
 
     private final TelegramBot bot;
 
-    public TelegramBotUserInterface (String token){
+    public TelegramBotUserInterface (@Value("${botToken}") String token){
         bot = new TelegramBot(token, 1249988927);
         try {
             new TelegramBotsApi(DefaultBotSession.class).registerBot(bot);

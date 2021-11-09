@@ -25,11 +25,6 @@ public class DbTasksDao implements IStorage {
         this.owner = owner;
     }
 
-    @Override
-    public String getOwner ( ) {
-        return owner;
-    }
-
     private Connection getDbConnection() throws SQLException {
         try {
             Class.forName("org.postgresql.Driver");
@@ -53,7 +48,7 @@ public class DbTasksDao implements IStorage {
             PreparedStatement preparedStatement = dbConnection.prepareStatement(firstRequest);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(ToDoMain.properties.getPropertyContent("storageError"));
+            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
         }
 
         String request = "SELECT * FROM task WHERE owner=?;";
@@ -72,7 +67,7 @@ public class DbTasksDao implements IStorage {
                 }
             }
         } catch (SQLException e) {
-            System.out.println(ToDoMain.properties.getPropertyContent("storageError"));
+            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
         }
 
         if (result.size()==0) return new Task[0];
@@ -99,7 +94,7 @@ public class DbTasksDao implements IStorage {
             if (generatedKeys.next()) data.setId(generatedKeys.getLong("id"));
 
         } catch (SQLException e) {
-            System.out.println(ToDoMain.properties.getPropertyContent("storageError"));
+            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
         }
     }
 
@@ -112,7 +107,7 @@ public class DbTasksDao implements IStorage {
             preparedStatement.setLong(2, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(ToDoMain.properties.getPropertyContent("storageError"));
+            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
         }
     }
 }

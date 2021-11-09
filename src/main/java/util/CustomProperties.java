@@ -3,6 +3,7 @@ package util;
 import java.util.PropertyResourceBundle;
 
 public class CustomProperties {
+
     private final String fileName;
 
     public CustomProperties (String fileName) {

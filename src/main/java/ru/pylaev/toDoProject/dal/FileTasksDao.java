@@ -1,7 +1,6 @@
 package ru.pylaev.toDoProject.dal;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.abstractions.IStorage;
@@ -26,17 +25,12 @@ public class FileTasksDao implements IStorage {
         this.owner = owner;
     }
 
-    @Override
-    public String getOwner ( ) {
-        return owner;
-    }
-
     public FileTasksDao (@Value("${filePath}") String path) {
         this.path = path;
         try {
             if (!Files.exists(Paths.get(path))) Files.createFile(Paths.get(path));
         } catch (IOException e) {
-            System.out.println(ToDoMain.properties.getPropertyContent("storageError"));
+            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
         }
     }
 
@@ -55,7 +49,7 @@ public class FileTasksDao implements IStorage {
             lastIndex = result.size();
         }
         catch (IOException | ClassNotFoundException e) {
-            System.out.println(ToDoMain.properties.getPropertyContent("storageError"));
+            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
         }
         return (result.size()==0)?new Task[0]:result.toArray(Task[]::new);
     }
@@ -68,7 +62,7 @@ public class FileTasksDao implements IStorage {
             for (Task item:tasks) {objectOutputStream.writeObject(item);}
             objectOutputStream.writeObject(task);
         } catch (IOException e) {
-            System.out.println(ToDoMain.properties.getPropertyContent("storageError"));
+            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
         }
     }
 
@@ -81,7 +75,7 @@ public class FileTasksDao implements IStorage {
                 objectOutputStream.writeObject(task);
             }
         } catch (IOException e) {
-            System.out.println(ToDoMain.properties.getPropertyContent("storageError"));
+            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
         }
     }
 }

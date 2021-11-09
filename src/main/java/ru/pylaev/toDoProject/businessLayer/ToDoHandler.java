@@ -1,8 +1,5 @@
 package ru.pylaev.toDoProject.businessLayer;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.abstractions.IStorage;
 import ru.pylaev.toDoProject.abstractions.IUserInterface;
@@ -15,14 +12,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Component
 public class ToDoHandler implements Runnable {
 
     private final IStorage storage;
     private final IUserInterface ui;
 
-    @Autowired
-    public ToDoHandler (@Qualifier("consoleUserInterface") IUserInterface ui, @Qualifier("dbTasksDao") IStorage storage) {
+    public ToDoHandler (IUserInterface ui, IStorage storage) {
         this.storage = storage;
         this.ui = ui;
     }
@@ -35,7 +30,7 @@ public class ToDoHandler implements Runnable {
         String owner = "";
 
         while (inputCheck(invalidNameSymbols, owner)>=0) {
-            owner = ui.askInput(ToDoMain.properties.getPropertyContent("askOwner"));
+            owner = ui.askInput(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner"));
         }
         storage.setOwner(owner);
 
@@ -45,14 +40,14 @@ public class ToDoHandler implements Runnable {
             IntStream.range(0, list.size()).forEach(i -> ui.show(i + 1 + " " + list.get(i)));
 
             if (list.size()==0 || userInput.equals("NEW")) {
-                userInput = ui.askInput(ToDoMain.properties.getPropertyContent("askNew"));
+                userInput = ui.askInput(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew"));
                 if (!userInput.equals("BACK")) storage.add(new Task(owner, userInput, new Date(), "WAIT"));
             }
             else {
-                userInput = ui.askInput(ToDoMain.properties.getPropertyContent("askNumber"));
+                userInput = ui.askInput(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber"));
                 int taskIndex = getIndex(userInput, list);
                 if (taskIndex != -1) do {
-                    userInput = ui.askInput(ToDoMain.properties.getPropertyContent("askStatus"));
+                    userInput = ui.askInput(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus"));
                     if (inputCheck(tasksStates, userInput)>0) storage.setStatus(list.get(taskIndex-1).getId(),userInput);
                 } while (inputCheck(commands, userInput)<=0);
             }
