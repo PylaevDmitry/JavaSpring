@@ -23,6 +23,7 @@ public class ToDoMain {
 //        WindowUserInterface windowUserInterface = applicationContext.getBean("windowUserInterface", WindowUserInterface.class);
         ConsoleUserInterface consoleUserInterface = applicationContext.getBean("consoleUserInterface", ConsoleUserInterface.class);
 //        TelegramBotUserInterface telegramBotUserInterface = applicationContext.getBean("telegramBotUserInterface", TelegramBotUserInterface.class);
+
         FileTasksDao fileTasksDao = applicationContext.getBean("fileTasksDao", FileTasksDao.class);
         DbTasksDao dbTasksDao = applicationContext.getBean("dbTasksDao", DbTasksDao.class);
 

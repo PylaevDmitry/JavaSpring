@@ -42,7 +42,6 @@ public class Task implements Serializable {
 
     public void setStatus (String status) { this.status = status; }
 
-
     public long getId ( ) { return id; }
 
     public String getOwner ( ) { return owner;}
