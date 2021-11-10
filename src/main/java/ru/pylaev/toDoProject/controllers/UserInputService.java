@@ -19,26 +19,25 @@ import java.util.stream.IntStream;
 public class UserInputService {
 
     private int taskIndex;
-    private String owner = "";
+    private String owner;
+    private final View view = new View();
 
     @Autowired
     private TaskRepository taskRepository;
 
     public View process (String userInput) {
-        View view = new View();
         String[] invalidNameSymbols = new String[] {" ", "\\", "|", "/", ":", "?", "\"", "<", ">"};
         String[] commands = new String[] {"ARCH", "DONE", "WAIT", "BACK", "EXIT"};
         String[] tasksStates = new String[] {"ARCH", "DONE", "WAIT"};
 
-        if (owner.equals("")) {
+        if (owner==null) {
             if (inputCheck(invalidNameSymbols, userInput) < 0) {
                 owner = userInput;
             }
             else return view;
         }
 
-        String finalOwner = owner;
-        List<Task> list = ((List<Task>) taskRepository.findAll()).stream().filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(finalOwner)).collect(Collectors.toList());
+        List<Task> list = ((List<Task>) taskRepository.findAll()).stream().filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(owner)).collect(Collectors.toList());
 
         if ((list.size()==0 && view.getMessage().equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner")))
                 || (userInput.equals("NEW") && view.getMessage().equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber")))) {
@@ -71,13 +70,10 @@ public class UserInputService {
         else if (view.getMessage().equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus"))) {
             if (!userInput.equals("BACK")) {
                 if (inputCheck(tasksStates, userInput)>0) {
-                    Optional<Task> optionalTask = taskRepository.findById(list.get(taskIndex-1).getId());
-                    if (optionalTask.isPresent()) {
-                        Task task = optionalTask.get();
-                        task.setStatus(userInput);
-                        taskRepository.save(task);
-                        view.setMessage(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber"));
-                    }
+                    Task task = taskRepository.findById(list.get(taskIndex-1).getId()).orElseThrow();
+                    task.setStatus(userInput);
+                    taskRepository.save(task);
+                    view.setMessage(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber"));
                 }
             }
             else {
@@ -85,7 +81,8 @@ public class UserInputService {
             }
         }
 
-        List<Task> finalList = ((List<Task>) taskRepository.findAll()).stream().filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(finalOwner)).collect(Collectors.toList());
+        List<Task> finalList = ((List<Task>) taskRepository.findAll()).stream().filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(owner)).collect(Collectors.toList());
+
         view.setArrTasks(new String[finalList.size()]);
         IntStream.range(0, finalList.size()).forEach(i -> view.getArrTasks()[i] = i + 1 + " " + finalList.get(i));
 
