@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.businessLayer;
+package ru.pylaev.toDoProject.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

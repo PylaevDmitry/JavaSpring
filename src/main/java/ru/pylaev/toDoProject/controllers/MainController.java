@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import ru.pylaev.toDoProject.businessLayer.UserInputService;
-
 @Controller
 public class MainController {
 
@@ -19,7 +17,6 @@ public class MainController {
     public String show (Model model) {
         model.addAttribute("arrTasks", userInputService.getArrTasks());
         model.addAttribute("message", userInputService.getMessage());
-        model.addAttribute("input", "");
         return "home";
     }
 
