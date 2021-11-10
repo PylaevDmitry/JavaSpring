@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.abstractions.IStorage;
-import ru.pylaev.toDoProject.models.Task;
+import ru.pylaev.toDoProject.entity.Task;
 
 import java.io.EOFException;
 import java.io.IOException;

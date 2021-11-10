@@ -1,6 +1,6 @@
 package ru.pylaev.toDoProject.abstractions;
 
-import ru.pylaev.toDoProject.models.Task;
+import ru.pylaev.toDoProject.entity.Task;
 
 public interface IStorage {
     Task[] getAll ();

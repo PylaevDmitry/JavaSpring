@@ -1,14 +1,14 @@
 package ru.pylaev.toDoProject.models;
 
+import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 
+@Component
 public class View {
     private String message = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner");
     private String[] arrTasks;
 
-    public View (String message, String[] arrTasks) {
-        this.message = message;
-        this.arrTasks = arrTasks;
+    public View ( ) {
     }
 
     public String getMessage ( ) {

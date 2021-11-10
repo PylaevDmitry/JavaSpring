@@ -6,23 +6,26 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.pylaev.toDoProject.models.View;
 
 @Controller
 public class MainController {
+
+    @Autowired
+    private View view;
 
     @Autowired
     private UserInputService userInputService;
 
     @GetMapping
     public String show (Model model) {
-        model.addAttribute("arrTasks", userInputService.getArrTasks());
-        model.addAttribute("message", userInputService.getMessage());
+        model.addAttribute("view", view);
         return "home";
     }
 
     @PostMapping
     public String processUserInput (@RequestParam String userInput) {
-        userInputService.process(userInput);
+        view = userInputService.process(userInput);
         return "redirect:/";
     }
 

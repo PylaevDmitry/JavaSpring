@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.models;
+package ru.pylaev.toDoProject.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

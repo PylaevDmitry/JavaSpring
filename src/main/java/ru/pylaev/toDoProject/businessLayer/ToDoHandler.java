@@ -3,7 +3,7 @@ package ru.pylaev.toDoProject.businessLayer;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.abstractions.IStorage;
 import ru.pylaev.toDoProject.abstractions.IUserInterface;
-import ru.pylaev.toDoProject.models.Task;
+import ru.pylaev.toDoProject.entity.Task;
 
 import java.time.temporal.ValueRange;
 import java.util.Arrays;

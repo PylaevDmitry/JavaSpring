@@ -3,7 +3,8 @@ package ru.pylaev.toDoProject.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.models.Task;
+import ru.pylaev.toDoProject.entity.Task;
+import ru.pylaev.toDoProject.models.View;
 import ru.pylaev.toDoProject.repo.TaskRepository;
 
 import java.time.temporal.ValueRange;
@@ -17,23 +18,14 @@ import java.util.stream.IntStream;
 @Service
 public class UserInputService {
 
-    private String message = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner");
     private int taskIndex;
     private String owner = "";
-    private String[] arrTasks;
 
     @Autowired
     private TaskRepository taskRepository;
 
-    public String getMessage ( ) {
-        return message;
-    }
-
-    public String[] getArrTasks ( ) {
-        return arrTasks;
-    }
-
-    public void process (String userInput) {
+    public View process (String userInput) {
+        View view = new View();
         String[] invalidNameSymbols = new String[] {" ", "\\", "|", "/", ":", "?", "\"", "<", ">"};
         String[] commands = new String[] {"ARCH", "DONE", "WAIT", "BACK", "EXIT"};
         String[] tasksStates = new String[] {"ARCH", "DONE", "WAIT"};
@@ -42,41 +34,41 @@ public class UserInputService {
             if (inputCheck(invalidNameSymbols, userInput) < 0) {
                 owner = userInput;
             }
-            else return;
+            else return view;
         }
 
         String finalOwner = owner;
         List<Task> list = ((List<Task>) taskRepository.findAll()).stream().filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(finalOwner)).collect(Collectors.toList());
 
-        if ((list.size()==0 && message.equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner")))
-                || (userInput.equals("NEW") && message.equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber")))) {
+        if ((list.size()==0 && view.getMessage().equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner")))
+                || (userInput.equals("NEW") && view.getMessage().equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber")))) {
             if (!userInput.equals("BACK")) {
-                message = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
+                view.setMessage(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew"));
             }
-            return;
+            return view;
         }
 
-        if (message.equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew"))) {
+        if (view.getMessage().equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew"))) {
             if (!userInput.equals("BACK")) {
                 taskRepository.save(new Task(owner, userInput, new Date(), "WAIT"));
             }
-            message = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
+            view.setMessage(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber"));
         }
 
-        else if (message.equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner"))) {
-            message = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
+        else if (view.getMessage().equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner"))) {
+            view.setMessage(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber"));
         }
 
-        else if (message.equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber"))) {
+        else if (view.getMessage().equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber"))) {
             if (!userInput.equals("BACK")) {
                 taskIndex = getIndex(userInput, list);
                 if ((taskIndex != -1)&&(inputCheck(commands, userInput)<=0)) {
-                    message = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
+                    view.setMessage(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus"));
                 }
             }
         }
 
-        else if (message.equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus"))) {
+        else if (view.getMessage().equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus"))) {
             if (!userInput.equals("BACK")) {
                 if (inputCheck(tasksStates, userInput)>0) {
                     Optional<Task> optionalTask = taskRepository.findById(list.get(taskIndex-1).getId());
@@ -84,18 +76,20 @@ public class UserInputService {
                         Task task = optionalTask.get();
                         task.setStatus(userInput);
                         taskRepository.save(task);
-                        message = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
+                        view.setMessage(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber"));
                     }
                 }
             }
             else {
-                message = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
+                view.setMessage(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber"));
             }
         }
 
         List<Task> finalList = ((List<Task>) taskRepository.findAll()).stream().filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(finalOwner)).collect(Collectors.toList());
-        arrTasks = new String[finalList.size()];
-        IntStream.range(0, finalList.size()).forEach(i -> arrTasks[i] = i + 1 + " " + finalList.get(i));
+        view.setArrTasks(new String[finalList.size()]);
+        IntStream.range(0, finalList.size()).forEach(i -> view.getArrTasks()[i] = i + 1 + " " + finalList.get(i));
+
+        return view;
     }
 
     private int getIndex (String userInput, List <Task> list) {
