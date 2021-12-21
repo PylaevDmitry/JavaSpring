@@ -1,6 +1,7 @@
 package ru.pylaev.toDoProject.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.entity.Task;
@@ -11,11 +12,11 @@ import java.time.temporal.ValueRange;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
+@Scope("prototype")
 public class UserInputService {
 
     private int taskIndex;

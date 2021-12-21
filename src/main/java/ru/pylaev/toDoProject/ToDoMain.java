@@ -14,7 +14,7 @@ import util.CustomProperties;
 @SpringBootApplication
 public class ToDoMain {
 
-    public static final CustomProperties CUSTOM_PROPERTIES = new CustomProperties("ru.pylaev.toDoProject.customConfig");
+    public static final CustomProperties CUSTOM_PROPERTIES = new CustomProperties("customConfig");
 
     public static void main (String[] args) {
 

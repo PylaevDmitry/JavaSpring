@@ -20,9 +20,8 @@ public class RestController {
     public ResponseEntity<String> processUserInput (@RequestBody UserInput userInput) {
         try {
             view = userInputService.process(userInput.getContent());
-            String[] arr = view.getArrTasks();
             StringBuilder stringBuilder = new StringBuilder();
-            for (String s : arr) {
+            for (String s : view.getArrTasks()) {
                 stringBuilder.append(s).append("\n");
             }
             return ResponseEntity.ok(stringBuilder + view.getMessage());
