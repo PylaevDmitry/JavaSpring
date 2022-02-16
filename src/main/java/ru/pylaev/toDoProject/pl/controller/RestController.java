@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.pl.controllers;
+package ru.pylaev.toDoProject.pl.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

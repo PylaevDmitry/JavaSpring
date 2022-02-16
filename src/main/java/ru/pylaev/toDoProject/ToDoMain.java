@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 import ru.pylaev.toDoProject.bll.service.ToDoService;
 import ru.pylaev.toDoProject.dal.dao.DbTasksDao;
 import ru.pylaev.toDoProject.dal.dao.FileTasksDao;
-import ru.pylaev.toDoProject.pl.presenters.ConsoleUserInterface;
+import ru.pylaev.toDoProject.pl.presenter.ConsoleUserInterface;
 import ru.pylaev.util.CustomProperties;
 
 @SpringBootApplication

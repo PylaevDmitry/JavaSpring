@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.pl.presenters;
+package ru.pylaev.toDoProject.pl.presenter;
 
 import javax.swing.*;
 import java.util.ArrayList;

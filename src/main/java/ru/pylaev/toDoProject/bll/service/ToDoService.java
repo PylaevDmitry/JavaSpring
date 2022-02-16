@@ -1,8 +1,8 @@
 package ru.pylaev.toDoProject.bll.service;
 
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.dal.dao.dao;
-import ru.pylaev.toDoProject.pl.presenters.Presenter;
+import ru.pylaev.toDoProject.dal.dao.Dao;
+import ru.pylaev.toDoProject.pl.presenter.Presenter;
 import ru.pylaev.toDoProject.dal.entity.Task;
 
 import java.time.temporal.ValueRange;
@@ -14,10 +14,10 @@ import java.util.stream.IntStream;
 
 public class ToDoService implements Runnable {
 
-    private final dao storage;
+    private final Dao storage;
     private final Presenter ui;
 
-    public ToDoService (Presenter ui, dao storage) {
+    public ToDoService (Presenter ui, Dao storage) {
         this.storage = storage;
         this.ui = ui;
     }

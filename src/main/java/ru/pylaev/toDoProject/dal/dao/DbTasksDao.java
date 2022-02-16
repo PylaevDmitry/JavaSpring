@@ -3,14 +3,13 @@ package ru.pylaev.toDoProject.dal.dao;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.dal.dao.dao;
 import ru.pylaev.toDoProject.dal.entity.Task;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 @Component
-public class DbTasksDao implements dao {
+public class DbTasksDao implements Dao {
     private final String dbUser;
     private final String dbPass;
     private String owner;

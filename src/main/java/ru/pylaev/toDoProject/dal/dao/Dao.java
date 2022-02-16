@@ -2,7 +2,7 @@ package ru.pylaev.toDoProject.dal.dao;
 
 import ru.pylaev.toDoProject.dal.entity.Task;
 
-public interface dao {
+public interface Dao {
     Task[] getAll ();
     void add (Task data);
     void setStatus (long id, String status);
