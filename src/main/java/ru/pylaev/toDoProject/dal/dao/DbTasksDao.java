@@ -1,16 +1,16 @@
-package ru.pylaev.toDoProject.dal;
+package ru.pylaev.toDoProject.dal.dao;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.abstractions.IStorage;
-import ru.pylaev.toDoProject.entity.Task;
+import ru.pylaev.toDoProject.dal.dao.dao;
+import ru.pylaev.toDoProject.dal.entity.Task;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 @Component
-public class DbTasksDao implements IStorage {
+public class DbTasksDao implements dao {
     private final String dbUser;
     private final String dbPass;
     private String owner;

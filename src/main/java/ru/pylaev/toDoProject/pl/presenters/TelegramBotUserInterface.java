@@ -1,14 +1,13 @@
-package ru.pylaev.toDoProject.userInterfaces;
+package ru.pylaev.toDoProject.pl.presenters;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.pylaev.toDoProject.abstractions.IUserInterface;
 
 @Component
-public class TelegramBotUserInterface implements IUserInterface {
+public class TelegramBotUserInterface implements Presenter {
 
     private final TelegramBot bot;
 

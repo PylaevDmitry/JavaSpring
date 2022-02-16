@@ -1,12 +1,10 @@
-package ru.pylaev.toDoProject.userInterfaces;
+package ru.pylaev.toDoProject.pl.presenters;
 
-import org.springframework.stereotype.Component;
-import ru.pylaev.toDoProject.abstractions.IUserInterface;
 import javax.swing.*;
 import java.util.ArrayList;
 
 //@Component
-public class WindowUserInterface implements IUserInterface {
+public class WindowUserInterface implements Presenter {
     private boolean showListEnds = false;
     private final ArrayList<String> bufList = new ArrayList<>();
     private final JPanel field = new JPanel();

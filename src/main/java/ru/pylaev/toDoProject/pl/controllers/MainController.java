@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.controllers;
+package ru.pylaev.toDoProject.pl.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -6,7 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.pylaev.toDoProject.models.View;
+import ru.pylaev.toDoProject.bll.service.UserInputService;
+import ru.pylaev.toDoProject.pl.view.View;
 
 @Controller
 public class MainController {

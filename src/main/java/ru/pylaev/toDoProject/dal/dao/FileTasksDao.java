@@ -1,10 +1,10 @@
-package ru.pylaev.toDoProject.dal;
+package ru.pylaev.toDoProject.dal.dao;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.abstractions.IStorage;
-import ru.pylaev.toDoProject.entity.Task;
+import ru.pylaev.toDoProject.dal.dao.dao;
+import ru.pylaev.toDoProject.dal.entity.Task;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 @Component
-public class FileTasksDao implements IStorage {
+public class FileTasksDao implements dao {
     private final String path;
     private String owner;
     private long lastIndex = 0;

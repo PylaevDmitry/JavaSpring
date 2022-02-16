@@ -1,12 +1,12 @@
-package ru.pylaev.toDoProject.controllers;
+package ru.pylaev.toDoProject.bll.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.entity.Task;
-import ru.pylaev.toDoProject.models.View;
-import ru.pylaev.toDoProject.repo.TaskRepository;
+import ru.pylaev.toDoProject.dal.entity.Task;
+import ru.pylaev.toDoProject.pl.view.View;
+import ru.pylaev.toDoProject.dal.repo.TaskRepository;
 
 import java.time.temporal.ValueRange;
 import java.util.Arrays;

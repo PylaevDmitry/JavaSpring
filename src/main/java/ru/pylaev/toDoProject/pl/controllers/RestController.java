@@ -1,11 +1,12 @@
-package ru.pylaev.toDoProject.controllers;
+package ru.pylaev.toDoProject.pl.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import ru.pylaev.toDoProject.models.UserInput;
-import ru.pylaev.toDoProject.models.View;
+import ru.pylaev.toDoProject.bll.service.UserInputService;
+import ru.pylaev.toDoProject.pl.view.UserInput;
+import ru.pylaev.toDoProject.pl.view.View;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
@@ -26,8 +27,7 @@ public class RestController {
             }
             return ResponseEntity.ok(stringBuilder + view.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Произошла ошибка");
+            return ResponseEntity.badRequest().body("Произошла ошибка: " + e.getMessage());
         }
     }
-
 }

@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.models;
+package ru.pylaev.toDoProject.pl.view;
 
 public class UserInput {
     private String content;

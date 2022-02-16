@@ -1,6 +1,6 @@
-package ru.pylaev.toDoProject.abstractions;
+package ru.pylaev.toDoProject.pl.presenters;
 
-public interface IUserInterface{
+public interface Presenter {
     String askInput (String message);
     void show (String message);
     boolean isRunning ( );

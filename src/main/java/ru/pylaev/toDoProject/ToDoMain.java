@@ -3,13 +3,11 @@ package ru.pylaev.toDoProject;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
-import ru.pylaev.toDoProject.businessLayer.ToDoHandler;
-import ru.pylaev.toDoProject.dal.DbTasksDao;
-import ru.pylaev.toDoProject.dal.FileTasksDao;
-import ru.pylaev.toDoProject.userInterfaces.ConsoleUserInterface;
-import ru.pylaev.toDoProject.userInterfaces.TelegramBotUserInterface;
-import ru.pylaev.toDoProject.userInterfaces.WindowUserInterface;
-import util.CustomProperties;
+import ru.pylaev.toDoProject.bll.service.ToDoService;
+import ru.pylaev.toDoProject.dal.dao.DbTasksDao;
+import ru.pylaev.toDoProject.dal.dao.FileTasksDao;
+import ru.pylaev.toDoProject.pl.presenters.ConsoleUserInterface;
+import ru.pylaev.util.CustomProperties;
 
 @SpringBootApplication
 public class ToDoMain {
@@ -27,16 +25,16 @@ public class ToDoMain {
         FileTasksDao fileTasksDao = applicationContext.getBean("fileTasksDao", FileTasksDao.class);
         DbTasksDao dbTasksDao = applicationContext.getBean("dbTasksDao", DbTasksDao.class);
 
-        ToDoHandler toDoHandler1 = new ToDoHandler(consoleUserInterface, dbTasksDao);
-        Thread tread1 = new Thread(toDoHandler1);
+        ToDoService toDoService1 = new ToDoService(consoleUserInterface, dbTasksDao);
+        Thread tread1 = new Thread(toDoService1);
         tread1.start();
 
-//        ToDoHandler toDoHandler2 = new ToDoHandler(telegramBotUserInterface, fileTasksDao);
-//        Thread tread2 = new Thread(toDoHandler2);
+//        ToDoService toDoService2 = new ToDoService(telegramBotUserInterface, fileTasksDao);
+//        Thread tread2 = new Thread(toDoService2);
 //        tread2.start();
 
-//        ToDoHandler toDoHandler3 = new ToDoHandler(windowUserInterface, fileTasksDao);
-//        toDoHandler3.run();
+//        ToDoService toDoService3 = new ToDoService(windowUserInterface, fileTasksDao);
+//        toDoService3.run();
 
     }
 }

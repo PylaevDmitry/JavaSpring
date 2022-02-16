@@ -1,4 +1,4 @@
-package util;
+package ru.pylaev.util;
 
 import java.util.PropertyResourceBundle;
 

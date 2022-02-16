@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.models;
+package ru.pylaev.toDoProject.pl.view;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

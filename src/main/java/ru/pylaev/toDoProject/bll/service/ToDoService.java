@@ -1,9 +1,9 @@
-package ru.pylaev.toDoProject.businessLayer;
+package ru.pylaev.toDoProject.bll.service;
 
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.abstractions.IStorage;
-import ru.pylaev.toDoProject.abstractions.IUserInterface;
-import ru.pylaev.toDoProject.entity.Task;
+import ru.pylaev.toDoProject.dal.dao.dao;
+import ru.pylaev.toDoProject.pl.presenters.Presenter;
+import ru.pylaev.toDoProject.dal.entity.Task;
 
 import java.time.temporal.ValueRange;
 import java.util.Arrays;
@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ToDoHandler implements Runnable {
+public class ToDoService implements Runnable {
 
-    private final IStorage storage;
-    private final IUserInterface ui;
+    private final dao storage;
+    private final Presenter ui;
 
-    public ToDoHandler (IUserInterface ui, IStorage storage) {
+    public ToDoService (Presenter ui, dao storage) {
         this.storage = storage;
         this.ui = ui;
     }
