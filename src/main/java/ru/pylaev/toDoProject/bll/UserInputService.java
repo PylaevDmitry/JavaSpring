@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.bll.service;
+package ru.pylaev.toDoProject.bll;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

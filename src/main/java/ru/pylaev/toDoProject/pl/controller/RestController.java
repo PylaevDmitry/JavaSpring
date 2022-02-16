@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import ru.pylaev.toDoProject.bll.service.UserInputService;
+import ru.pylaev.toDoProject.bll.UserInputService;
 import ru.pylaev.toDoProject.pl.view.UserInput;
 import ru.pylaev.toDoProject.pl.view.View;
 

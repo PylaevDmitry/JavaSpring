@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.bll.service;
+package ru.pylaev.toDoProject.bll;
 
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dal.dao.Dao;
@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ToDoService implements Runnable {
+public class ToDoHandler implements Runnable {
 
     private final Dao storage;
     private final Presenter ui;
 
-    public ToDoService (Presenter ui, Dao storage) {
+    public ToDoHandler (Presenter ui, Dao storage) {
         this.storage = storage;
         this.ui = ui;
     }
