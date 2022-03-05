@@ -36,7 +36,8 @@ public class ToDoHandler implements Runnable {
 
         while (ui.isRunning()) {
             String finalOwner = owner;
-            List<Task> list = Arrays.stream(storage.getAll()).filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(finalOwner)).collect(Collectors.toList());
+            List<Task> list = Arrays.stream(storage.getAll()).filter(task -> !task.getStatus().equals("ARCH"))
+                    .filter(task -> task.getOwner().equals(finalOwner)).collect(Collectors.toList());
             IntStream.range(0, list.size()).forEach(i -> ui.show(i + 1 + " " + list.get(i)));
 
             if (list.size()==0 || userInput.equals("NEW")) {

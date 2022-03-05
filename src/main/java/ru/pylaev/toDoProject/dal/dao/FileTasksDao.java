@@ -33,7 +33,6 @@ public class FileTasksDao implements Dao {
         }
     }
 
-    //TODO:readonly access
     @Override
     public Task[] getAll () {
         var result = new ArrayList<Task>();

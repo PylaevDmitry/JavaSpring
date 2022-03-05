@@ -10,14 +10,7 @@ import java.util.ArrayList;
 
 @Component
 public class DbTasksDao implements Dao {
-    private final String dbUser;
-    private final String dbPass;
     private String owner;
-
-    public DbTasksDao (@Value("${spring.datasource.username}") String dbUser, @Value("${spring.datasource.password}") String dbPass) {
-        this.dbUser = dbUser;
-        this.dbPass = dbPass;
-    }
 
     @Override
     public void setOwner (String owner) {
@@ -25,10 +18,7 @@ public class DbTasksDao implements Dao {
     }
 
     private Connection getDbConnection() throws SQLException {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) { e.printStackTrace(); }
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", dbUser, dbPass);
+        return ConnectionBuilder.getDbConnection();
     }
 
     @Override

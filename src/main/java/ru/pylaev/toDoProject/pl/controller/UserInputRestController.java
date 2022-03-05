@@ -9,7 +9,7 @@ import ru.pylaev.toDoProject.pl.view.UserInput;
 import ru.pylaev.toDoProject.pl.view.View;
 
 @org.springframework.web.bind.annotation.RestController
-public class RestController {
+public class UserInputRestController {
 
     @Autowired
     private View view;

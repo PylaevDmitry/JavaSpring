@@ -10,7 +10,7 @@ import ru.pylaev.toDoProject.bll.UserInputService;
 import ru.pylaev.toDoProject.pl.view.View;
 
 @Controller
-public class MainController {
+public class UserInputController {
 
     @Autowired
     private View view;

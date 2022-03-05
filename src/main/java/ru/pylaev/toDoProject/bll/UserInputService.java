@@ -38,7 +38,10 @@ public class UserInputService {
             else return view;
         }
 
-        List<Task> list = ((List<Task>) taskRepository.findAll()).stream().filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(owner)).collect(Collectors.toList());
+        List<Task> list = ((List<Task>) taskRepository.findAll()).stream()
+                .filter(task -> !task.getStatus().equals("ARCH"))
+                .filter(task -> task.getOwner().equals(owner))
+                .collect(Collectors.toList());
 
         if ((list.size()==0 && view.getMessage().equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner")))
                 || (userInput.equals("NEW") && view.getMessage().equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber")))) {
