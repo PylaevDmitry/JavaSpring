@@ -1,6 +1,5 @@
 package ru.pylaev.toDoProject.dal.dao;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dal.entity.Task;

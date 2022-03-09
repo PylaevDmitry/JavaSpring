@@ -3,42 +3,27 @@ package ru.pylaev.toDoProject.dal.dao;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dal.entity.Task;
+import ru.pylaev.util.CustomProperties;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
-class DbTasksDaoTest {
+class FileTasksDaoTest {
+
+    private static final CustomProperties APPLICATION_PROPERTIES = new CustomProperties("application");
+    private static final String path = APPLICATION_PROPERTIES.getPropertyContent("filePath");
 
     @BeforeEach
-    void setUp() throws IOException, URISyntaxException {
-        URI prepareDataPath = Objects.requireNonNull(DbTasksDaoTest.class.getClassLoader()
-                        .getResource("PrepareData.sql"))
-                        .toURI();
-        List<String> list = Files.readAllLines(Paths.get(prepareDataPath));
-        String sql = String.join("", list);
-
-        try (Connection dbConnection = ConnectionBuilder.getDbConnection()) {
-            PreparedStatement preparedStatement = dbConnection.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
-        }
+    void setUp() throws IOException {
+        if (Files.exists(Paths.get(path))) Files.delete(Paths.get(path));
     }
 
     @Test
     void Get_All_Add_new_task() {
-        Dao dao = new DbTasksDao();
+        Dao dao = new FileTasksDao(path);
         dao.setOwner("user");
         Task task1 = new Task("user","note1", new Date(),"WAIT");
 
@@ -50,7 +35,7 @@ class DbTasksDaoTest {
 
     @Test
     void Add_Throw_if_null_passed() {
-        Dao dao = new DbTasksDao();
+        Dao dao = new FileTasksDao(path);
         dao.setOwner("user");
         Task task1 = null;
 
@@ -61,7 +46,7 @@ class DbTasksDaoTest {
 
     @Test
     void setStatus ( ) {
-        Dao dao = new DbTasksDao();
+        Dao dao = new FileTasksDao(path);
         dao.setOwner("user");
 
         Task task1 = new Task("user","note1", new Date(),"WAIT");
