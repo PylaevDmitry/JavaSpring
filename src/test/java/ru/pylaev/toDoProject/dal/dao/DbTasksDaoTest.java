@@ -3,6 +3,7 @@ package ru.pylaev.toDoProject.dal.dao;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dal.entity.Task;
 
@@ -18,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+//@SpringBootTest
 class DbTasksDaoTest {
 
     @BeforeEach

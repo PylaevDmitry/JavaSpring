@@ -15,8 +15,13 @@ public class UserInputController {
     @Autowired
     private View view;
 
+    private final UserInputService userInputService;
+
     @Autowired
-    private UserInputService userInputService;
+    public UserInputController (View view, UserInputService userInputService) {
+        this.view = view;
+        this.userInputService = userInputService;
+    }
 
     @GetMapping
     public String show (Model model) {
@@ -26,7 +31,9 @@ public class UserInputController {
 
     @PostMapping
     public String processUserInput (@RequestParam String userInput) {
-        view = userInputService.process(userInput);
+        if (userInputService.checkOwner(userInput)) {
+            view = userInputService.process(userInput);
+        }
         return "redirect:/";
     }
 

@@ -19,24 +19,31 @@ import java.util.stream.IntStream;
 @Scope("prototype")
 public class UserInputService {
 
+    private static final String[] commands = new String[] {"ARCH", "DONE", "WAIT", "BACK", "EXIT"};
+    private static final String[] tasksStates = new String[] {"ARCH", "DONE", "WAIT"};
+    private static final String[] invalidNameSymbols = new String[] {" ", "\\", "|", "/", ":", "?", "\"", "<", ">"};
+
     private int taskIndex;
     private String owner;
     private final View view = new View();
+    private final TaskRepository taskRepository;
 
     @Autowired
-    private TaskRepository taskRepository;
+    public UserInputService (TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
-    public View process (String userInput) {
-        String[] invalidNameSymbols = new String[] {" ", "\\", "|", "/", ":", "?", "\"", "<", ">"};
-        String[] commands = new String[] {"ARCH", "DONE", "WAIT", "BACK", "EXIT"};
-        String[] tasksStates = new String[] {"ARCH", "DONE", "WAIT"};
-
+    public boolean checkOwner (String userInput) {
         if (owner==null) {
             if (inputCheck(invalidNameSymbols, userInput) < 0) {
                 owner = userInput;
             }
-            else return view;
+            else return false;
         }
+        return true;
+    }
+
+    public View process (String userInput) {
 
         List<Task> list = ((List<Task>) taskRepository.findAll()).stream()
                 .filter(task -> !task.getStatus().equals("ARCH"))
@@ -85,7 +92,10 @@ public class UserInputService {
             }
         }
 
-        List<Task> finalList = ((List<Task>) taskRepository.findAll()).stream().filter(task -> !task.getStatus().equals("ARCH")).filter(task -> task.getOwner().equals(owner)).collect(Collectors.toList());
+        List<Task> finalList = ((List<Task>) taskRepository.findAll()).stream()
+                .filter(task -> !task.getStatus().equals("ARCH"))
+                .filter(task -> task.getOwner().equals(owner))
+                .collect(Collectors.toList());
 
         view.setArrTasks(new String[finalList.size()]);
         IntStream.range(0, finalList.size()).forEach(i -> view.getArrTasks()[i] = i + 1 + " " + finalList.get(i));

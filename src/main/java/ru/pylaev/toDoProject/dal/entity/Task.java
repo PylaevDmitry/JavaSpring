@@ -27,7 +27,7 @@ public class Task implements Serializable {
         this.id = 0;
         this.owner = owner;
         this.text = text;
-        this.date = String.valueOf(date);
+        this.date = String.valueOf(date).substring(0,16);
         this.status = status;
     }
 
@@ -35,7 +35,7 @@ public class Task implements Serializable {
         this.id = Integer.parseInt(id);
         this.owner = owner;
         this.text = text;
-        this.date = String.valueOf(date);
+        this.date = date.substring(0,16);
         this.status = status;
     }
 

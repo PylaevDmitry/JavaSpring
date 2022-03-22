@@ -11,11 +11,14 @@ import ru.pylaev.toDoProject.pl.view.View;
 @org.springframework.web.bind.annotation.RestController
 public class UserInputRestController {
 
-    @Autowired
     private View view;
+    private final UserInputService userInputService;
 
     @Autowired
-    private UserInputService userInputService;
+    public UserInputRestController (View view, UserInputService userInputService) {
+        this.view = view;
+        this.userInputService = userInputService;
+    }
 
     @PostMapping("/sendJson")
     public ResponseEntity<String> processUserInput (@RequestBody UserInput userInput) {
