@@ -6,11 +6,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.bll.UserInputService;
 import ru.pylaev.toDoProject.pl.view.View;
 
 @Controller
 public class UserInputController {
+
+    private static final String askOwner = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner");
+    private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
+    private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
+    private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
     @Autowired
     private View view;
@@ -31,10 +37,25 @@ public class UserInputController {
 
     @PostMapping
     public String processUserInput (@RequestParam String userInput) {
-        if (userInputService.checkOwner(userInput)) {
-            view = userInputService.process(userInput);
-        }
+        howToServe(userInput);
         return "redirect:/";
     }
 
+    private void howToServe (String userInput) {
+        if (view.getMessage().equals(askOwner)) {
+            view = userInputService.checkOwner(view, userInput);
+        }
+
+        if (view.getMessage().equals(askNumber)) {
+            view = userInputService.processAskNumber(view, userInput);
+        }
+
+        else if (view.getMessage().equals(askNew)) {
+            view = userInputService.processAskNew(view, userInput);
+        }
+
+        else if (view.getMessage().equals(askStatus)) {
+            view = userInputService.processAskStatus(view, userInput);
+        }
+    }
 }
