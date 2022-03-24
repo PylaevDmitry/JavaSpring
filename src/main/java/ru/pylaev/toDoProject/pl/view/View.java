@@ -59,14 +59,18 @@ public class View {
 
         View view = (View) o;
 
+        if (taskIndex != view.taskIndex) return false;
         if (!Objects.equals(message, view.message)) return false;
-        return Arrays.equals(arrTasks, view.arrTasks);
+        if (!Arrays.deepEquals(arrTasks, view.arrTasks)) return false;
+        return Objects.equals(owner, view.owner);
     }
 
     @Override
     public int hashCode ( ) {
         int result = message != null ? message.hashCode() : 0;
         result = 31 * result + Arrays.hashCode(arrTasks);
+        result = 31 * result + taskIndex;
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
         return result;
     }
 }
