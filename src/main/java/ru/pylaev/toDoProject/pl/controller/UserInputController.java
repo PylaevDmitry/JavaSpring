@@ -18,9 +18,7 @@ public class UserInputController {
     private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
-    @Autowired
-    private View view;
-
+    private final View view;
     private final UserInputService userInputService;
 
     @Autowired
@@ -37,25 +35,7 @@ public class UserInputController {
 
     @PostMapping
     public String processUserInput (@RequestParam String userInput) {
-        howToServe(userInput);
+        userInputService.howToServe(view, userInput);
         return "redirect:/";
-    }
-
-    private void howToServe (String userInput) {
-        if (view.getMessage().equals(askOwner)) {
-            view = userInputService.checkOwner(view, userInput);
-        }
-
-        if (view.getMessage().equals(askNumber)) {
-            view = userInputService.processAskNumber(view, userInput);
-        }
-
-        else if (view.getMessage().equals(askNew)) {
-            view = userInputService.processAskNew(view, userInput);
-        }
-
-        else if (view.getMessage().equals(askStatus)) {
-            view = userInputService.processAskStatus(view, userInput);
-        }
     }
 }

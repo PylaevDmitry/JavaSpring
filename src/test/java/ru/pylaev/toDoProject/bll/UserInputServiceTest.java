@@ -4,13 +4,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dal.dao.ConnectionBuilder;
+import ru.pylaev.toDoProject.dal.entity.Task;
 import ru.pylaev.toDoProject.dal.repo.TaskRepository;
 import ru.pylaev.toDoProject.pl.view.View;
+import ru.pylaev.util.Checker;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,18 +24,25 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
 class UserInputServiceTest {
 
-//    @Autowired
-//    private TaskRepository taskRepository;
-//
+    private static final String[] commands = new String[] {"ARCH", "DONE", "WAIT", "BACK", "EXIT"};
+    private static final String[] tasksStates = new String[] {"ARCH", "DONE", "WAIT"};
+    private static final String[] invalidNameSymbols = new String[] {" ", "\\", "|", "/", ":", "?", "\"", "<", ">"};
+
+    private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
+    private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
+    private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
+
+    @Mock
+    private TaskRepository taskRepository;
+
+    List<Task> tasks = new ArrayList<>();
+
 //    @BeforeEach
 //    void setUp() throws IOException, URISyntaxException {
 //        URI prepareDataPath = Objects.requireNonNull(UserInputServiceTest.class.getClassLoader()
@@ -47,6 +58,70 @@ class UserInputServiceTest {
 //            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
 //        }
 //    }
+
+    @Test
+    void checkOwnerInvalidSymbol () {
+
+
+        View expectedView = new View();
+        View view = new View();
+        UserInputService userInputService = new UserInputService(taskRepository);
+
+        view = userInputService.howToServe(view, "???");
+
+        Assertions.assertEquals(view, expectedView);
+    }
+
+    @Test
+    void checkOwnerNull () {
+        View expectedView = new View();
+        View view = new View();
+        UserInputService userInputService = new UserInputService(taskRepository);
+
+        view = userInputService.howToServe(view, null);
+
+        Assertions.assertEquals(view, expectedView);
+    }
+
+    @Test
+    void checkOwnerIsOk () {
+        View expectedView = new View();
+        expectedView.setMessage(askNumber);
+        View view = new View();
+        UserInputService userInputService = new UserInputService(taskRepository);
+
+        view = userInputService.howToServe(view, "user");
+
+        Assertions.assertEquals(view, expectedView);
+    }
+
+    private void prepareData () {
+        tasks.add(new Task("11", "user", "note1", "wed", "WAIT"));
+        tasks.add(new Task("14", "user", "note2", "thu", "DONE"));
+        tasks.add(new Task("3", "user", "note3", "wed", "WAIT"));
+        Mockito.when(taskRepository.findByOwner("user")).thenReturn(tasks);
+        Mockito.when(taskRepository.findById(11L)).thenReturn(Optional.of(new Task("11", "user", "note1", "wed", "WAIT")));
+        Mockito.when(taskRepository.findById(14L)).thenReturn(Optional.of(new Task("14", "user", "note2", "thu", "DONE")));
+        Mockito.when(taskRepository.findById(3L)).thenReturn(Optional.of(new Task("3", "user", "note3", "wed", "WAIT")));
+    }
+
+    @Test
+    void processAskNew () {
+        prepareData();
+        View expectedView = new View();
+        expectedView.setMessage(askNumber);
+        expectedView.setTasks(tasks);
+
+        View view = new View();
+        UserInputService userInputService = new UserInputService(taskRepository);
+
+        view = userInputService.howToServe(view, "user");
+        view = userInputService.howToServe(view, "note1");
+
+        Assertions.assertEquals(view, expectedView);
+
+    }
+
 //
 //    @Test
 //    void processNew ( ) {

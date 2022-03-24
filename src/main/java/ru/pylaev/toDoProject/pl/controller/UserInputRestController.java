@@ -17,9 +17,7 @@ public class UserInputRestController {
     private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
-    @Autowired
-    private View view;
-
+    private final View view;
     private final UserInputService userInputService;
 
     @Autowired
@@ -31,7 +29,7 @@ public class UserInputRestController {
     @PostMapping("/sendJson")
     public ResponseEntity<String> processUserInput (@RequestBody UserInput userInput) {
         try {
-            howToServe(userInput.getContent());
+            userInputService.howToServe(view, userInput.getContent());
 
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : view.getArrTasks()) {
@@ -40,24 +38,6 @@ public class UserInputRestController {
             return ResponseEntity.ok(stringBuilder + view.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Произошла ошибка: " + e.getMessage());
-        }
-    }
-
-    private void howToServe (String userInput) {
-        if (view.getMessage().equals(askOwner)) {
-            view = userInputService.checkOwner(view, userInput);
-        }
-
-        if (view.getMessage().equals(askNumber)) {
-            view = userInputService.processAskNumber(view, userInput);
-        }
-
-        else if (view.getMessage().equals(askNew)) {
-            view = userInputService.processAskNew(view, userInput);
-        }
-
-        else if (view.getMessage().equals(askStatus)) {
-            view = userInputService.processAskStatus(view, userInput);
         }
     }
 }
