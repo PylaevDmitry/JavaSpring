@@ -11,6 +11,7 @@ import ru.pylaev.util.Checker;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +39,10 @@ public class UserInputService {
 
         if (view.getMessage().equals(askOwner)) {
             resultView = checkOwner(view, userInput);
+        }
+
+        if (Objects.isNull(userInput)) {
+            return view;
         }
 
         if (view.getMessage().equals(askNumber)) {

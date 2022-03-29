@@ -1,27 +1,19 @@
 package ru.pylaev.toDoProject.bll;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoSession;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.dal.dao.ConnectionBuilder;
 import ru.pylaev.toDoProject.dal.entity.Task;
 import ru.pylaev.toDoProject.dal.repo.TaskRepository;
 import ru.pylaev.toDoProject.pl.view.View;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.*;
 
 @SpringBootTest
@@ -35,90 +27,195 @@ class UserInputServiceTest {
     @Mock
     private TaskRepository taskRepository;
 
+//    MockitoSession session;
+
     List<Task> tasks = new ArrayList<>();
 
     @BeforeEach
-    void setUp() throws IOException, URISyntaxException {
-        URI prepareDataPath = Objects.requireNonNull(UserInputServiceTest.class.getClassLoader()
-                        .getResource("PrepareData.sql"))
-                .toURI();
-        List<String> list = Files.readAllLines(Paths.get(prepareDataPath));
-        String sql = String.join("", list);
+    void setUp() {
+//        session = Mockito.mockitoSession()
+//                .initMocks(this)
+//                .startMocking();
 
-        try (Connection dbConnection = ConnectionBuilder.getDbConnection()) {
-            PreparedStatement preparedStatement = dbConnection.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
-        }
+        Task task1 = new Task("11", "user", "note1", "Wed Mar 24 16:01", "WAIT");
+        Task task2 = new Task("14", "user", "note2", "Thu Mar 23 16:01", "DONE");
+        Task task3 = new Task("3", "user", "note3", "Wed Mar 25 16:01", "WAIT");
 
-        tasks.add(new Task("11", "user", "note1", "Wed Mar 24 16:01", "WAIT"));
-        tasks.add(new Task("14", "user", "note2", "Thu Mar 23 16:01", "DONE"));
-        tasks.add(new Task("3", "user", "note3", "Wed Mar 25 16:01", "WAIT"));
+        tasks.clear();
+        tasks.add(task1);
+        tasks.add(task2);
+        tasks.add(task3);
+
         Mockito.when(taskRepository.findByOwner("user")).thenReturn(tasks);
-        Mockito.when(taskRepository.findById(11L)).thenReturn(Optional.of(new Task("11", "user", "note1", "Wed Mar 24 16:01", "WAIT")));
-        Mockito.when(taskRepository.findById(14L)).thenReturn(Optional.of(new Task("14", "user", "note2", "Thu Mar 23 16:01", "DONE")));
-        Mockito.when(taskRepository.findById(3L)).thenReturn(Optional.of(new Task("3", "user", "note3", "Wed Mar 25 16:01", "WAIT")));
+        Mockito.when(taskRepository.findById(11L)).thenReturn(Optional.of(task1));
+        Mockito.when(taskRepository.findById(14L)).thenReturn(Optional.of(task2));
+        Mockito.when(taskRepository.findById(3L)).thenReturn(Optional.of(task3));
     }
 
-    @Test
-    void checkOwnerInvalidSymbol () {
-        View expectedView = new View();
+//    @AfterEach
+//    public void afterMethod() {
+//        session.finishMocking();
+//    }
 
+    @Test
+    void processOwnerIsOk () {
         View view = new View();
 
-        UserInputService userInputService = new UserInputService(taskRepository);
-
-        view = userInputService.howToServe(view, "???");
-
-        Assertions.assertEquals(view, expectedView);
-    }
-
-    @Test
-    void checkOwnerNull () {
-        View expectedView = new View();
-
-        View view = new View();
-
-        UserInputService userInputService = new UserInputService(taskRepository);
-
-        view = userInputService.howToServe(view, null);
-
-        Assertions.assertEquals(view, expectedView);
-    }
-
-    @Test
-    void checkOwnerIsOk () {
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setMessage(askNumber);
         expectedView.setTasks(tasks);
 
+        View resultView = new UserInputService(taskRepository).howToServe(view, "user");
+
+        Assertions.assertEquals(resultView, expectedView);
+    }
+
+    @Test
+    void processOwnerInvalidSymbol () {
         View view = new View();
 
-        UserInputService userInputService = new UserInputService(taskRepository);
+        View expectedView = new View();
 
-        view = userInputService.howToServe(view, "user");
+        View resultView = new UserInputService(taskRepository).howToServe(view, "???");
 
-        Assertions.assertEquals(view, expectedView);
+        Assertions.assertEquals(resultView, expectedView);
+    }
+
+    @Test
+    void processOwnerNull () {
+        View view = new View();
+
+        View expectedView = new View();
+
+        View resultView = new UserInputService(taskRepository).howToServe(view, null);
+
+        Assertions.assertEquals(resultView, expectedView);
     }
 
     @Test
     void processAskNumberOk () {
+        View view = new View();
+        view.setOwner("user");
+        view.setMessage(askNumber);
+
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setTaskIndex(1);
         expectedView.setMessage(askStatus);
         expectedView.setTasks(tasks);
 
+        View resultView = new UserInputService(taskRepository).howToServe(view, "1");
+
+        Assertions.assertEquals(resultView, expectedView);
+    }
+
+    @Test
+    void processAskNumberOutRange () {
         View view = new View();
         view.setOwner("user");
         view.setMessage(askNumber);
 
-        UserInputService userInputService = new UserInputService(taskRepository);
+        View expectedView = new View();
+        expectedView.setOwner("user");
+        expectedView.setMessage(askNumber);
+        expectedView.setTasks(tasks);
 
-        view = userInputService.howToServe(view, "1");
+        View resultView = new UserInputService(taskRepository).howToServe(view, "10");
 
-        Assertions.assertEquals(view, expectedView);
+        Assertions.assertEquals(resultView, expectedView);
     }
+
+    @Test
+    void processAskNumberNull () {
+        View view = new View();
+        view.setOwner("user");
+        view.setMessage(askNumber);
+
+        View expectedView = new View();
+        expectedView.setOwner("user");
+        expectedView.setMessage(askNumber);
+
+        View resultView = new UserInputService(taskRepository).howToServe(view, null);
+
+        Assertions.assertEquals(resultView, expectedView);
+    }
+
+    @Test
+    void processAskNewOk () {
+        View view = new View();
+        view.setOwner("user");
+        view.setMessage(askNew);
+
+        Task task = new Task("33", "user", "note4", "Wed Mar 25 16:01", "WAIT");
+        tasks.add(task);
+
+        View expectedView = new View();
+        expectedView.setOwner("user");
+        expectedView.setMessage(askNumber);
+        expectedView.setTasks(tasks);
+
+        View resultView = new UserInputService(taskRepository).howToServe(view, "note4");
+
+        Assertions.assertEquals(resultView, expectedView);
+    }
+
+    @Test
+    void processAskStatusDone () {
+        View view = new View();
+        view.setOwner("user");
+        view.setTaskIndex(3);
+        view.setMessage(askStatus);
+        view.setTasks(tasks);
+
+        View expectedView = new View();
+        expectedView.setOwner("user");
+        expectedView.setTaskIndex(3);
+        expectedView.setMessage(askNumber);
+        List <Task> expectList = new ArrayList<>(tasks);
+        expectList.set(2, new Task("3", "user", "note3", "Wed Mar 25 16:01", "DONE"));
+        expectedView.setTasks(expectList);
+
+        View resultView = new UserInputService(taskRepository).howToServe(view, "DONE");
+
+        Assertions.assertEquals(resultView, expectedView);
+    }
+
+    @Test
+    void processAskStatusArch () {
+        View view = new View();
+        view.setOwner("user");
+        view.setTaskIndex(3);
+        view.setMessage(askStatus);
+        view.setTasks(tasks);
+
+        View expectedView = new View();
+        expectedView.setOwner("user");
+        expectedView.setTaskIndex(3);
+        expectedView.setMessage(askNumber);
+        List <Task> expectList = new ArrayList<>(tasks);
+        expectList.remove(2);
+        expectedView.setTasks(expectList);
+
+        View resultView = new UserInputService(taskRepository).howToServe(view, "ARCH");
+
+        Assertions.assertEquals(resultView, expectedView);
+    }
+
+    @Test
+    void processAskStatusInvalid () {
+        View view = new View();
+        view.setOwner("user");
+        view.setMessage(askNumber);
+
+        View expectedView = new View();
+        expectedView.setOwner("user");
+        expectedView.setMessage(askNumber);
+        expectedView.setTasks(tasks);
+
+        View resultView = new UserInputService(taskRepository).howToServe(view, "arc");
+
+        Assertions.assertEquals(resultView, expectedView);
+    }
+
 }
