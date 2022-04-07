@@ -4,15 +4,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dal.entity.Task;
 import ru.pylaev.toDoProject.dal.repo.TaskRepository;
 import ru.pylaev.toDoProject.pl.view.View;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
@@ -22,8 +26,11 @@ class UserInputServiceTest {
     private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
-    @Mock
+    @MockBean
     private TaskRepository taskRepository;
+
+    @Autowired
+    UserInputService userInputService;
 
     List<Task> tasks = new ArrayList<>();
 
@@ -53,7 +60,7 @@ class UserInputServiceTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasks(tasks);
 
-        View resultView = new UserInputService(taskRepository).howToServe(view, "user");
+        View resultView = userInputService.howToServe(view, "user");
 
         Assertions.assertEquals(resultView, expectedView);
     }
@@ -64,7 +71,7 @@ class UserInputServiceTest {
 
         View expectedView = new View();
 
-        View resultView = new UserInputService(taskRepository).howToServe(view, "???");
+        View resultView = userInputService.howToServe(view, "???");
 
         Assertions.assertEquals(resultView, expectedView);
     }
@@ -75,7 +82,7 @@ class UserInputServiceTest {
 
         View expectedView = new View();
 
-        View resultView = new UserInputService(taskRepository).howToServe(view, null);
+        View resultView = userInputService.howToServe(view, null);
 
         Assertions.assertEquals(resultView, expectedView);
     }
@@ -92,7 +99,7 @@ class UserInputServiceTest {
         expectedView.setMessage(askStatus);
         expectedView.setTasks(tasks);
 
-        View resultView = new UserInputService(taskRepository).howToServe(view, "1");
+        View resultView = userInputService.howToServe(view, "1");
 
         Assertions.assertEquals(resultView, expectedView);
     }
@@ -108,7 +115,7 @@ class UserInputServiceTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasks(tasks);
 
-        View resultView = new UserInputService(taskRepository).howToServe(view, "10");
+        View resultView = userInputService.howToServe(view, "10");
 
         Assertions.assertEquals(resultView, expectedView);
     }
@@ -123,7 +130,7 @@ class UserInputServiceTest {
         expectedView.setOwner("user");
         expectedView.setMessage(askNumber);
 
-        View resultView = new UserInputService(taskRepository).howToServe(view, null);
+        View resultView = userInputService.howToServe(view, null);
 
         Assertions.assertEquals(resultView, expectedView);
     }
@@ -142,7 +149,7 @@ class UserInputServiceTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasks(tasks);
 
-        View resultView = new UserInputService(taskRepository).howToServe(view, "note4");
+        View resultView = userInputService.howToServe(view, "note4");
 
         Assertions.assertEquals(resultView, expectedView);
     }
@@ -163,7 +170,7 @@ class UserInputServiceTest {
         expectList.set(2, new Task("3", "user", "note3", "Wed Mar 25 16:01", "DONE"));
         expectedView.setTasks(expectList);
 
-        View resultView = new UserInputService(taskRepository).howToServe(view, "DONE");
+        View resultView = userInputService.howToServe(view, "DONE");
 
         Assertions.assertEquals(resultView, expectedView);
     }
@@ -184,7 +191,7 @@ class UserInputServiceTest {
         expectList.remove(2);
         expectedView.setTasks(expectList);
 
-        View resultView = new UserInputService(taskRepository).howToServe(view, "ARCH");
+        View resultView = userInputService.howToServe(view, "ARCH");
 
         Assertions.assertEquals(resultView, expectedView);
     }
@@ -200,7 +207,7 @@ class UserInputServiceTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasks(tasks);
 
-        View resultView = new UserInputService(taskRepository).howToServe(view, "arc");
+        View resultView = userInputService.howToServe(view, "arc");
 
         Assertions.assertEquals(resultView, expectedView);
     }

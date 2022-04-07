@@ -10,7 +10,7 @@ import ru.pylaev.toDoProject.pl.view.View;
 
 @org.springframework.web.bind.annotation.RestController
 public class UserInputRestController {
-    private final View view;
+    private View view;
     private final UserInputService userInputService;
 
     @Autowired
@@ -22,7 +22,7 @@ public class UserInputRestController {
     @PostMapping("/sendJson")
     public ResponseEntity<String> processUserInput (@RequestBody UserInput userInput) {
         try {
-            userInputService.howToServe(view, userInput.getContent());
+            view  = userInputService.howToServe(view, userInput.getContent());
 
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : view.getArrTasks()) {

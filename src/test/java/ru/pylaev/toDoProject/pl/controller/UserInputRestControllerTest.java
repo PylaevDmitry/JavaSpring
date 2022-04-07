@@ -15,18 +15,18 @@ import ru.pylaev.toDoProject.bll.UserInputService;
 import ru.pylaev.toDoProject.dal.entity.Task;
 import ru.pylaev.toDoProject.pl.view.View;
 
+import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(MockitoJUnitRunner.class)
-class UserInputControllerTest {
+class UserInputRestControllerTest {
 
     private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
 
@@ -51,17 +51,7 @@ class UserInputControllerTest {
     }
 
     @Test
-    void show() throws Exception {
-        View expectedView = new View();
-
-        this.mvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("view"))
-                .andExpect(model().attribute("view", expectedView));
-    }
-
-    @Test
-    void processUserInput() throws Exception {
+    void processUserInput () throws Exception {
         View view = new View();
 
         View expectedView = new View();
@@ -69,14 +59,19 @@ class UserInputControllerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasks(tasks);
 
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String s : expectedView.getArrTasks()) {
+            stringBuilder.append(s).append("\n");
+        }
+
+        String expectedResult = stringBuilder + expectedView.getMessage();
+
         Mockito.when(userInputService.howToServe(view, "user")).thenReturn(expectedView);
 
-        this.mvc.perform(post("/").param("userInput", "user"))
-                .andExpect(status().is(302));
-
-        this.mvc.perform(get("/"))
+        this.mvc.perform(post("/sendJson")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"content\": \"user\"}"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("view"))
-                .andExpect(model().attribute("view", expectedView));
+                .andExpect(content().string(expectedResult));
     }
 }
