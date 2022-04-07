@@ -1,7 +1,5 @@
 package ru.pylaev.toDoProject.dal.dao;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import ru.pylaev.util.CustomProperties;
 
 import java.sql.Connection;
@@ -14,7 +12,8 @@ public class ConnectionBuilder {
     private static final CustomProperties APPLICATION_PROPERTIES = new CustomProperties("application");
     private static final String dbUser = APPLICATION_PROPERTIES.getPropertyContent("spring.datasource.username");
     private static final String dbPass = APPLICATION_PROPERTIES.getPropertyContent("spring.datasource.password");
-
+    private static final String driver = APPLICATION_PROPERTIES.getPropertyContent("spring.datasource.driver-class-name");
+    private static final String url = APPLICATION_PROPERTIES.getPropertyContent("spring.datasource.url");
 //    private static String dbUser;
 //    private static String dbPass;
 //
@@ -30,10 +29,10 @@ public class ConnectionBuilder {
 
     public static Connection getDbConnection() throws SQLException {
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName(driver);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/todo", dbUser, dbPass);
+        return DriverManager.getConnection(url, dbUser, dbPass);
     }
 }
