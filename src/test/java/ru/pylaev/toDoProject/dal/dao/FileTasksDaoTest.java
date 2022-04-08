@@ -6,21 +6,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.pylaev.toDoProject.dal.entity.Task;
-import ru.pylaev.util.CustomProperties;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
 
-//@SpringBootTest
+@SpringBootTest
 class FileTasksDaoTest {
 
-    private static final CustomProperties APPLICATION_PROPERTIES = new CustomProperties("application");
-    private static final String path = APPLICATION_PROPERTIES.getPropertyContent("filePath");
+//    private static final CustomProperties APPLICATION_PROPERTIES = new CustomProperties("application");
+//    private static final String path = APPLICATION_PROPERTIES.getPropertyContent("filePath");
 
-//    @Value("${filePath}")
-//    private String path;
+    @Value("${filePath}")
+    private String path;
 
     @BeforeEach
     void setUp() throws IOException {
