@@ -42,6 +42,8 @@ public class ToDoHandler implements Runnable {
 
             if (list.size()==0 || userInput.equals("NEW")) {
                 userInput = ui.askInput(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew"));
+
+
                 if (!userInput.equals("BACK")) storage.add(new Task(owner, userInput, new Date(), "WAIT"));
             }
             else {

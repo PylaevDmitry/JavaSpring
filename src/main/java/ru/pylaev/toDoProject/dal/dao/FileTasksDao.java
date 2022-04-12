@@ -53,7 +53,7 @@ public class FileTasksDao implements Dao {
     }
 
     @Override
-    public synchronized void add (Task task) {
+    public synchronized long add (Task task) {
         task.setId(lastIndex+1);
         var tasks = getAll();
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(Files.newOutputStream(Paths.get(path)))) {
@@ -62,6 +62,7 @@ public class FileTasksDao implements Dao {
         } catch (IOException e) {
             System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
         }
+        return task.getId();
     }
 
     @Override

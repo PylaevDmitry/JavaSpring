@@ -4,7 +4,8 @@ import ru.pylaev.toDoProject.dal.entity.Task;
 
 public interface Dao {
     Task[] getAll ();
-    void add (Task data);
+    Task[] get (long id);
+    long add (Task data);
     void setStatus (long id, String status);
     void setOwner (String owner);
 }

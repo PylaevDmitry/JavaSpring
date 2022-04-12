@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
 class UserInputServiceTest {
 
@@ -26,10 +25,10 @@ class UserInputServiceTest {
     private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
-    @MockBean
+
     private TaskRepository taskRepository;
 
-    @Autowired
+
     UserInputService userInputService;
 
     List<Task> tasks = new ArrayList<>();
@@ -45,10 +44,14 @@ class UserInputServiceTest {
         tasks.add(task2);
         tasks.add(task3);
 
+        taskRepository = Mockito.mock(TaskRepository.class);
+
         Mockito.when(taskRepository.findByOwner("user")).thenReturn(tasks);
         Mockito.when(taskRepository.findById(11L)).thenReturn(Optional.of(task1));
         Mockito.when(taskRepository.findById(14L)).thenReturn(Optional.of(task2));
         Mockito.when(taskRepository.findById(3L)).thenReturn(Optional.of(task3));
+
+        userInputService = new UserInputService(taskRepository);
     }
 
     @Test
@@ -210,6 +213,12 @@ class UserInputServiceTest {
         View resultView = userInputService.howToServe(view, "arc");
 
         Assertions.assertEquals(resultView, expectedView);
+    }
+
+    @Test
+    void setOwner_validData_changeOwner () {
+
+        View resultView = userInputService.setOwner(view, "arc");
     }
 
 }

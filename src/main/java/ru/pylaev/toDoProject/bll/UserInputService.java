@@ -59,8 +59,12 @@ public class UserInputService {
         return resultView;
     }
 
-    private View checkOwner (View view, String userInput) {
-        if (view.getOwner()==null && (Checker.isValidInput(userInput, invalidNameSymbols) < 0)) {
+    public boolean checkOwner (View view, String userInput) {
+         return view.getOwner()==null && (Checker.isValidInput(userInput, invalidNameSymbols) < 0);
+    }
+
+    public View setOwner (View view, String userInput) {
+        if (checkOwner(view, userInput)){
             view.setOwner(userInput);
             view.setMessage(askNumber);
         }

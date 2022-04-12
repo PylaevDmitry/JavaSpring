@@ -67,7 +67,14 @@ public class DbTasksDao implements Dao {
     }
 
     @Override
+    public Task[] get(long id) {
+        return new Task[0];
+    }
+
+    @Override
     public void add (Task data) {
+        if(data == null) throw  new IllegalArgumentException("data is null");
+
         String request = "INSERT INTO task (owner, text, date, status) VALUES (?,?,?,?);";
 
         try (Connection dbConnection = getDbConnection()) {

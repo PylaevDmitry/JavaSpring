@@ -30,11 +30,16 @@ class UserInputRestControllerTest {
 
     private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
 
+    // 1. Act Arrange Assert
+    // 2. Naming
+    // 3. Unit, integration, API(component), Performance
+    // 4. Mocking
+    // 5. Coverage
+    // 6. Data generators(ready libraries)
+    // 7. Test must not dictate how to write prod code
+    // 8. TDD
     @Autowired
     private MockMvc mvc;
-
-    @MockBean
-    private UserInputService userInputService;
 
     List<Task> tasks = new ArrayList<>();
 
