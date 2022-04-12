@@ -36,9 +36,9 @@ class UserInputServiceTest {
 
     @BeforeEach
     void setUp() {
-        Task task1 = new Task("11", "user", "note1", "Wed Mar 24 16:01", "WAIT");
-        Task task2 = new Task("14", "user", "note2", "Thu Mar 23 16:01", "DONE");
-        Task task3 = new Task("3", "user", "note3", "Wed Mar 25 16:01", "WAIT");
+        Task task1 = new Task("3", "user", "note3", "Wed Mar 25 16:01", "WAIT");
+        Task task2 = new Task("11", "user", "note1", "Wed Mar 24 16:01", "WAIT");
+        Task task3 = new Task("14", "user", "note2", "Thu Mar 23 16:01", "DONE");
 
         tasks.clear();
         tasks.add(task1);
@@ -46,9 +46,10 @@ class UserInputServiceTest {
         tasks.add(task3);
 
         Mockito.when(taskRepository.findByOwner("user")).thenReturn(tasks);
-        Mockito.when(taskRepository.findById(11L)).thenReturn(Optional.of(task1));
-        Mockito.when(taskRepository.findById(14L)).thenReturn(Optional.of(task2));
-        Mockito.when(taskRepository.findById(3L)).thenReturn(Optional.of(task3));
+        Mockito.when(taskRepository.findById(3L)).thenReturn(Optional.of(task1));
+        Mockito.when(taskRepository.findById(11L)).thenReturn(Optional.of(task2));
+        Mockito.when(taskRepository.findById(14L)).thenReturn(Optional.of(task3));
+
     }
 
     @Test
@@ -158,16 +159,16 @@ class UserInputServiceTest {
     void processAskStatusDone () {
         View view = new View();
         view.setOwner("user");
-        view.setTaskIndex(3);
+        view.setTaskIndex(1);
         view.setMessage(askStatus);
         view.setTasks(tasks);
 
         View expectedView = new View();
         expectedView.setOwner("user");
-        expectedView.setTaskIndex(3);
+        expectedView.setTaskIndex(1);
         expectedView.setMessage(askNumber);
         List <Task> expectList = new ArrayList<>(tasks);
-        expectList.set(2, new Task("3", "user", "note3", "Wed Mar 25 16:01", "DONE"));
+        expectList.set(0, new Task("3", "user", "note3", "Wed Mar 25 16:01", "DONE"));
         expectedView.setTasks(expectList);
 
         View resultView = userInputService.howToServe(view, "DONE");
