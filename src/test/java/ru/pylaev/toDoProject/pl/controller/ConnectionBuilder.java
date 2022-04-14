@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.dal.dao;
+package ru.pylaev.toDoProject.pl.controller;
 
 import ru.pylaev.util.CustomProperties;
 
