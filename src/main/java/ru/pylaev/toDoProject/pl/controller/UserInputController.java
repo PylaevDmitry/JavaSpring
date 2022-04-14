@@ -10,7 +10,6 @@ import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.bll.UserInputService;
 import ru.pylaev.toDoProject.dal.entity.Task;
 import ru.pylaev.toDoProject.pl.view.View;
-import ru.pylaev.util.Checker;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +21,7 @@ public class UserInputController {
     private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
-    private View view;
+    private final View view;
     private final UserInputService userInputService;
 
     @Autowired
@@ -39,48 +38,46 @@ public class UserInputController {
 
     @PostMapping
     public String processUserInput (@RequestParam String userInput) {
-        view = howToServe(view, userInput);
+        processView(userInput);
         return "redirect:/";
     }
 
-    public View howToServe (View view, String userInput) {
-
+    public void processView (String userInput) {
         if (view.getMessage().equals(askOwner) && userInputService.checkOwner(view.getOwner(), userInput)) {
             view.setOwner(userInput);
             view.setMessage(askNumber);
         }
 
         if (Objects.isNull(userInput)) {
-            return view;
+            return;
         }
 
         if (view.getMessage().equals(askNumber)) {
             List<Task> tasks = userInputService.getActualTasks(view.getOwner());
-            if (tasks.size()==0 || userInput.equals("NEW")) {
+            int getCurrentIndexResult = userInputService.getCurrentIndex(userInput, tasks.size());
+            if (getCurrentIndexResult == 0) {
                 view.setMessage(askNew);
             }
-            else if (!userInput.equals("BACK")) {
-                var taskIndex = Checker.isValidIndex(userInput, tasks.size());
-                if (userInputService.processAskNumber(userInput, taskIndex)) {
-                    view.setMessage(askStatus);
-                    view.setTaskIndex(taskIndex);
-                }
+            else if (getCurrentIndexResult > 0) {
+                view.setMessage(askStatus);
+                view.setTaskIndex(getCurrentIndexResult);
             }
             view.setTasksAsList(tasks);
         }
         else if (view.getMessage().equals(askNew)) {
-            userInputService.processAskNew(view.getOwner(), userInput);
+            int saveNewResult = userInputService.saveNew(view.getOwner(), userInput);
             view.setMessage(askNumber);
-            view.setTasksAsList(userInputService.getActualTasks(view.getOwner()));
+            if (saveNewResult>0){
+                view.setTasksAsList(userInputService.getActualTasks(view.getOwner()));
+            }
         }
         else if (view.getMessage().equals(askStatus)) {
-            if (userInputService.processAskStatus(view.getOwner(), userInput, view.getTaskIndex())) {
+            int changeStatusResult = userInputService.changeStatus(view.getOwner(), userInput, view.getTaskIndex());
+            if (changeStatusResult>0) {
                 view.setMessage(askNumber);
                 view.setTasksAsList(userInputService.getActualTasks(view.getOwner()));
             }
-            else view.setMessage(askNumber);
+            else if (changeStatusResult==0) view.setMessage(askNumber);
         }
-
-        return view;
     }
 }

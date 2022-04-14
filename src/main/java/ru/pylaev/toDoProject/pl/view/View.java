@@ -46,10 +46,6 @@ public class View {
         return arrTasks;
     }
 
-    public void setArrTasks(String[] arrTasks) {
-        this.arrTasks = arrTasks;
-    }
-
     public void setTasksAsList(List<Task> list) {
         arrTasks = new String[list.size()];
         IntStream.range(0, list.size()).forEach(i -> this.getArrTasks()[i] = i + 1 + " " + list.get(i));
