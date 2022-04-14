@@ -46,10 +46,13 @@ public class View {
         return arrTasks;
     }
 
-    public void setTasks (List<Task> finalList) {
-        arrTasks = new String[finalList.size()];
-        IntStream.range(0, finalList.size())
-                .forEach(i -> this.getArrTasks()[i] = i + 1 + " " + finalList.get(i));
+    public void setArrTasks(String[] arrTasks) {
+        this.arrTasks = arrTasks;
+    }
+
+    public void setTasksAsList(List<Task> list) {
+        arrTasks = new String[list.size()];
+        IntStream.range(0, list.size()).forEach(i -> this.getArrTasks()[i] = i + 1 + " " + list.get(i));
     }
 
     @Override

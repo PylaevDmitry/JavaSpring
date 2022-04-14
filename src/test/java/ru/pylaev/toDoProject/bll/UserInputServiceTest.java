@@ -59,7 +59,7 @@ class UserInputServiceTest {
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setMessage(askNumber);
-        expectedView.setTasks(tasks);
+        expectedView.setTasksAsList(tasks);
 
         View resultView = userInputService.howToServe(view, "user");
 
@@ -98,7 +98,7 @@ class UserInputServiceTest {
         expectedView.setOwner("user");
         expectedView.setTaskIndex(1);
         expectedView.setMessage(askStatus);
-        expectedView.setTasks(tasks);
+        expectedView.setTasksAsList(tasks);
 
         View resultView = userInputService.howToServe(view, "1");
 
@@ -114,7 +114,7 @@ class UserInputServiceTest {
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setMessage(askNumber);
-        expectedView.setTasks(tasks);
+        expectedView.setTasksAsList(tasks);
 
         View resultView = userInputService.howToServe(view, "10");
 
@@ -148,7 +148,7 @@ class UserInputServiceTest {
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setMessage(askNumber);
-        expectedView.setTasks(tasks);
+        expectedView.setTasksAsList(tasks);
 
         View resultView = userInputService.howToServe(view, "note4");
 
@@ -161,7 +161,7 @@ class UserInputServiceTest {
         view.setOwner("user");
         view.setTaskIndex(1);
         view.setMessage(askStatus);
-        view.setTasks(tasks);
+        view.setTasksAsList(tasks);
 
         View expectedView = new View();
         expectedView.setOwner("user");
@@ -169,7 +169,7 @@ class UserInputServiceTest {
         expectedView.setMessage(askNumber);
         List <Task> expectList = new ArrayList<>(tasks);
         expectList.set(0, new Task("3", "user", "note3", "Wed Mar 25 16:01", "DONE"));
-        expectedView.setTasks(expectList);
+        expectedView.setTasksAsList(expectList);
 
         View resultView = userInputService.howToServe(view, "DONE");
 
@@ -182,7 +182,7 @@ class UserInputServiceTest {
         view.setOwner("user");
         view.setTaskIndex(3);
         view.setMessage(askStatus);
-        view.setTasks(tasks);
+        view.setTasksAsList(tasks);
 
         View expectedView = new View();
         expectedView.setOwner("user");
@@ -190,7 +190,7 @@ class UserInputServiceTest {
         expectedView.setMessage(askNumber);
         List <Task> expectList = new ArrayList<>(tasks);
         expectList.remove(2);
-        expectedView.setTasks(expectList);
+        expectedView.setTasksAsList(expectList);
 
         View resultView = userInputService.howToServe(view, "ARCH");
 
@@ -206,7 +206,7 @@ class UserInputServiceTest {
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setMessage(askNumber);
-        expectedView.setTasks(tasks);
+        expectedView.setTasksAsList(tasks);
 
         View resultView = userInputService.howToServe(view, "arc");
 
