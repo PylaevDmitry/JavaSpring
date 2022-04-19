@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.bll.UserInputService;
-import ru.pylaev.toDoProject.dal.entity.Task;
+import ru.pylaev.toDoProject.dal.Task;
 import ru.pylaev.toDoProject.pl.view.View;
 
 import java.util.List;

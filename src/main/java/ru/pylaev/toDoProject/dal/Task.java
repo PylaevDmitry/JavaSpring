@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.dal.entity;
+package ru.pylaev.toDoProject.dal;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

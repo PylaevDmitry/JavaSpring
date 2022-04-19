@@ -1,6 +1,4 @@
-package ru.pylaev.toDoProject.pl.controller;
-
-import ru.pylaev.util.CustomProperties;
+package ru.pylaev.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

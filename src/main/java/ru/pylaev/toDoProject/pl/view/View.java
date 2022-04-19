@@ -3,7 +3,7 @@ package ru.pylaev.toDoProject.pl.view;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.dal.entity.Task;
+import ru.pylaev.toDoProject.dal.Task;
 
 import java.util.Arrays;
 import java.util.List;

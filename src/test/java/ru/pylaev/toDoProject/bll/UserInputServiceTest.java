@@ -10,8 +10,8 @@
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.boot.test.mock.mockito.MockBean;
 //import ru.pylaev.toDoProject.ToDoMain;
-//import ru.pylaev.toDoProject.dal.entity.Task;
-//import ru.pylaev.toDoProject.dal.repo.TaskRepository;
+//import ru.pylaev.toDoProject.dal.Task;
+//import ru.pylaev.toDoProject.dal.TaskRepository;
 //import ru.pylaev.toDoProject.pl.view.View;
 //
 //import java.util.ArrayList;

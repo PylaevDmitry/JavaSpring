@@ -1,7 +1,6 @@
-package ru.pylaev.toDoProject.dal.repo;
+package ru.pylaev.toDoProject.dal;
 
 import org.springframework.data.repository.CrudRepository;
-import ru.pylaev.toDoProject.dal.entity.Task;
 
 import java.util.List;
 

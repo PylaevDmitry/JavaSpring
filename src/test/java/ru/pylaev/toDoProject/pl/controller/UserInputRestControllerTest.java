@@ -9,21 +9,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.dal.entity.Task;
+import ru.pylaev.toDoProject.dal.Task;
 import ru.pylaev.toDoProject.pl.view.View;
+import ru.pylaev.util.DBDataSupplier;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -43,18 +37,7 @@ class UserInputRestControllerTest {
 
     @BeforeEach
     void setUp() throws URISyntaxException, IOException {
-        URI sqlPath = Objects.requireNonNull(UserInputControllerTest.class.getClassLoader()
-                        .getResource("PrepareData.sql"))
-                .toURI();
-        List<String> list = Files.readAllLines(Paths.get(sqlPath));
-        String sql = String.join("", list);
-
-        try (Connection dbConnection = ConnectionBuilder.getDbConnection()) {
-            PreparedStatement preparedStatement = dbConnection.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("storageError"));
-        }
+        DBDataSupplier.prepareData("PrepareData.sql");
     }
 
     @Test

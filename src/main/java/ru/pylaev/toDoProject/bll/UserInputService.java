@@ -2,8 +2,8 @@ package ru.pylaev.toDoProject.bll;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.pylaev.toDoProject.dal.entity.Task;
-import ru.pylaev.toDoProject.dal.repo.TaskRepository;
+import ru.pylaev.toDoProject.dal.Task;
+import ru.pylaev.toDoProject.dal.TaskRepository;
 import ru.pylaev.util.Checker;
 
 import java.util.Date;
