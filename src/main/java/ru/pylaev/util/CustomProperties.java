@@ -2,17 +2,10 @@ package ru.pylaev.util;
 
 import java.util.PropertyResourceBundle;
 
-public class CustomProperties {
+public record CustomProperties(String fileName) {
 
-    private final String fileName;
-
-    public CustomProperties (String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getPropertyContent (String property ) {
+    public String getPropertyContent(String property) {
         PropertyResourceBundle properties = (PropertyResourceBundle) PropertyResourceBundle.getBundle(fileName);
         return properties.getString(property);
     }
-
 }

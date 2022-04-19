@@ -1,7 +1,6 @@
 package ru.pylaev.toDoProject.bll;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import ru.pylaev.toDoProject.dal.entity.Task;
 import ru.pylaev.toDoProject.dal.repo.TaskRepository;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("ClassCanBeRecord")
 @Service
-@Scope("prototype")
 public class UserInputService {
 
     private static final String[] tasksStates = new String[] {"ARCH", "DONE", "WAIT"};
