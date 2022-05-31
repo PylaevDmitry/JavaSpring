@@ -14,7 +14,7 @@ public class Checker {
         }
     }
 
-    public static int isValidInput (String userInput, String[] arrString) {
+    public static int inputInArray(String userInput, String[] arrString) {
         if (userInput==null) return 0;
         boolean anyMatch = Arrays.stream(arrString).anyMatch(userInput::contains);
         if (userInput.length() > 0) {

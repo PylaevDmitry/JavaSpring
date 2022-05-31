@@ -31,7 +31,7 @@ public class UserInputService {
     }
 
     public boolean checkOwner (String owner, String userInput) {
-        return owner == null && (Checker.isValidInput(userInput, invalidNameSymbols) < 0);
+        return owner == null && (Checker.inputInArray(userInput, invalidNameSymbols) < 0);
     }
 
     public int getCurrentIndex(String userInput, int size) {
@@ -57,7 +57,7 @@ public class UserInputService {
 
     public int changeStatus (String owner, String userInput, int taskIndex) {
         if (!userInput.equals("BACK")) {
-            if (Checker.isValidInput(userInput, tasksStates)>0) {
+            if (Checker.inputInArray(userInput, tasksStates)>0) {
                 Task task = taskRepository.findById(getActualTasks(owner)
                         .get(taskIndex-1)
                         .getId())
