@@ -15,9 +15,9 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String owner = null;
-    private String text = null;
-    private String date = null;
+    private String owner;
+    private String text;
+    private String date;
     private String status;
 
     public Task ( ) {
