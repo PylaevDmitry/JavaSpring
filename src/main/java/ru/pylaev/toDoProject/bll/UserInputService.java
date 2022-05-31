@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.pylaev.toDoProject.dal.Task;
 import ru.pylaev.toDoProject.dal.TaskRepository;
-import ru.pylaev.util.Checker;
+import ru.pylaev.util.InputChecker;
 
 import java.util.Date;
 import java.util.List;
@@ -31,7 +31,7 @@ public class UserInputService {
     }
 
     public boolean checkOwner (String owner, String userInput) {
-        return owner == null && (Checker.inputInArray(userInput, invalidNameSymbols) < 0);
+        return owner == null && (InputChecker.inputInArray(userInput, invalidNameSymbols) < 0);
     }
 
     public int getCurrentIndex(String userInput, int size) {
@@ -39,7 +39,7 @@ public class UserInputService {
             return 0;
         }
         else if (!userInput.equals("BACK")) {
-            var taskIndex = Checker.isValidIndex(userInput, size);
+            var taskIndex = InputChecker.isValidIndex(userInput, size);
             if (taskIndex>-1) {
                 return taskIndex;
             }
@@ -57,7 +57,7 @@ public class UserInputService {
 
     public int changeStatus (String owner, String userInput, int taskIndex) {
         if (!userInput.equals("BACK")) {
-            if (Checker.inputInArray(userInput, tasksStates)>0) {
+            if (InputChecker.inputInArray(userInput, tasksStates)>0) {
                 Task task = taskRepository.findById(getActualTasks(owner)
                         .get(taskIndex-1)
                         .getId())

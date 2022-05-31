@@ -39,21 +39,9 @@ public class Task implements Serializable {
         this.status = status;
     }
 
-    public void setId (long id) { this.id = id; }
-
     public void setStatus (String status) { this.status = status; }
 
     public long getId ( ) { return id; }
-
-    public String getOwner ( ) { return owner;}
-
-    public String getText ( ) {
-        return text;
-    }
-
-    public String getDate ( ) {
-        return date;
-    }
 
     public String getStatus ( ) {
         return status;
@@ -66,9 +54,7 @@ public class Task implements Serializable {
     public boolean equals (Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Task task = (Task) o;
-
         if (!Objects.equals(owner, task.owner)) return false;
         if (!Objects.equals(text, task.text)) return false;
         if (!Objects.equals(date, task.date)) return false;

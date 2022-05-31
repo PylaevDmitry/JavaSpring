@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @SuppressWarnings("ClassCanBeRecord")
 @Component
-public class ViewProcessor {
+public class ControllerHandler {
 
     private static final String askOwner = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner");
     private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
@@ -22,7 +22,7 @@ public class ViewProcessor {
     private final UserInputService userInputService;
 
     @Autowired
-    public ViewProcessor(UserInputService userInputService) {
+    public ControllerHandler(UserInputService userInputService) {
         this.userInputService = userInputService;
     }
 

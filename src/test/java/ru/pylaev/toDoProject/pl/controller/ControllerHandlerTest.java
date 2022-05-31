@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.bll;
+package ru.pylaev.toDoProject.pl.controller;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dal.Task;
 import ru.pylaev.toDoProject.dal.TaskRepository;
-import ru.pylaev.toDoProject.pl.controller.ViewProcessor;
 import ru.pylaev.toDoProject.pl.view.View;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
-class ViewProcessorTest {
+class ControllerHandlerTest {
 
     private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
     private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
@@ -31,7 +30,7 @@ class ViewProcessorTest {
     private TaskRepository taskRepository;
 
     @Autowired
-    ViewProcessor viewProcessor;
+    ControllerHandler controllerHandler;
 
     List<Task> tasks = new ArrayList<>();
 
@@ -62,7 +61,7 @@ class ViewProcessorTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        viewProcessor.processView("user", view);
+        controllerHandler.processView("user", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -73,7 +72,7 @@ class ViewProcessorTest {
 
         View expectedView = new View();
 
-        viewProcessor.processView( "???", view);
+        controllerHandler.processView( "???", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -84,7 +83,7 @@ class ViewProcessorTest {
 
         View expectedView = new View();
 
-        viewProcessor.processView( null, view);
+        controllerHandler.processView( null, view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -101,7 +100,7 @@ class ViewProcessorTest {
         expectedView.setMessage(askStatus);
         expectedView.setTasksAsList(tasks);
 
-        viewProcessor.processView( "1", view);
+        controllerHandler.processView( "1", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -117,7 +116,7 @@ class ViewProcessorTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        viewProcessor.processView( "10", view);
+        controllerHandler.processView( "10", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -132,7 +131,7 @@ class ViewProcessorTest {
         expectedView.setOwner("user");
         expectedView.setMessage(askNumber);
 
-        viewProcessor.processView( null, view);
+        controllerHandler.processView( null, view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -151,7 +150,7 @@ class ViewProcessorTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        viewProcessor.processView( "note4", view);
+        controllerHandler.processView( "note4", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -172,7 +171,7 @@ class ViewProcessorTest {
         expectList.set(0, new Task("3", "user", "note3", "Wed Mar 25 16:01", "DONE"));
         expectedView.setTasksAsList(expectList);
 
-        viewProcessor.processView( "DONE", view);
+        controllerHandler.processView( "DONE", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -193,7 +192,7 @@ class ViewProcessorTest {
         expectList.remove(2);
         expectedView.setTasksAsList(expectList);
 
-        viewProcessor.processView("ARCH", view);
+        controllerHandler.processView("ARCH", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -209,7 +208,7 @@ class ViewProcessorTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        viewProcessor.processView( "arc", view);
+        controllerHandler.processView( "arc", view);
 
         Assertions.assertEquals(view, expectedView);
     }

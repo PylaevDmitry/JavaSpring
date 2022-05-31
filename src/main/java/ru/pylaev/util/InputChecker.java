@@ -3,7 +3,7 @@ package ru.pylaev.util;
 import java.time.temporal.ValueRange;
 import java.util.Arrays;
 
-public class Checker {
+public class InputChecker {
     public static int isValidIndex (String userInput, int size) {
         if (size<1) return -1;
         try {

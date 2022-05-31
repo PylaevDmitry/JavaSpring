@@ -17,10 +17,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SuppressWarnings("NewClassNamingConvention")
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
-class UserInputServiceTestNew {
+class UserInputServiceTest {
 
     @MockBean
     private TaskRepository taskRepository;

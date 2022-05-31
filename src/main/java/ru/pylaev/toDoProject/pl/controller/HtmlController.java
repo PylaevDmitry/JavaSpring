@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.pylaev.toDoProject.pl.view.View;
 
 @Controller
-public class UserInputController {
+public class HtmlController {
     private final View view;
-    private final ViewProcessor viewProcessor;
+    private final ControllerHandler controllerHandler;
 
     @Autowired
-    public UserInputController (View view, ViewProcessor viewProcessor) {
+    public HtmlController(View view, ControllerHandler controllerHandler) {
         this.view = view;
-        this.viewProcessor = viewProcessor;
+        this.controllerHandler = controllerHandler;
     }
 
     @GetMapping
@@ -27,7 +27,7 @@ public class UserInputController {
 
     @PostMapping
     public String processUserInput (@RequestParam String userInput) {
-        viewProcessor.processView(userInput, view);
+        controllerHandler.processView(userInput, view);
         return "redirect:/";
     }
 }
