@@ -4,10 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Random;
 
-public class DataGenerator {
+public class IntGenerator {
     private final Random random;
 
-    public DataGenerator() {
+    public IntGenerator() {
         random = new Random();
     }
 

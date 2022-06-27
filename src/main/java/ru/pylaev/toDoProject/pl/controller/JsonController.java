@@ -22,7 +22,7 @@ public class JsonController {
     @PostMapping("/sendJson")
     public ResponseEntity<String> processUserInput (@RequestBody UserInput userInput) {
         try {
-            controllerHandler.processView (userInput.getContent(), view);
+            controllerHandler.processUserInput(userInput.getContent(), view);
 
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : view.getArrTasks()) {

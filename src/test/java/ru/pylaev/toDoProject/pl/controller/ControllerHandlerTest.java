@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.pylaev.toDoProject.ToDoMain;
+import ru.pylaev.toDoProject.dal.DataBaseTaskDAO;
 import ru.pylaev.toDoProject.dal.Task;
-import ru.pylaev.toDoProject.dal.TaskRepository;
 import ru.pylaev.toDoProject.pl.view.View;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ class ControllerHandlerTest {
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
     @MockBean
-    private TaskRepository taskRepository;
+    private DataBaseTaskDAO taskRepository;
 
     @Autowired
     ControllerHandler controllerHandler;
@@ -61,7 +61,7 @@ class ControllerHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        controllerHandler.processView("user", view);
+        controllerHandler.processUserInput("user", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -72,7 +72,7 @@ class ControllerHandlerTest {
 
         View expectedView = new View();
 
-        controllerHandler.processView( "???", view);
+        controllerHandler.processUserInput( "???", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -83,7 +83,7 @@ class ControllerHandlerTest {
 
         View expectedView = new View();
 
-        controllerHandler.processView( null, view);
+        controllerHandler.processUserInput( null, view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -100,7 +100,7 @@ class ControllerHandlerTest {
         expectedView.setMessage(askStatus);
         expectedView.setTasksAsList(tasks);
 
-        controllerHandler.processView( "1", view);
+        controllerHandler.processUserInput( "1", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -116,7 +116,7 @@ class ControllerHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        controllerHandler.processView( "10", view);
+        controllerHandler.processUserInput( "10", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -131,7 +131,7 @@ class ControllerHandlerTest {
         expectedView.setOwner("user");
         expectedView.setMessage(askNumber);
 
-        controllerHandler.processView( null, view);
+        controllerHandler.processUserInput( null, view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -150,7 +150,7 @@ class ControllerHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        controllerHandler.processView( "note4", view);
+        controllerHandler.processUserInput( "note4", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -171,7 +171,7 @@ class ControllerHandlerTest {
         expectList.set(0, new Task("3", "user", "note3", "Wed Mar 25 16:01", "DONE"));
         expectedView.setTasksAsList(expectList);
 
-        controllerHandler.processView( "DONE", view);
+        controllerHandler.processUserInput( "DONE", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -192,7 +192,7 @@ class ControllerHandlerTest {
         expectList.remove(2);
         expectedView.setTasksAsList(expectList);
 
-        controllerHandler.processView("ARCH", view);
+        controllerHandler.processUserInput("ARCH", view);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -208,7 +208,7 @@ class ControllerHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        controllerHandler.processView( "arc", view);
+        controllerHandler.processUserInput( "arc", view);
 
         Assertions.assertEquals(view, expectedView);
     }

@@ -27,7 +27,7 @@ public class HtmlController {
 
     @PostMapping
     public String processUserInput (@RequestParam String userInput) {
-        controllerHandler.processView(userInput, view);
+        controllerHandler.processUserInput(userInput, view);
         return "redirect:/";
     }
 }

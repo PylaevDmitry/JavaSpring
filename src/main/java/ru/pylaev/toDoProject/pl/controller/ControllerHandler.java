@@ -26,7 +26,7 @@ public class ControllerHandler {
         this.userInputService = userInputService;
     }
 
-    public void processView(String userInput, View view) {
+    public void processUserInput(String userInput, View view) {
         if (view.getMessage().equals(askOwner) && userInputService.checkOwner(view.getOwner(), userInput)) {
             view.setOwner(userInput);
             view.setMessage(askNumber);

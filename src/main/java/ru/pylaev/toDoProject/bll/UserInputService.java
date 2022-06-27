@@ -2,30 +2,29 @@ package ru.pylaev.toDoProject.bll;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.pylaev.toDoProject.dal.DataBaseTaskDAO;
+import ru.pylaev.toDoProject.dal.DAO;
 import ru.pylaev.toDoProject.dal.Task;
-import ru.pylaev.toDoProject.dal.TaskRepository;
 import ru.pylaev.util.InputChecker;
 
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("ClassCanBeRecord")
 @Service
 public class UserInputService {
-
     private static final String[] tasksStates = new String[] {"ARCH", "DONE", "WAIT"};
     private static final String[] invalidNameSymbols = new String[] {" ", "\\", "|", "/", ":", "?", "\"", "<", ">"};
 
-    private final TaskRepository taskRepository;
+    private final DAO taskDAO;
 
     @Autowired
-    public UserInputService (TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public UserInputService (DataBaseTaskDAO taskRepository) {
+        this.taskDAO = taskRepository;
     }
 
     public List<Task> getActualTasks (String owner) {
-        return (taskRepository.findByOwner(owner)).stream()
+        return (taskDAO.findByOwner(owner)).stream()
                 .filter(task -> !task.getStatus().equals("ARCH"))
                 .collect(Collectors.toList());
     }
@@ -49,7 +48,7 @@ public class UserInputService {
 
     public int saveNew (String owner, String userInput) {
         if (!userInput.equals("BACK")) {
-            taskRepository.save(new Task(owner, userInput, new Date(), "WAIT"));
+            taskDAO.save(new Task(owner, userInput, new Date(), "WAIT"));
             return 1;
         }
         return 0;
@@ -58,12 +57,12 @@ public class UserInputService {
     public int changeStatus (String owner, String userInput, int taskIndex) {
         if (!userInput.equals("BACK")) {
             if (InputChecker.inputInArray(userInput, tasksStates)>0) {
-                Task task = taskRepository.findById(getActualTasks(owner)
+                Task task = taskDAO.findById(getActualTasks(owner)
                         .get(taskIndex-1)
                         .getId())
                         .orElseThrow();
                 task.setStatus(userInput);
-                taskRepository.save(task);
+                taskDAO.save(task);
                 return 1;
             }
             return -1;
