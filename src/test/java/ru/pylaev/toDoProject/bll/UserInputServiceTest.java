@@ -8,7 +8,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import ru.pylaev.toDoProject.dal.DataBaseTaskDAO;
+import ru.pylaev.toDoProject.dal.fileIO.FileTasksDAO;
 import ru.pylaev.toDoProject.dal.Task;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserInputServiceTest {
 
     @MockBean
-    private DataBaseTaskDAO taskRepository;
+    private FileTasksDAO tasksDAO;
 
     @Autowired
     UserInputService userInputService;
@@ -40,11 +40,11 @@ class UserInputServiceTest {
         tasks.add(task2);
         tasks.add(task3);
 
-        Mockito.when(taskRepository.findByOwner("user")).thenReturn(tasks);
-        Mockito.when(taskRepository.findById(3L)).thenReturn(Optional.of(task1));
-        Mockito.when(taskRepository.findById(11L)).thenReturn(Optional.of(task2));
-        Mockito.when(taskRepository.findById(14L)).thenReturn(Optional.of(task3));
-        Mockito.when(taskRepository.findByOwner("user")).thenReturn(tasks);
+        Mockito.when(tasksDAO.findByOwner("user")).thenReturn(tasks);
+        Mockito.when(tasksDAO.findById(3L)).thenReturn(Optional.of(task1));
+        Mockito.when(tasksDAO.findById(11L)).thenReturn(Optional.of(task2));
+        Mockito.when(tasksDAO.findById(14L)).thenReturn(Optional.of(task3));
+        Mockito.when(tasksDAO.findByOwner("user")).thenReturn(tasks);
 
     }
 

@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.dal.DataBaseTaskDAO;
 import ru.pylaev.toDoProject.dal.Task;
+import ru.pylaev.toDoProject.dal.fileIO.FileTasksDAO;
 import ru.pylaev.toDoProject.pl.view.View;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ class ControllerHandlerTest {
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
     @MockBean
-    private DataBaseTaskDAO taskRepository;
+    private FileTasksDAO tasksDAO;
 
     @Autowired
     ControllerHandler controllerHandler;
@@ -45,10 +45,10 @@ class ControllerHandlerTest {
         tasks.add(task2);
         tasks.add(task3);
 
-        Mockito.when(taskRepository.findByOwner("user")).thenReturn(tasks);
-        Mockito.when(taskRepository.findById(3L)).thenReturn(Optional.of(task1));
-        Mockito.when(taskRepository.findById(11L)).thenReturn(Optional.of(task2));
-        Mockito.when(taskRepository.findById(14L)).thenReturn(Optional.of(task3));
+        Mockito.when(tasksDAO.findByOwner("user")).thenReturn(tasks);
+        Mockito.when(tasksDAO.findById(3L)).thenReturn(Optional.of(task1));
+        Mockito.when(tasksDAO.findById(11L)).thenReturn(Optional.of(task2));
+        Mockito.when(tasksDAO.findById(14L)).thenReturn(Optional.of(task3));
 
     }
 

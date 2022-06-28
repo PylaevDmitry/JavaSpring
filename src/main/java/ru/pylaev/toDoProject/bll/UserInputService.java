@@ -2,8 +2,8 @@ package ru.pylaev.toDoProject.bll;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.pylaev.toDoProject.dal.DataBaseTaskDAO;
 import ru.pylaev.toDoProject.dal.DAO;
+import ru.pylaev.toDoProject.dal.fileIO.FileTasksDAO;
 import ru.pylaev.toDoProject.dal.Task;
 import ru.pylaev.util.InputChecker;
 
@@ -19,8 +19,8 @@ public class UserInputService {
     private final DAO taskDAO;
 
     @Autowired
-    public UserInputService (DataBaseTaskDAO taskRepository) {
-        this.taskDAO = taskRepository;
+    public UserInputService (FileTasksDAO tasksDAO) {
+        this.taskDAO = tasksDAO;
     }
 
     public List<Task> getActualTasks (String owner) {
