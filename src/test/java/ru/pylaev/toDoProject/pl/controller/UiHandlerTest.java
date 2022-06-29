@@ -10,8 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.pylaev.toDoProject.ToDoMain;
+import ru.pylaev.toDoProject.bll.UserInputService;
 import ru.pylaev.toDoProject.dal.Task;
-import ru.pylaev.toDoProject.dal.fileIO.FileTasksDAO;
+import ru.pylaev.toDoProject.dal.dataBase.DataBaseTaskDAO;
 import ru.pylaev.toDoProject.pl.view.View;
 
 import java.util.ArrayList;
@@ -20,17 +21,17 @@ import java.util.Optional;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
-class ControllerHandlerTest {
+class UiHandlerTest {
 
     private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
     private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
     @MockBean
-    private FileTasksDAO tasksDAO;
+    private DataBaseTaskDAO tasksDAO;
 
     @Autowired
-    ControllerHandler controllerHandler;
+    UserInputService userInputService;
 
     List<Task> tasks = new ArrayList<>();
 
@@ -61,7 +62,7 @@ class ControllerHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        controllerHandler.processUserInput("user", view);
+        UiHandler.processUserInput("user", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -72,7 +73,7 @@ class ControllerHandlerTest {
 
         View expectedView = new View();
 
-        controllerHandler.processUserInput( "???", view);
+        UiHandler.processUserInput( "???", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -83,7 +84,7 @@ class ControllerHandlerTest {
 
         View expectedView = new View();
 
-        controllerHandler.processUserInput( null, view);
+        UiHandler.processUserInput( null, view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -100,7 +101,7 @@ class ControllerHandlerTest {
         expectedView.setMessage(askStatus);
         expectedView.setTasksAsList(tasks);
 
-        controllerHandler.processUserInput( "1", view);
+        UiHandler.processUserInput( "1", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -116,7 +117,7 @@ class ControllerHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        controllerHandler.processUserInput( "10", view);
+        UiHandler.processUserInput( "10", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -131,7 +132,7 @@ class ControllerHandlerTest {
         expectedView.setOwner("user");
         expectedView.setMessage(askNumber);
 
-        controllerHandler.processUserInput( null, view);
+        UiHandler.processUserInput( null, view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -150,7 +151,7 @@ class ControllerHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        controllerHandler.processUserInput( "note4", view);
+        UiHandler.processUserInput( "note4", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -171,7 +172,7 @@ class ControllerHandlerTest {
         expectList.set(0, new Task("3", "user", "note3", "Wed Mar 25 16:01", "DONE"));
         expectedView.setTasksAsList(expectList);
 
-        controllerHandler.processUserInput( "DONE", view);
+        UiHandler.processUserInput( "DONE", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -192,7 +193,7 @@ class ControllerHandlerTest {
         expectList.remove(2);
         expectedView.setTasksAsList(expectList);
 
-        controllerHandler.processUserInput("ARCH", view);
+        UiHandler.processUserInput("ARCH", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -208,7 +209,7 @@ class ControllerHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        controllerHandler.processUserInput( "arc", view);
+        UiHandler.processUserInput( "arc", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }

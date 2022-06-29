@@ -1,7 +1,5 @@
 package ru.pylaev.toDoProject.pl.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.bll.UserInputService;
 import ru.pylaev.toDoProject.dal.Task;
@@ -10,23 +8,14 @@ import ru.pylaev.toDoProject.pl.view.View;
 import java.util.List;
 import java.util.Objects;
 
-@SuppressWarnings("ClassCanBeRecord")
-@Component
-public class ControllerHandler {
+public class UiHandler {
 
     private static final String askOwner = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner");
     private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
     private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
-    private final UserInputService userInputService;
-
-    @Autowired
-    public ControllerHandler(UserInputService userInputService) {
-        this.userInputService = userInputService;
-    }
-
-    public void processUserInput(String userInput, View view) {
+    public static void processUserInput(String userInput, View view, UserInputService userInputService) {
         if (view.getMessage().equals(askOwner) && userInputService.checkOwner(view.getOwner(), userInput)) {
             view.setOwner(userInput);
             view.setMessage(askNumber);

@@ -1,6 +1,7 @@
 package ru.pylaev.toDoProject.dal.dataBase;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.dal.DAO;
 import ru.pylaev.toDoProject.dal.Task;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @SuppressWarnings("ClassCanBeRecord")
 @Component
+@Primary
 public class DataBaseTaskDAO implements DAO {
     private final TaskSpringRepository taskSpringRepository;
 

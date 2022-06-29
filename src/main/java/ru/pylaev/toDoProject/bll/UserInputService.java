@@ -1,9 +1,9 @@
 package ru.pylaev.toDoProject.bll;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import ru.pylaev.toDoProject.dal.DAO;
-import ru.pylaev.toDoProject.dal.fileIO.FileTasksDAO;
 import ru.pylaev.toDoProject.dal.Task;
 import ru.pylaev.util.InputChecker;
 
@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Scope("prototype")
 public class UserInputService {
     private static final String[] tasksStates = new String[] {"ARCH", "DONE", "WAIT"};
     private static final String[] invalidNameSymbols = new String[] {" ", "\\", "|", "/", ":", "?", "\"", "<", ">"};
@@ -19,7 +20,7 @@ public class UserInputService {
     private final DAO taskDAO;
 
     @Autowired
-    public UserInputService (FileTasksDAO tasksDAO) {
+    public UserInputService (DAO tasksDAO) {
         this.taskDAO = tasksDAO;
     }
 

@@ -41,7 +41,7 @@ public class FileTasksDAO implements DAO {
     }
 
     @Override
-    public void save (Task task) {
+    public synchronized void save (Task task) {
         var tasks = findByOwner(task.getOwner());
         boolean taskIsFound = false;
         long lastIndex = 0;

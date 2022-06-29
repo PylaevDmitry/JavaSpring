@@ -6,17 +6,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.pylaev.toDoProject.bll.UserInputService;
 import ru.pylaev.toDoProject.pl.view.View;
 
 @Controller
 public class HtmlController {
     private final View view;
-    private final ControllerHandler controllerHandler;
+    private final UserInputService userInputService;
 
     @Autowired
-    public HtmlController(View view, ControllerHandler controllerHandler) {
+    public HtmlController(View view, UserInputService userInputService) {
         this.view = view;
-        this.controllerHandler = controllerHandler;
+        this.userInputService = userInputService;
     }
 
     @GetMapping
@@ -27,7 +28,7 @@ public class HtmlController {
 
     @PostMapping
     public String processUserInput (@RequestParam String userInput) {
-        controllerHandler.processUserInput(userInput, view);
+        UiHandler.processUserInput(userInput, view, userInputService);
         return "redirect:/";
     }
 }
