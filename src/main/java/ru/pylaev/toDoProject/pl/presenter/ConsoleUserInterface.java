@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.pl;
+package ru.pylaev.toDoProject.pl.presenter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 @Component
-public class ConsoleUserInterface {
+public class ConsoleUserInterface implements Runnable {
     private final View view;
     private final UserInputService userInputService;
 
@@ -26,7 +26,7 @@ public class ConsoleUserInterface {
         System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner"));
     }
 
-    public void processUserInput () {
+    public void run () {
         while (running) {
             var userInput = _scanner.next();
             if (userInput.equals("EXIT")) {
