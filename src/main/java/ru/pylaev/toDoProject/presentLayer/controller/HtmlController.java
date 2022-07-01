@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
-import ru.pylaev.toDoProject.presentLayer.UiHandler;
+import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
 @Controller
@@ -29,7 +29,7 @@ public class HtmlController {
 
     @PostMapping
     public String processUserInput (@RequestParam String userInput) {
-        UiHandler.processUserInput(userInput, view, userInputService);
+        ViewHandler.processUserInput(userInput, view, userInputService);
         return "redirect:/";
     }
 }

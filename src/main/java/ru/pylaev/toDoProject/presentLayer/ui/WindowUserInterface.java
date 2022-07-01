@@ -1,7 +1,7 @@
 package ru.pylaev.toDoProject.presentLayer.ui;
 
 import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
-import ru.pylaev.toDoProject.presentLayer.UiHandler;
+import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
 import javax.swing.*;
@@ -53,7 +53,7 @@ public class WindowUserInterface implements Runnable {
                 } catch (InterruptedException ignored) {
                 }
             }
-            UiHandler.processUserInput(userInput[0], view, userInputService);
+            ViewHandler.processUserInput(userInput[0], view, userInputService);
             List<String> list = new ArrayList<>(List.of(view.getArrTasks()));
             list.add(view.getMessage());
             this.show(field,list);

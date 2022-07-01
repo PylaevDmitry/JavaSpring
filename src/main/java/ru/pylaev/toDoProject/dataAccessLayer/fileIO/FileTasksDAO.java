@@ -1,6 +1,7 @@
 package ru.pylaev.toDoProject.dataAccessLayer.fileIO;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dataAccessLayer.DAO;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @SuppressWarnings("ClassCanBeRecord")
 @Component
+@Primary
 public class FileTasksDAO implements DAO {
     private final String path;
 
@@ -31,13 +33,13 @@ public class FileTasksDAO implements DAO {
     }
 
     @Override
-    public List<Task> findByOwner (String owner) {
-        return findTasks(owner, new ElectorByOwner());
+    public synchronized List<Task> findByOwner (String owner) {
+        return findTasks(owner, (task, o1) -> task.getOwner().equals(o1));
     }
 
     @Override
-    public Optional<Task> findById (long id) {
-        return Optional.ofNullable(findTasks(id, new ElectorByID()).get(0));
+    public synchronized Optional<Task> findById (long id) {
+        return Optional.ofNullable(findTasks(id, (task, o1) -> task.getId()==o1).get(0));
     }
 
     @Override
@@ -78,5 +80,4 @@ public class FileTasksDAO implements DAO {
         }
         return result;
     }
-
 }

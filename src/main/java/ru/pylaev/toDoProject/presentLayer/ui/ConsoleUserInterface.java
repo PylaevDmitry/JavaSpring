@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
-import ru.pylaev.toDoProject.presentLayer.UiHandler;
+import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
 import java.util.Arrays;
@@ -35,7 +35,7 @@ public class ConsoleUserInterface implements Runnable {
                 running = false;
                 break;
             }
-            UiHandler.processUserInput(userInput, view, userInputService);
+            ViewHandler.processUserInput(userInput, view, userInputService);
             Arrays.stream(view.getArrTasks()).forEach(System.out::println);
             System.out.println(view.getMessage());
         }

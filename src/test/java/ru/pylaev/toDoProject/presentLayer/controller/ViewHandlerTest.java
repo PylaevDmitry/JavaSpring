@@ -12,8 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
-import ru.pylaev.toDoProject.dataAccessLayer.dataBase.DataBaseTaskDAO;
-import ru.pylaev.toDoProject.presentLayer.UiHandler;
+import ru.pylaev.toDoProject.dataAccessLayer.fileIO.FileTasksDAO;
+import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
 import java.util.ArrayList;
@@ -22,14 +22,14 @@ import java.util.Optional;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
-class UiHandlerTest {
+class ViewHandlerTest {
 
     private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
     private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
     @MockBean
-    private DataBaseTaskDAO tasksDAO;
+    private FileTasksDAO tasksDAO;
 
     @Autowired
     UserInputService userInputService;
@@ -63,7 +63,7 @@ class UiHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        UiHandler.processUserInput("user", view, userInputService);
+        ViewHandler.processUserInput("user", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -74,7 +74,7 @@ class UiHandlerTest {
 
         View expectedView = new View();
 
-        UiHandler.processUserInput( "???", view, userInputService);
+        ViewHandler.processUserInput( "???", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -85,7 +85,7 @@ class UiHandlerTest {
 
         View expectedView = new View();
 
-        UiHandler.processUserInput( null, view, userInputService);
+        ViewHandler.processUserInput( null, view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -102,7 +102,7 @@ class UiHandlerTest {
         expectedView.setMessage(askStatus);
         expectedView.setTasksAsList(tasks);
 
-        UiHandler.processUserInput( "1", view, userInputService);
+        ViewHandler.processUserInput( "1", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -118,7 +118,7 @@ class UiHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        UiHandler.processUserInput( "10", view, userInputService);
+        ViewHandler.processUserInput( "10", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -133,7 +133,7 @@ class UiHandlerTest {
         expectedView.setOwner("user");
         expectedView.setMessage(askNumber);
 
-        UiHandler.processUserInput( null, view, userInputService);
+        ViewHandler.processUserInput( null, view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -152,7 +152,7 @@ class UiHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        UiHandler.processUserInput( "note4", view, userInputService);
+        ViewHandler.processUserInput( "note4", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -173,7 +173,7 @@ class UiHandlerTest {
         expectList.set(0, new Task("3", "user", "note3", "Wed Mar 25 16:01", "DONE"));
         expectedView.setTasksAsList(expectList);
 
-        UiHandler.processUserInput( "DONE", view, userInputService);
+        ViewHandler.processUserInput( "DONE", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -194,7 +194,7 @@ class UiHandlerTest {
         expectList.remove(2);
         expectedView.setTasksAsList(expectList);
 
-        UiHandler.processUserInput("ARCH", view, userInputService);
+        ViewHandler.processUserInput("ARCH", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }
@@ -210,7 +210,7 @@ class UiHandlerTest {
         expectedView.setMessage(askNumber);
         expectedView.setTasksAsList(tasks);
 
-        UiHandler.processUserInput( "arc", view, userInputService);
+        ViewHandler.processUserInput( "arc", view, userInputService);
 
         Assertions.assertEquals(view, expectedView);
     }

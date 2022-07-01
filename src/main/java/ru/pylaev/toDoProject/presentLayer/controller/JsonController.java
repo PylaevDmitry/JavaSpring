@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
-import ru.pylaev.toDoProject.presentLayer.UiHandler;
+import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.UserInput;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
@@ -24,7 +24,7 @@ public class JsonController {
     @PostMapping("/sendJson")
     public ResponseEntity<String> processUserInput (@RequestBody UserInput userInput) {
         try {
-            UiHandler.processUserInput(userInput.getContent(), view, userInputService);
+            ViewHandler.processUserInput(userInput.getContent(), view, userInputService);
 
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : view.getArrTasks()) {

@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
-import ru.pylaev.toDoProject.presentLayer.UiHandler;
+import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
 import java.util.Arrays;
@@ -41,7 +41,7 @@ public class TelegramBotUserInterface implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            UiHandler.processUserInput(bot.Input, view, userInputService);
+            ViewHandler.processUserInput(bot.Input, view, userInputService);
             bot.send(Arrays.toString(view.getArrTasks()));
             bot.send(view.getMessage());
         }

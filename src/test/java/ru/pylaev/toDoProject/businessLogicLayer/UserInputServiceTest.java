@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
-import ru.pylaev.toDoProject.dataAccessLayer.dataBase.DataBaseTaskDAO;
+import ru.pylaev.toDoProject.dataAccessLayer.fileIO.FileTasksDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserInputServiceTest {
 
     @MockBean
-    private DataBaseTaskDAO tasksDAO;
+    private FileTasksDAO tasksDAO;
 
     @Autowired
     UserInputService userInputService;

@@ -8,7 +8,7 @@ import ru.pylaev.toDoProject.presentLayer.view.View;
 import java.util.List;
 import java.util.Objects;
 
-public class UiHandler {
+public class ViewHandler {
     private static final String askOwner = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner");
     private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
     private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
