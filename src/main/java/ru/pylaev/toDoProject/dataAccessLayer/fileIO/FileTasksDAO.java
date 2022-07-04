@@ -44,7 +44,7 @@ public class FileTasksDAO implements DAO {
 
     @Override
     public synchronized void save (Task task) {
-        var tasks = findByOwner(task.getOwner());
+        var tasks = findTasks("addAll", (t1, o1) -> true);
         boolean taskIsFound = false;
         long lastIndex = 0;
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(Files.newOutputStream(Paths.get(path)))) {
