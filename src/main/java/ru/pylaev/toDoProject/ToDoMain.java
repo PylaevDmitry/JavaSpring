@@ -16,16 +16,16 @@ public class ToDoMain {
 
         ConsoleUserInterface consoleUserInterface = applicationContext.getBean("consoleUserInterface", ConsoleUserInterface.class);
 //        TelegramBotUserInterface telegramBotUserInterface = applicationContext.getBean("telegramBotUserInterface", TelegramBotUserInterface.class);
-//        WindowUserInterface windowUserInterface = applicationContext.getBean("windowUserInterface", WindowUserInterface.class);
+        WindowUserInterface windowUserInterface = applicationContext.getBean("windowUserInterface", WindowUserInterface.class);
 
         Thread thread1 = new Thread(consoleUserInterface);
         thread1.start();
 
 //        Thread thread2 = new Thread(telegramBotUserInterface);
 //        thread2.start();
-//
-//        Thread thread3 = new Thread(windowUserInterface);
-//        thread3.start();
+
+        Thread thread3 = new Thread(windowUserInterface);
+        thread3.start();
 
     }
 }

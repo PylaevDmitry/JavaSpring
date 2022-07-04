@@ -11,27 +11,26 @@ import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 //@Component
-public class TelegramBotUserInterface implements Runnable {
-    private final View view;
-    private final UserInputService userInputService;
-
+public class TelegramBotUserInterface extends UserInterface {
     private final TelegramBot bot;
 
     @Autowired
     public TelegramBotUserInterface(View view, UserInputService userInputService, @Value("${botToken}") String token){
-        this.view = view;
-        this.userInputService = userInputService;
+        super(view, userInputService);
         bot = new TelegramBot(token, 1249988927);
         try {
             new TelegramBotsApi(DefaultBotSession.class).registerBot(bot);
-        } catch (TelegramApiException e) { e.printStackTrace(); }
-        bot.send(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner"));
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void run () {
+        bot.send(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner"));
         while (true) {
             bot.Input = null;
             try {
@@ -42,7 +41,9 @@ public class TelegramBotUserInterface implements Runnable {
                 e.printStackTrace();
             }
             ViewHandler.processUserInput(bot.Input, view, userInputService);
-            bot.send(Arrays.toString(view.getArrTasks()));
+            if (!Objects.isNull(view.getArrTasks())) {
+                bot.send(Arrays.toString(view.getArrTasks()));
+            }
             bot.send(view.getMessage());
         }
     }

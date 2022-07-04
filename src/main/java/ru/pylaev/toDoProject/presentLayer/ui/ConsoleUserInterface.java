@@ -8,26 +8,23 @@ import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Scanner;
 
 @Component
-public class ConsoleUserInterface implements Runnable {
-    private final View view;
-    private final UserInputService userInputService;
-
+public class ConsoleUserInterface extends UserInterface {
     private final Scanner _scanner;
     private volatile boolean running = true;
 
     @Autowired
     public ConsoleUserInterface (View view, UserInputService userInputService) {
-        this.view = view;
-        this.userInputService = userInputService;
+        super(view, userInputService);
         _scanner = new Scanner((System.in)).useDelimiter("\n");
-        System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner"));
     }
 
     @Override
     public void run () {
+        System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner"));
         while (running) {
             var userInput = _scanner.next();
             if (userInput.equals("EXIT")) {
@@ -36,7 +33,9 @@ public class ConsoleUserInterface implements Runnable {
                 break;
             }
             ViewHandler.processUserInput(userInput, view, userInputService);
-            Arrays.stream(view.getArrTasks()).forEach(System.out::println);
+            if (!Objects.isNull(view.getArrTasks())) {
+                Arrays.stream(view.getArrTasks()).forEach(System.out::println);
+            }
             System.out.println(view.getMessage());
         }
     }
