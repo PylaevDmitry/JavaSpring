@@ -40,6 +40,11 @@ public class TelegramBotUserInterface extends UserInterface {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            if (bot.Input.equals("EXIT")) {
+                view = new View();
+                bot.send(view.getMessage());
+                continue;
+            }
             ViewHandler.processUserInput(bot.Input, view, userInputService);
             if (!Objects.isNull(view.getArrTasks())) {
                 bot.send(Arrays.toString(view.getArrTasks()));

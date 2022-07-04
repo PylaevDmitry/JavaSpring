@@ -14,7 +14,6 @@ import java.util.Scanner;
 @Component
 public class ConsoleUserInterface extends UserInterface {
     private final Scanner _scanner;
-    private volatile boolean running = true;
 
     @Autowired
     public ConsoleUserInterface (View view, UserInputService userInputService) {
@@ -25,13 +24,8 @@ public class ConsoleUserInterface extends UserInterface {
     @Override
     public void run () {
         System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner"));
-        while (running) {
+        while (true) {
             var userInput = _scanner.next();
-            if (userInput.equals("EXIT")) {
-                System.out.println(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("exitMessage"));
-                running = false;
-                break;
-            }
             ViewHandler.processUserInput(userInput, view, userInputService);
             if (!Objects.isNull(view.getArrTasks())) {
                 Arrays.stream(view.getArrTasks()).forEach(System.out::println);

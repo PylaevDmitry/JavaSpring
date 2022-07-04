@@ -5,6 +5,7 @@ import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,13 +16,23 @@ public class ViewHandler {
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
     public static void processUserInput(String userInput, View view, UserInputService userInputService) {
+        if (Objects.isNull(userInput)) {
+            return;
+        }
+
+        if (userInput.equals("EXIT")) {
+            view.setMessage(askOwner);
+            view.setOwner(null);
+            view.setTasksAsList(new ArrayList<>());
+            view.setTaskIndex(0);
+            return;
+        }
+
         if (view.getMessage().equals(askOwner) && userInputService.checkOwner(view.getOwner(), userInput)) {
             view.setOwner(userInput);
             view.setMessage(askNumber);
         }
-        if (Objects.isNull(userInput)) {
-            return;
-        }
+
         if (view.getMessage().equals(askNumber)) {
             List<Task> tasks = userInputService.getActualTasks(view.getOwner());
             int getCurrentIndexResult = userInputService.getCurrentIndex(userInput, tasks.size());

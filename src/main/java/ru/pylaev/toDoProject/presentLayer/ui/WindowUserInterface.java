@@ -15,7 +15,7 @@ public class WindowUserInterface extends UserInterface {
     private class MainWindow extends JFrame {
         public MainWindow() {
             setTitle("TODO");
-            setDefaultCloseOperation((WindowConstants.DO_NOTHING_ON_CLOSE));
+            setDefaultCloseOperation((WindowConstants.DISPOSE_ON_CLOSE));
             setBounds(300, 300, 900, 400);
             add(field);
             setVisible(true);
@@ -25,7 +25,6 @@ public class WindowUserInterface extends UserInterface {
     private final JPanel field = new JPanel();
     private final MainWindow mainWindow = new MainWindow();
 
-    private volatile boolean running = true;
     private boolean userInputEnds;
 
     public WindowUserInterface(View view, UserInputService userInputService) {
@@ -40,18 +39,25 @@ public class WindowUserInterface extends UserInterface {
         textField.setHorizontalAlignment(JTextField.CENTER);
         textField.addActionListener(e -> {
             userInput[0] = textField.getText();
-            if (userInput[0].equals("EXIT")) {
-                mainWindow.dispose();
-                running = false;
-            }
             userInputEnds = true;
             textField.setText("");
         });
 
-        List<String> initList = new ArrayList<>();
-        initList.add(view.getMessage());
-        show(field, initList);
-        while (running) {
+        while (true) {
+            List<String> list = new ArrayList<>();
+            if (!Objects.isNull(view.getArrTasks())) {
+                list.addAll(List.of(view.getArrTasks()));
+            }
+            list.add(view.getMessage());
+            field.removeAll();
+            DefaultListModel<String> dlm = new DefaultListModel<>();
+            for (int i = list.size()-1; i >=0 ; i--) {
+                dlm.add(0, list.get(i));
+            }
+            JList<String> jList = new JList<>(dlm);
+            jList.setFixedCellWidth(790);
+            field.add(new JScrollPane(jList));
+            userInputEnds = false;
             field.add(textField);
             field.repaint();
             mainWindow.setVisible(true);
@@ -62,24 +68,8 @@ public class WindowUserInterface extends UserInterface {
                 }
             }
             ViewHandler.processUserInput(userInput[0], view, userInputService);
-            List<String> list = new ArrayList<>();
-            if (!Objects.isNull(view.getArrTasks())) {
-                list.addAll(List.of(view.getArrTasks()));
-            }
-            list.add(view.getMessage());
-            this.show(field,list);
-            userInputEnds = false;
         }
     }
 
-    private void show (JPanel field,List<String> bufList) {
-        field.removeAll();
-        DefaultListModel<String> dlm = new DefaultListModel<>();
-        for (int i = bufList.size()-1; i >=0 ; i--) {
-            dlm.add(0, bufList.get(i));
-        }
-        JList<String> jList = new JList<>(dlm);
-        jList.setFixedCellWidth(790);
-        field.add(new JScrollPane(jList));
-    }
+
 }
