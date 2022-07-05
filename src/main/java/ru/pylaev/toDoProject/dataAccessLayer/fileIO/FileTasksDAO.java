@@ -1,7 +1,6 @@
 package ru.pylaev.toDoProject.dataAccessLayer.fileIO;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dataAccessLayer.DAO;
@@ -19,7 +18,7 @@ import java.util.Optional;
 
 @SuppressWarnings("ClassCanBeRecord")
 @Component
-@Primary
+//@Primary
 public class FileTasksDAO implements DAO {
     private final String path;
 

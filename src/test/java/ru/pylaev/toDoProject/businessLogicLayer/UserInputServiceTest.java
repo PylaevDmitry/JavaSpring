@@ -8,8 +8,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
+import ru.pylaev.util.HeadlessSpringBootContextLoader;
+import ru.pylaev.toDoProject.dataAccessLayer.DAO;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
-import ru.pylaev.toDoProject.dataAccessLayer.fileIO.FileTasksDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
+@ContextConfiguration(loader = HeadlessSpringBootContextLoader.class)
 class UserInputServiceTest {
-
     @MockBean
-    private FileTasksDAO tasksDAO;
+    private DAO tasksDAO;
 
     @Autowired
     UserInputService userInputService;

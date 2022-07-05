@@ -9,10 +9,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
+import ru.pylaev.util.HeadlessSpringBootContextLoader;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
+import ru.pylaev.toDoProject.dataAccessLayer.DAO;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
-import ru.pylaev.toDoProject.dataAccessLayer.fileIO.FileTasksDAO;
 import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
@@ -22,14 +24,14 @@ import java.util.Optional;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
+@ContextConfiguration(loader = HeadlessSpringBootContextLoader.class)
 class ViewHandlerTest {
-
     private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
     private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
     private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
 
     @MockBean
-    private FileTasksDAO tasksDAO;
+    private DAO tasksDAO;
 
     @Autowired
     UserInputService userInputService;
