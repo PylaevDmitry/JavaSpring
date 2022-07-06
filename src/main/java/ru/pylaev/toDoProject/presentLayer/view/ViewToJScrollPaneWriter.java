@@ -11,7 +11,7 @@ public class ViewToJScrollPaneWriter {
         if (!Objects.isNull(view.getArrTasks())) {
             list.addAll(List.of(view.getArrTasks()));
         }
-        list.add(view.getMessage());
+        list.add(view.getMessage().toString());
         DefaultListModel<String> dlm = new DefaultListModel<>();
         for (int i = list.size()-1; i >=0 ; i--) {
             dlm.add(0, list.get(i));

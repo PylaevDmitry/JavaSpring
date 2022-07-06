@@ -22,7 +22,7 @@ public class WindowUserInterface extends UserInterfaceBase {
 
     private final JTextField textField = new JTextField(72);
     private final JPanel panel = new JPanel();
-    private final MainWindow mainWindow = new MainWindow();
+    private MainWindow mainWindow;
 
     @Autowired
     public WindowUserInterface(View view, UserInputService userInputService) {
@@ -31,6 +31,7 @@ public class WindowUserInterface extends UserInterfaceBase {
 
     @Override
     public void showStartView() {
+        mainWindow = new MainWindow();
         mainWindow.add(panel);
         textField.setHorizontalAlignment(JTextField.CENTER);
         textField.addActionListener(e -> {
@@ -42,7 +43,7 @@ public class WindowUserInterface extends UserInterfaceBase {
     }
 
     @Override
-    public void processUserActions() {
+    public void processUserInput() {
         try {
             Thread.sleep(250);
         }

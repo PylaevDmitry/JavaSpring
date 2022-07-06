@@ -22,7 +22,7 @@ public class HtmlController {
     }
 
     @GetMapping
-    public String show (Model model) {
+    public String showStartView (Model model) {
         model.addAttribute("view", view);
         return "home";
     }

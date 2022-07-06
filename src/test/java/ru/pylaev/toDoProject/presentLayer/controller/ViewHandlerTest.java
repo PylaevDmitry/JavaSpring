@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
-import ru.pylaev.util.HeadlessSpringBootContextLoader;
-import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
 import ru.pylaev.toDoProject.dataAccessLayer.DAO;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
+import ru.pylaev.toDoProject.presentLayer.Messages;
 import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
+import ru.pylaev.util.HeadlessSpringBootContextLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +26,6 @@ import java.util.Optional;
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration(loader = HeadlessSpringBootContextLoader.class)
 class ViewHandlerTest {
-    private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
-    private static final String askNew = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew");
-    private static final String askStatus = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askStatus");
-
     @MockBean
     private DAO tasksDAO;
 
@@ -62,7 +58,7 @@ class ViewHandlerTest {
 
         View expectedView = new View();
         expectedView.setOwner("user");
-        expectedView.setMessage(askNumber);
+        expectedView.setMessage(Messages.askNumber);
         expectedView.setTasksAsList(tasks);
 
         ViewHandler.processUserInput("user", view, userInputService);
@@ -96,12 +92,12 @@ class ViewHandlerTest {
     void processAskNumberOk () {
         View view = new View();
         view.setOwner("user");
-        view.setMessage(askNumber);
+        view.setMessage(Messages.askNumber);
 
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setTaskIndex(1);
-        expectedView.setMessage(askStatus);
+        expectedView.setMessage(Messages.askStatus);
         expectedView.setTasksAsList(tasks);
 
         ViewHandler.processUserInput( "1", view, userInputService);
@@ -113,11 +109,11 @@ class ViewHandlerTest {
     void processAskNumberOutRange () {
         View view = new View();
         view.setOwner("user");
-        view.setMessage(askNumber);
+        view.setMessage(Messages.askNumber);
 
         View expectedView = new View();
         expectedView.setOwner("user");
-        expectedView.setMessage(askNumber);
+        expectedView.setMessage(Messages.askNumber);
         expectedView.setTasksAsList(tasks);
 
         ViewHandler.processUserInput( "10", view, userInputService);
@@ -129,11 +125,11 @@ class ViewHandlerTest {
     void processAskNumberNull () {
         View view = new View();
         view.setOwner("user");
-        view.setMessage(askNumber);
+        view.setMessage(Messages.askNumber);
 
         View expectedView = new View();
         expectedView.setOwner("user");
-        expectedView.setMessage(askNumber);
+        expectedView.setMessage(Messages.askNumber);
 
         ViewHandler.processUserInput( null, view, userInputService);
 
@@ -144,14 +140,14 @@ class ViewHandlerTest {
     void processAskNewOk () {
         View view = new View();
         view.setOwner("user");
-        view.setMessage(askNew);
+        view.setMessage(Messages.askNew);
 
         Task task = new Task("33", "user", "note4", "Wed Mar 25 16:01", "WAIT");
         tasks.add(task);
 
         View expectedView = new View();
         expectedView.setOwner("user");
-        expectedView.setMessage(askNumber);
+        expectedView.setMessage(Messages.askNumber);
         expectedView.setTasksAsList(tasks);
 
         ViewHandler.processUserInput( "note4", view, userInputService);
@@ -164,13 +160,13 @@ class ViewHandlerTest {
         View view = new View();
         view.setOwner("user");
         view.setTaskIndex(1);
-        view.setMessage(askStatus);
+        view.setMessage(Messages.askStatus);
         view.setTasksAsList(tasks);
 
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setTaskIndex(1);
-        expectedView.setMessage(askNumber);
+        expectedView.setMessage(Messages.askNumber);
         List <Task> expectList = new ArrayList<>(tasks);
         expectList.set(0, new Task("3", "user", "note3", "Wed Mar 25 16:01", "DONE"));
         expectedView.setTasksAsList(expectList);
@@ -185,13 +181,13 @@ class ViewHandlerTest {
         View view = new View();
         view.setOwner("user");
         view.setTaskIndex(3);
-        view.setMessage(askStatus);
+        view.setMessage(Messages.askStatus);
         view.setTasksAsList(tasks);
 
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setTaskIndex(3);
-        expectedView.setMessage(askNumber);
+        expectedView.setMessage(Messages.askNumber);
         List <Task> expectList = new ArrayList<>(tasks);
         expectList.remove(2);
         expectedView.setTasksAsList(expectList);
@@ -205,11 +201,11 @@ class ViewHandlerTest {
     void processAskStatusInvalid () {
         View view = new View();
         view.setOwner("user");
-        view.setMessage(askNumber);
+        view.setMessage(Messages.askNumber);
 
         View expectedView = new View();
         expectedView.setOwner("user");
-        expectedView.setMessage(askNumber);
+        expectedView.setMessage(Messages.askNumber);
         expectedView.setTasksAsList(tasks);
 
         ViewHandler.processUserInput( "arc", view, userInputService);

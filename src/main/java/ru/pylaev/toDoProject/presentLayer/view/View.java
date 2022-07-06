@@ -2,8 +2,8 @@ package ru.pylaev.toDoProject.presentLayer.view;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
+import ru.pylaev.toDoProject.presentLayer.Messages;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 @Component
 @Scope("prototype")
 public class View {
-    private String message = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner");
+    private Messages message = Messages.askOwner;
     private String[] arrTasks;
     private int taskIndex;
     private String owner;
@@ -34,11 +34,11 @@ public class View {
         this.owner = owner;
     }
 
-    public String getMessage ( ) {
+    public Messages getMessage ( ) {
         return message;
     }
 
-    public void setMessage (String message) {
+    public void setMessage (Messages message) {
         this.message = message;
     }
 

@@ -25,7 +25,7 @@ public class ConsoleUserInterface extends UserInterfaceBase {
     }
 
     @Override
-    public void processUserActions() {
+    public void processUserInput() {
         var userInput = scanner.next();
         ViewHandler.processUserInput(userInput, view, userInputService);
         if (!Objects.isNull(view.getArrTasks())) {

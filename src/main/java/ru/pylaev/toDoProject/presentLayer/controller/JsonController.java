@@ -30,7 +30,7 @@ public class JsonController {
             for (String s : view.getArrTasks()) {
                 stringBuilder.append(s).append("\n");
             }
-            return ResponseEntity.ok(stringBuilder + view.getMessage());
+            return ResponseEntity.ok(stringBuilder + view.getMessage().toString());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Произошла ошибка: " + e.getMessage());
         }

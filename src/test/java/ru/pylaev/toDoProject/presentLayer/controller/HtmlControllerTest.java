@@ -9,11 +9,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.pylaev.util.HeadlessSpringBootContextLoader;
-import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
+import ru.pylaev.toDoProject.presentLayer.Messages;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 import ru.pylaev.util.DBDataSupplier;
+import ru.pylaev.util.HeadlessSpringBootContextLoader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -30,8 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration(loader = HeadlessSpringBootContextLoader.class)
 class HtmlControllerTest {
-    private static final String askNumber = ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber");
-
     @Autowired
     private MockMvc mvc;
 
@@ -65,7 +63,7 @@ class HtmlControllerTest {
 
         View expectedView = new View();
         expectedView.setOwner("user");
-        expectedView.setMessage(askNumber);
+        expectedView.setMessage(Messages.askNumber);
         expectedView.setTasksAsList(tasks);
 
         this.mvc.perform(post("/").param("userInput", "user"))

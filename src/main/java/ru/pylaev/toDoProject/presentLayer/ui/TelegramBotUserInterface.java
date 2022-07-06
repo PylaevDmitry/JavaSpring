@@ -30,11 +30,11 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-        bot.send(view.getMessage());
+        bot.send(view.getMessage().toString());
     }
 
     @Override
-    public void processUserActions() {
+    public void processUserInput() {
         bot.Input = null;
         try {
             while (bot.Input == null) Thread.sleep(250);
@@ -47,6 +47,6 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
                 bot.send(Arrays.toString(view.getArrTasks()));
             }
         }
-        bot.send(view.getMessage());
+        bot.send(view.getMessage().toString());
     }
 }

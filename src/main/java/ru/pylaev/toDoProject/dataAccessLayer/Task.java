@@ -10,18 +10,15 @@ import java.util.Objects;
 
 @Entity
 public class Task implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String owner;
     private String text;
     private String date;
     private String status;
 
-    public Task ( ) {
-    }
+    public Task () {}
 
     public Task (String owner, String text, Date date, String status) {
         this.id = 0;
@@ -43,8 +40,6 @@ public class Task implements Serializable {
         return owner;
     }
 
-    public void setStatus (String status) { this.status = status; }
-
     public long getId ( ) { return id; }
 
     public void setId(long id) {
@@ -54,6 +49,8 @@ public class Task implements Serializable {
     public String getStatus ( ) {
         return status;
     }
+
+    public void setStatus (String status) { this.status = status; }
 
     @Override
     public String toString () { return  text + ' ' + date + ' ' + status; }

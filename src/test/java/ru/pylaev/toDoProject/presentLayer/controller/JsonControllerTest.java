@@ -9,11 +9,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.pylaev.util.HeadlessSpringBootContextLoader;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
+import ru.pylaev.toDoProject.presentLayer.Messages;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 import ru.pylaev.util.DBDataSupplier;
+import ru.pylaev.util.HeadlessSpringBootContextLoader;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -55,7 +56,7 @@ class JsonControllerTest {
 
         View expectedView = new View();
         expectedView.setOwner("user");
-        expectedView.setMessage(askNumber);
+        expectedView.setMessage(Messages.askNumber);
         expectedView.setTasksAsList(tasks);
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -63,7 +64,7 @@ class JsonControllerTest {
             stringBuilder.append(s).append("\n");
         }
 
-        String expectedResult = stringBuilder + expectedView.getMessage();
+        String expectedResult = stringBuilder + expectedView.getMessage().toString();
 
         this.mvc.perform(post("/sendJson")
                         .contentType(MediaType.APPLICATION_JSON)

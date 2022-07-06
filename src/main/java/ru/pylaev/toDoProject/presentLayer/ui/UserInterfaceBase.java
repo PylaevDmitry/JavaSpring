@@ -14,5 +14,5 @@ public abstract class UserInterfaceBase {
 
     public abstract void showStartView();
 
-    public abstract void processUserActions();
+    public abstract void processUserInput();
 }
