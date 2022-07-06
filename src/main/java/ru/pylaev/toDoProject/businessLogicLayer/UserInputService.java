@@ -20,17 +20,11 @@ public class UserInputService {
     private final DAO taskDAO;
 
     @Autowired
-    public UserInputService (DAO tasksDAO) {
+    public UserInputService(DAO tasksDAO) {
         this.taskDAO = tasksDAO;
     }
 
-    public List<Task> getActualTasks (String owner) {
-        return (taskDAO.findByOwner(owner)).stream()
-                .filter(task -> !task.getStatus().equals("ARCH"))
-                .collect(Collectors.toList());
-    }
-
-    public boolean checkOwner (String owner, String userInput) {
+    public boolean checkOwner(String owner, String userInput) {
         return owner == null && (InputChecker.inputInArray(userInput, invalidNameSymbols) < 0);
     }
 
@@ -47,7 +41,13 @@ public class UserInputService {
         return -1;
     }
 
-    public int saveNew (String owner, String userInput) {
+    public List<Task> getActualTasks(String owner) {
+        return (taskDAO.findByOwner(owner)).stream()
+                .filter(task -> !task.getStatus().equals("ARCH"))
+                .collect(Collectors.toList());
+    }
+
+    public int saveNewTask(String owner, String userInput) {
         if (!userInput.equals("BACK")) {
             taskDAO.save(new Task(owner, userInput, new Date(), "WAIT"));
             return 1;
@@ -55,7 +55,7 @@ public class UserInputService {
         return 0;
     }
 
-    public int changeStatus (String owner, String userInput, int taskIndex) {
+    public int changeTaskStatus(String owner, String userInput, int taskIndex) {
         if (!userInput.equals("BACK")) {
             if (InputChecker.inputInArray(userInput, tasksStates)>0) {
                 Task task = taskDAO.findById(getActualTasks(owner)

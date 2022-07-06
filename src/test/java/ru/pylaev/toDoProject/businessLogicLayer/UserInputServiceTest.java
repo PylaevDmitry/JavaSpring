@@ -82,26 +82,26 @@ class UserInputServiceTest {
 
     @Test
     void saveNewIsOk() {
-        assertEquals(userInputService.saveNew("user", "note1"), 1);
+        assertEquals(userInputService.saveNewTask("user", "note1"), 1);
     }
 
     @Test
     void saveNewIsRejected() {
-        assertEquals(userInputService.saveNew("user", "BACK"), 0);
+        assertEquals(userInputService.saveNewTask("user", "BACK"), 0);
     }
 
     @Test
     void changeStatusOK() {
-        assertEquals(userInputService.changeStatus("user", "DONE", 1), 1);
+        assertEquals(userInputService.changeTaskStatus("user", "DONE", 1), 1);
     }
 
     @Test
     void changeStatusBack() {
-        assertEquals(userInputService.changeStatus("user", "BACK", 1), 0);
+        assertEquals(userInputService.changeTaskStatus("user", "BACK", 1), 0);
     }
 
     @Test
     void changeStatusReject() {
-        assertEquals(userInputService.changeStatus("user", "invalidStatus", 1), -1);
+        assertEquals(userInputService.changeTaskStatus("user", "invalidStatus", 1), -1);
     }
 }
