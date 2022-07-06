@@ -10,7 +10,7 @@ import ru.pylaev.toDoProject.presentLayer.view.ViewToJScrollPaneWriter;
 import javax.swing.*;
 
 @Component
-public class WindowUserInterface extends UserInterface {
+public class WindowUserInterface extends UserInterfaceBase {
     private static class MainWindow extends JFrame {
         public MainWindow() {
             setTitle("TODO");
@@ -27,26 +27,31 @@ public class WindowUserInterface extends UserInterface {
     @Autowired
     public WindowUserInterface(View view, UserInputService userInputService) {
         super(view, userInputService);
-        mainWindow.add(panel);
     }
 
     @Override
-    public void run () {
+    public void showStartView() {
+        mainWindow.add(panel);
         textField.setHorizontalAlignment(JTextField.CENTER);
         textField.addActionListener(e -> {
-            processTextField(textField);
+            ViewHandler.processUserInput(textField.getText(), view, userInputService);
+            refreshPanel();
             textField.setText("");
         });
-
-        processTextField(textField);
-
-        try {while (true) {Thread.sleep(250);}}
-        catch (InterruptedException e) {e.printStackTrace();}
+        refreshPanel();
     }
 
-    private void processTextField(JTextField textField) {
-        ViewHandler.processUserInput(textField.getText(), view, userInputService);
+    @Override
+    public void processUserActions() {
+        try {
+            Thread.sleep(250);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void refreshPanel() {
         panel.removeAll();
         panel.add(ViewToJScrollPaneWriter.write(view));
         panel.add(textField);

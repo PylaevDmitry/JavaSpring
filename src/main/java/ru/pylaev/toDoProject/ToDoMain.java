@@ -3,8 +3,10 @@ package ru.pylaev.toDoProject;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
-import ru.pylaev.toDoProject.presentLayer.ui.WindowUserInterface;
 import ru.pylaev.toDoProject.presentLayer.ui.ConsoleUserInterface;
+import ru.pylaev.toDoProject.presentLayer.ui.TelegramBotUserInterface;
+import ru.pylaev.toDoProject.presentLayer.ui.UserInterfaceBase;
+import ru.pylaev.toDoProject.presentLayer.ui.WindowUserInterface;
 import ru.pylaev.util.CustomProperties;
 
 @SpringBootApplication
@@ -15,18 +17,22 @@ public class ToDoMain {
         ApplicationContext applicationContext = new SpringApplicationBuilder(ToDoMain.class).headless(false).run(args);
 
         ConsoleUserInterface consoleUserInterface = applicationContext.getBean("consoleUserInterface", ConsoleUserInterface.class);
-//        TelegramBotUserInterface telegramBotUserInterface = applicationContext.getBean("telegramBotUserInterface", TelegramBotUserInterface.class);
+        TelegramBotUserInterface telegramBotUserInterface = applicationContext.getBean("telegramBotUserInterface", TelegramBotUserInterface.class);
         WindowUserInterface windowUserInterface = applicationContext.getBean("windowUserInterface", WindowUserInterface.class);
 
-        Thread thread1 = new Thread(consoleUserInterface);
-        thread1.start();
+        new Thread(new Runner(consoleUserInterface)).start();
+        new Thread(new Runner(telegramBotUserInterface)).start();
+        new Thread(new Runner(windowUserInterface)).start();
+    }
+}
 
-//        Thread thread2 = new Thread(telegramBotUserInterface);
-//        thread2.start();
-
-        Thread thread3 = new Thread(windowUserInterface);
-        thread3.start();
-
+record Runner (UserInterfaceBase userInterfaceBase) implements Runnable {
+    @Override
+    public void run() {
+        userInterfaceBase.showStartView();
+        while (true) {
+            userInterfaceBase.processUserActions();
+        }
     }
 }
 
