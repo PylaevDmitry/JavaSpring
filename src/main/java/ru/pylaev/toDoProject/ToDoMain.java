@@ -4,8 +4,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import ru.pylaev.toDoProject.presentLayer.ui.ConsoleUserInterface;
+import ru.pylaev.toDoProject.presentLayer.ui.TelegramBotUserInterface;
 import ru.pylaev.toDoProject.presentLayer.ui.UserInterfaceBase;
+import ru.pylaev.toDoProject.presentLayer.ui.WindowUserInterface;
 import ru.pylaev.util.CustomProperties;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @SpringBootApplication
 public class ToDoMain {
@@ -16,12 +21,13 @@ public class ToDoMain {
         applicationContext = new SpringApplicationBuilder(ToDoMain.class).headless(false).run(args);
 
         ConsoleUserInterface consoleUserInterface = applicationContext.getBean("consoleUserInterface", ConsoleUserInterface.class);
-//        TelegramBotUserInterface telegramBotUserInterface = applicationContext.getBean("telegramBotUserInterface", TelegramBotUserInterface.class);
-//        WindowUserInterface windowUserInterface = applicationContext.getBean("windowUserInterface", WindowUserInterface.class);
+        TelegramBotUserInterface telegramBotUserInterface = applicationContext.getBean("telegramBotUserInterface", TelegramBotUserInterface.class);
+        WindowUserInterface windowUserInterface = applicationContext.getBean("windowUserInterface", WindowUserInterface.class);
 
-        new Thread(new UserInterfaceRunner(consoleUserInterface)).start();
-//        new Thread(new Runner(telegramBotUserInterface)).start();
-//        new Thread(new Runner(windowUserInterface)).start();
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        executorService.execute(new UserInterfaceRunner(consoleUserInterface));
+        executorService.execute(new UserInterfaceRunner(telegramBotUserInterface));
+        executorService.execute(new UserInterfaceRunner(windowUserInterface));
     }
 }
 

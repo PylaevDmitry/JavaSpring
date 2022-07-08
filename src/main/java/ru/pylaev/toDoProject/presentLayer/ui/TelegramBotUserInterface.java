@@ -12,6 +12,7 @@ import ru.pylaev.toDoProject.presentLayer.view.View;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class TelegramBotUserInterface extends UserInterfaceBase {
@@ -37,7 +38,7 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
     public void processUserInput() {
         bot.Input = null;
         try {
-            while (bot.Input == null) Thread.sleep(250);
+            while (bot.Input == null) TimeUnit.MILLISECONDS.sleep(250);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
