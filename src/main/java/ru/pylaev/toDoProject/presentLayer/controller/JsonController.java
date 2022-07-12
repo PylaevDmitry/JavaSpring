@@ -6,9 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
+import ru.pylaev.toDoProject.dataAccessLayer.Task;
 import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.UserInput;
 import ru.pylaev.toDoProject.presentLayer.view.View;
+
+import java.util.List;
 
 @Controller
 public class JsonController {
@@ -24,10 +27,10 @@ public class JsonController {
     @PostMapping("/sendJson")
     public ResponseEntity<String> processUserInput (@RequestBody UserInput userInput) {
         try {
-            ViewHandler.processUserInput(userInput.getContent(), view, taskRepository);
+            List<Task> tasks = ViewHandler.processUserInput(userInput.getContent(), view, taskRepository);
 
             StringBuilder stringBuilder = new StringBuilder();
-            for (String s : view.getTasks()) {
+            for (String s : tasks.stream().map(Task::toString).toList()) {
                 stringBuilder.append(s).append("\n");
             }
             return ResponseEntity.ok(stringBuilder + view.getMessage().toString());

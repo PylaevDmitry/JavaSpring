@@ -9,7 +9,7 @@
 <header th:insert="blocks/header::header"></header>
 
 <div class="container mt-5">
-    <div th:each="element: ${view.getArrTasks()}" class="alert alert-info mt-2">
+    <div th:each="element: ${arrTasks}" class="alert alert-info mt-2">
         <p th:text="${element}"></p>
     </div>
 </div>

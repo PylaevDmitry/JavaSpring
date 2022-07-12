@@ -64,7 +64,6 @@ class HtmlControllerTest {
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setMessage(Messages.askNumber);
-        expectedView.setTasks(tasks);
 
         this.mvc.perform(post("/").param("userInput", "user"))
                 .andExpect(status().is(302));
@@ -72,6 +71,7 @@ class HtmlControllerTest {
         this.mvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("view"))
-                .andExpect(model().attribute("view", expectedView));
+                .andExpect(model().attribute("view", expectedView))
+                .andExpect(model().attribute("arrTasks", tasks));
     }
 }

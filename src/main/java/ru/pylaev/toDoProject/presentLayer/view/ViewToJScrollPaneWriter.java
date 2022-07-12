@@ -10,7 +10,7 @@ import java.util.Objects;
 public class ViewToJScrollPaneWriter {
     public static JScrollPane write (View view, List<Task> tasks) {
         List<String> list = new ArrayList<>();
-        if (!Objects.isNull(view.getTasks())) {
+        if (Objects.nonNull(tasks)) {
             list.addAll((tasks.stream().map(Task::toString).toList()));
         }
         list.add(view.getMessage().toString());

@@ -57,10 +57,9 @@ class JsonControllerTest {
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setMessage(Messages.askNumber);
-        expectedView.setTasks(tasks);
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (String s : expectedView.getTasks()) {
+        for (String s : tasks.stream().map(Task::toString).toList()) {
             stringBuilder.append(s).append("\n");
         }
 

@@ -41,21 +41,9 @@ public class View {
         this.message = message;
     }
 
-    private String[] arrTasks;
-
-//    public String[] getTasks( ) {
-//        return arrTasks;
-//    }
-//
-//    public void setTasks(List<Task> list) {
-//        arrTasks = new String[list.size()];
-//        IntStream.range(0, list.size()).forEach(i -> this.getTasks()[i] = i + 1 + " " + list.get(i));
-//    }
-
     public void reset() {
         this.message = Messages.askOwner;
         this.owner = null;
-//        this.setTasks(new ArrayList<>());
         this.taskIndex = 0;
     }
 
@@ -68,14 +56,12 @@ public class View {
 
         if (taskIndex != view.taskIndex) return false;
         if (!Objects.equals(message, view.message)) return false;
-//        if (!Arrays.deepEquals(arrTasks, view.arrTasks)) return false;
         return Objects.equals(owner, view.owner);
     }
 
     @Override
     public int hashCode ( ) {
         int result = message != null ? message.hashCode() : 0;
-//        result = 31 * result + Arrays.hashCode(arrTasks);
         result = 31 * result + taskIndex;
         result = 31 * result + (owner != null ? owner.hashCode() : 0);
         return result;
