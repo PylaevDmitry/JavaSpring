@@ -2,12 +2,14 @@ package ru.pylaev.toDoProject.presentLayer.ui;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
+import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
+import ru.pylaev.toDoProject.dataAccessLayer.Task;
 import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 import ru.pylaev.toDoProject.presentLayer.view.ViewToJScrollPaneWriter;
 
 import javax.swing.*;
+import java.util.List;
 
 @Component
 public class WindowUserInterface extends UserInterfaceBase {
@@ -23,10 +25,11 @@ public class WindowUserInterface extends UserInterfaceBase {
     private final JTextField textField = new JTextField(72);
     private final JPanel panel = new JPanel();
     private MainWindow mainWindow;
+    private List<Task> tasks;
 
     @Autowired
-    public WindowUserInterface(View view, UserInputService userInputService) {
-        super(view, userInputService);
+    public WindowUserInterface(View view, TaskRepository taskRepository) {
+        super(view, taskRepository);
     }
 
     @Override
@@ -35,7 +38,7 @@ public class WindowUserInterface extends UserInterfaceBase {
         mainWindow.add(panel);
         textField.setHorizontalAlignment(JTextField.CENTER);
         textField.addActionListener(e -> {
-            ViewHandler.processUserInput(textField.getText(), view, userInputService);
+            tasks = ViewHandler.processUserInput(textField.getText(), view, taskRepository);
             refreshPanel();
             textField.setText("");
         });
@@ -54,7 +57,7 @@ public class WindowUserInterface extends UserInterfaceBase {
 
     private void refreshPanel() {
         panel.removeAll();
-        panel.add(ViewToJScrollPaneWriter.write(view));
+        panel.add(ViewToJScrollPaneWriter.write(view, tasks));
         panel.add(textField);
         panel.repaint();
         mainWindow.setVisible(true);

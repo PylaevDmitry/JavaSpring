@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 @SpringBootApplication
 public class ToDoMain {
     public static final CustomProperties CUSTOM_PROPERTIES = new CustomProperties("customConfig");
+    public static final String[] invalidNameSymbols = new String[] {" ", "\\", "|", "/", ":", "?", "\"", "<", ">"};
     public static ApplicationContext applicationContext;
 
     public static void main (String[] args) {

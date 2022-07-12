@@ -13,35 +13,17 @@ import java.util.stream.Collectors;
 
 @Service
 @Scope("prototype")
-public class UserInputService {
+public class TaskRepository {
     private static final String[] tasksStates = new String[] {"ARCH", "DONE", "WAIT"};
-    private static final String[] invalidNameSymbols = new String[] {" ", "\\", "|", "/", ":", "?", "\"", "<", ">"};
 
     private final DAO taskDAO;
 
     @Autowired
-    public UserInputService(DAO tasksDAO) {
+    public TaskRepository(DAO tasksDAO) {
         this.taskDAO = tasksDAO;
     }
 
-    public boolean checkOwner(String owner, String userInput) {
-        return owner == null && (InputChecker.inputInArray(userInput, invalidNameSymbols) < 0);
-    }
-
-    public int getCurrentIndex(String userInput, int size) {
-        if (size==0 || userInput.equals("NEW")) {
-            return 0;
-        }
-        else if (!userInput.equals("BACK")) {
-            var taskIndex = InputChecker.isValidIndex(userInput, size);
-            if (taskIndex>-1) {
-                return taskIndex;
-            }
-        }
-        return -1;
-    }
-
-    public List<Task> getActualTasks(String owner) {
+    public List<Task> findByOwner(String owner) {
         return (taskDAO.findByOwner(owner)).stream()
                 .filter(task -> !task.getStatus().equals("ARCH"))
                 .collect(Collectors.toList());
@@ -55,10 +37,10 @@ public class UserInputService {
         return 0;
     }
 
-    public int changeTaskStatus(String owner, String userInput, int taskIndex) {
+    public int updateTaskStatus(String owner, String userInput, int taskIndex) {
         if (!userInput.equals("BACK")) {
             if (InputChecker.inputInArray(userInput, tasksStates)>0) {
-                Task task = taskDAO.findById(getActualTasks(owner)
+                Task task = taskDAO.findById(findByOwner(owner)
                         .get(taskIndex-1)
                         .getId())
                         .orElseThrow();

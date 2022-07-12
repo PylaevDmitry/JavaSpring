@@ -2,8 +2,10 @@ package ru.pylaev.util;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.pylaev.toDoProject.ToDoMain;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.pylaev.util.InputChecker.checkInput;
 
 class InputCheckerTest {
 
@@ -57,4 +59,13 @@ class InputCheckerTest {
         assertEquals(InputChecker.inputInArray("noValid", new String[] {"ARCH", "WAIT", "DONE"}), -1);
     }
 
+    @Test
+    void checkOwnerIsOk() {
+        assertTrue(checkInput(null, "user", ToDoMain.invalidNameSymbols));
+    }
+
+    @Test
+    void checkOwnerIsRejected() {
+        assertFalse(checkInput(null, ":", ToDoMain.invalidNameSymbols));
+    }
 }

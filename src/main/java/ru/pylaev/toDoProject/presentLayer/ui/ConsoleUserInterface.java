@@ -2,12 +2,12 @@ package ru.pylaev.toDoProject.presentLayer.ui;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
+import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
+import ru.pylaev.toDoProject.dataAccessLayer.Task;
 import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 import java.util.Scanner;
 
 @Component
@@ -15,8 +15,8 @@ public class ConsoleUserInterface extends UserInterfaceBase {
     private final Scanner scanner = new Scanner((System.in)).useDelimiter("\n");
 
     @Autowired
-    public ConsoleUserInterface (View view, UserInputService userInputService) {
-        super(view, userInputService);
+    public ConsoleUserInterface (View view, TaskRepository taskRepository) {
+        super(view, taskRepository);
     }
 
     @Override
@@ -27,9 +27,9 @@ public class ConsoleUserInterface extends UserInterfaceBase {
     @Override
     public void processUserInput() {
         var userInput = scanner.next();
-        ViewHandler.processUserInput(userInput, view, userInputService);
-        if (!Objects.isNull(view.getArrTasks())) {
-            Arrays.stream(view.getArrTasks()).forEach(System.out::println);
+        List<Task> tasks = ViewHandler.processUserInput(userInput, view, taskRepository);
+        if (tasks.size()>0) {
+            tasks.forEach(System.out::println);
         }
         System.out.println(view.getMessage());
     }

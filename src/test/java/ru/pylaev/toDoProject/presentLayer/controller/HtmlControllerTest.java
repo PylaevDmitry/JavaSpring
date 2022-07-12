@@ -64,7 +64,7 @@ class HtmlControllerTest {
         View expectedView = new View();
         expectedView.setOwner("user");
         expectedView.setMessage(Messages.askNumber);
-        expectedView.setTasksAsList(tasks);
+        expectedView.setTasks(tasks);
 
         this.mvc.perform(post("/").param("userInput", "user"))
                 .andExpect(status().is(302));

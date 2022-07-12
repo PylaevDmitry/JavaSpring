@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
+import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
 import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.UserInput;
 import ru.pylaev.toDoProject.presentLayer.view.View;
@@ -13,21 +13,21 @@ import ru.pylaev.toDoProject.presentLayer.view.View;
 @Controller
 public class JsonController {
     private final View view;
-    private final UserInputService userInputService;
+    private final TaskRepository taskRepository;
 
     @Autowired
-    public JsonController(View view, UserInputService userInputService) {
+    public JsonController(View view, TaskRepository taskRepository) {
         this.view = view;
-        this.userInputService = userInputService;
+        this.taskRepository = taskRepository;
     }
 
     @PostMapping("/sendJson")
     public ResponseEntity<String> processUserInput (@RequestBody UserInput userInput) {
         try {
-            ViewHandler.processUserInput(userInput.getContent(), view, userInputService);
+            ViewHandler.processUserInput(userInput.getContent(), view, taskRepository);
 
             StringBuilder stringBuilder = new StringBuilder();
-            for (String s : view.getArrTasks()) {
+            for (String s : view.getTasks()) {
                 stringBuilder.append(s).append("\n");
             }
             return ResponseEntity.ok(stringBuilder + view.getMessage().toString());

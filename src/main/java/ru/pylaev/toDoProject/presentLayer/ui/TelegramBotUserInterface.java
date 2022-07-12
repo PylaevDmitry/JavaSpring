@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
+import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
+import ru.pylaev.toDoProject.dataAccessLayer.Task;
 import ru.pylaev.toDoProject.presentLayer.ViewHandler;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -19,8 +19,8 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
     private final TelegramBot bot;
 
     @Autowired
-    public TelegramBotUserInterface(View view, UserInputService userInputService, @Value("${botToken}") String token){
-        super(view, userInputService);
+    public TelegramBotUserInterface(View view, TaskRepository taskRepository, @Value("${botToken}") String token){
+        super(view, taskRepository);
         bot = new TelegramBot(token, 1249988927);
     }
 
@@ -42,12 +42,11 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ViewHandler.processUserInput(bot.Input, view, userInputService);
-        if (!Objects.isNull(view.getArrTasks())) {
-            if (view.getArrTasks().length>0) {
-                bot.send(Arrays.toString(view.getArrTasks()));
-            }
+        List<Task> tasks = ViewHandler.processUserInput(bot.Input, view, taskRepository);
+        if (tasks.size()>0) {
+            bot.send(String.valueOf(tasks));
         }
+
         bot.send(view.getMessage().toString());
     }
 }

@@ -22,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration(loader = HeadlessSpringBootContextLoader.class)
-class UserInputServiceTest {
+class TaskRepositoryTest {
     @MockBean
     private DAO tasksDAO;
 
     @Autowired
-    UserInputService userInputService;
+    TaskRepository taskRepository;
 
     List<Task> tasks = new ArrayList<>();
 
@@ -47,61 +47,35 @@ class UserInputServiceTest {
         Mockito.when(tasksDAO.findById(11L)).thenReturn(Optional.of(task2));
         Mockito.when(tasksDAO.findById(14L)).thenReturn(Optional.of(task3));
         Mockito.when(tasksDAO.findByOwner("user")).thenReturn(tasks);
-
     }
 
     @Test
     void getActualTasks() {
-        assertEquals(userInputService.getActualTasks("user"), tasks);
-    }
-
-    @Test
-    void checkOwnerIsOk() {
-        assertTrue(userInputService.checkOwner(null, "user"));
-    }
-
-    @Test
-    void checkOwnerIsRejected() {
-        assertFalse(userInputService.checkOwner(null, ":"));
-    }
-
-    @Test
-    void getCurrentIndexIsOk() {
-        assertEquals(userInputService.getCurrentIndex("3", tasks.size()), 3);
-    }
-
-    @Test
-    void getCurrentIndexIsNull() {
-        assertEquals(userInputService.getCurrentIndex("2", 0), 0);
-    }
-
-    @Test
-    void getCurrentIndexIsRejected() {
-        assertEquals(userInputService.getCurrentIndex("4", tasks.size()), -1);
+        assertEquals(taskRepository.findByOwner("user"), tasks);
     }
 
     @Test
     void saveNewIsOk() {
-        assertEquals(userInputService.saveNewTask("user", "note1"), 1);
+        assertEquals(taskRepository.saveNewTask("user", "note1"), 1);
     }
 
     @Test
     void saveNewIsRejected() {
-        assertEquals(userInputService.saveNewTask("user", "BACK"), 0);
+        assertEquals(taskRepository.saveNewTask("user", "BACK"), 0);
     }
 
     @Test
     void changeStatusOK() {
-        assertEquals(userInputService.changeTaskStatus("user", "DONE", 1), 1);
+        assertEquals(taskRepository.updateTaskStatus("user", "DONE", 1), 1);
     }
 
     @Test
     void changeStatusBack() {
-        assertEquals(userInputService.changeTaskStatus("user", "BACK", 1), 0);
+        assertEquals(taskRepository.updateTaskStatus("user", "BACK", 1), 0);
     }
 
     @Test
     void changeStatusReject() {
-        assertEquals(userInputService.changeTaskStatus("user", "invalidStatus", 1), -1);
+        assertEquals(taskRepository.updateTaskStatus("user", "invalidStatus", 1), -1);
     }
 }

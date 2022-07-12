@@ -1,55 +1,70 @@
 package ru.pylaev.toDoProject.presentLayer;
 
-import ru.pylaev.toDoProject.businessLogicLayer.UserInputService;
+import ru.pylaev.toDoProject.ToDoMain;
+import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
 import ru.pylaev.toDoProject.presentLayer.view.View;
+import ru.pylaev.util.InputChecker;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static ru.pylaev.util.InputChecker.checkInput;
+
 public class ViewHandler {
-    public static void processUserInput(String userInput, View view, UserInputService userInputService) {
+    private static int validateIndex(String userInput, int size) {
+        if (size==0 || userInput.equals("NEW")) {
+            return 0;
+        }
+        else if (!userInput.equals("BACK")) {
+            var taskIndex = InputChecker.isValidIndex(userInput, size);
+            if (taskIndex>-1) {
+                return taskIndex;
+            }
+        }
+        return -1;
+    }
+
+    public static List<Task> processUserInput(String userInput, View view, TaskRepository taskRepository) {
+        List<Task> tasks = new ArrayList<>();
         if (Objects.isNull(userInput)) {
-            return;
+            return tasks;
         }
         else if (userInput.equals("EXIT")) {
-            view.setMessage(Messages.askOwner);
-            view.setOwner(null);
-            view.setTasksAsList(new ArrayList<>());
-            view.setTaskIndex(0);
-            return;
+            view.reset();
+            return tasks;
         }
 
-        if (view.getMessage().equals(Messages.askOwner) && userInputService.checkOwner(view.getOwner(), userInput)) {
+        if (view.getMessage().equals(Messages.askOwner) && checkInput(view.getOwner(), userInput, ToDoMain.invalidNameSymbols)) {
             view.setOwner(userInput);
-            view.setMessage(Messages.askNumber);
         }
 
         switch (view.getMessage()) {
             case askNumber -> {
-                List<Task> tasks = userInputService.getActualTasks(view.getOwner());
-                int getCurrentIndexResult = userInputService.getCurrentIndex(userInput, tasks.size());
-                if (getCurrentIndexResult == 0) view.setMessage(Messages.askNew);
-                else if (getCurrentIndexResult > 0) {
+                List<Task> tasksList = taskRepository.findByOwner(view.getOwner());
+                int index = validateIndex(userInput, tasksList.size());
+                if (index == 0) view.setMessage(Messages.askNew);
+                else if (index > 0) {
                     view.setMessage(Messages.askStatus);
-                    view.setTaskIndex(getCurrentIndexResult);
+                    view.setTaskIndex(index);
                 }
-                view.setTasksAsList(tasks);
+                tasks = tasksList;
             }
             case askNew -> {
-                int saveNewResult = userInputService.saveNewTask(view.getOwner(), userInput);
+                int saveNewResult = taskRepository.saveNewTask(view.getOwner(), userInput);
                 view.setMessage(Messages.askNumber);
-                if (saveNewResult>0) view.setTasksAsList(userInputService.getActualTasks(view.getOwner()));
+                if (saveNewResult>0) tasks = taskRepository.findByOwner(view.getOwner());
             }
             case askStatus -> {
-                int changeStatusResult = userInputService.changeTaskStatus(view.getOwner(), userInput, view.getTaskIndex());
+                int changeStatusResult = taskRepository.updateTaskStatus(view.getOwner(), userInput, view.getTaskIndex());
                 if (changeStatusResult>0) {
                     view.setMessage(Messages.askNumber);
-                    view.setTasksAsList(userInputService.getActualTasks(view.getOwner()));
+                    tasks = taskRepository.findByOwner(view.getOwner());
                 }
                 else if (changeStatusResult==0) view.setMessage(Messages.askNumber);
             }
         }
+        return tasks;
     }
 }
