@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.presentLayer.ui;
+package ru.pylaev.toDoProject.presentLayer.runUi;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,11 +13,11 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class TelegramBotUserInterface extends UserInterfaceBase {
+public class TelegramUserInterface extends RunUI {
     private final TelegramBot bot;
 
     @Autowired
-    public TelegramBotUserInterface(State state, @Value("${botToken}") String token){
+    public TelegramUserInterface(State state, @Value("${botToken}") String token){
         super(state);
         bot = new TelegramBot(token, 1249988927);
     }
@@ -29,7 +29,7 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-        bot.send(state.getStep().toString());
+        bot.send(view.getMessage());
     }
 
     @Override

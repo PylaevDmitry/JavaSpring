@@ -50,7 +50,7 @@ public class StateService {
                 state.setStep(Step.askNumber);
             }
             case askStatus -> {
-                int changeStatusResult = taskRepository.updateTaskStatus(state.getOwner(), userInput, state.getCurrentTaskIndex());
+                int changeStatusResult = taskRepository.updateTask(state.getOwner(), userInput, state.getCurrentTaskIndex());
                 if (changeStatusResult>0) {
                     state.setStep(Step.askNumber);
                 }

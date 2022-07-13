@@ -1,16 +1,15 @@
-package ru.pylaev.toDoProject.presentLayer.ui;
+package ru.pylaev.toDoProject.presentLayer.runUi;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.businessLogicLayer.State;
 import ru.pylaev.toDoProject.businessLogicLayer.StateService;
-import ru.pylaev.toDoProject.presentLayer.view.JScrollPaneWriter;
 
 import javax.swing.*;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class WindowUserInterface extends UserInterfaceBase {
+public class WindowUserInterface extends RunUI {
     private static class MainWindow extends JFrame {
         public MainWindow() {
             setTitle("TODO");

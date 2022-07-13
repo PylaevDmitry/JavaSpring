@@ -1,4 +1,4 @@
-package ru.pylaev.toDoProject.presentLayer.ui;
+package ru.pylaev.toDoProject.presentLayer.runUi;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 @Component
-public class ConsoleUserInterface extends UserInterfaceBase {
+public class ConsoleUserInterface extends RunUI {
     private final Scanner scanner = new Scanner((System.in)).useDelimiter("\n");
 
     @Autowired
@@ -19,7 +19,7 @@ public class ConsoleUserInterface extends UserInterfaceBase {
 
     @Override
     public void showStartView() {
-        System.out.println(state.getStep());
+        System.out.println(view.getMessage());
     }
 
     @Override

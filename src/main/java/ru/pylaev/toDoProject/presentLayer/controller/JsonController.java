@@ -6,24 +6,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
-import ru.pylaev.toDoProject.businessLogicLayer.StateService;
 import ru.pylaev.toDoProject.businessLogicLayer.State;
+import ru.pylaev.toDoProject.businessLogicLayer.StateService;
+import ru.pylaev.toDoProject.presentLayer.BaseUI;
 import ru.pylaev.toDoProject.presentLayer.view.JsonInput;
-import ru.pylaev.toDoProject.presentLayer.view.View;
 
 @Controller
-public class JsonController {
-    private final State state;
-    private final View view = new View();
+public class JsonController extends BaseUI {
 
     @Autowired
-    public JsonController(State state, TaskRepository taskRepository) {
-        this.state = state;
+    public JsonController(State state) {
+        super(state);
     }
 
     @PostMapping("/sendJson")
-    public ResponseEntity<String> processUserInput (@RequestBody JsonInput jsonInput) {
+    public ResponseEntity<String> post(@RequestBody JsonInput jsonInput) {
         try {
             view.setTasks(StateService.processUserInput(jsonInput.getContent(), state));
             view.setMessage(state.getStep().toString());

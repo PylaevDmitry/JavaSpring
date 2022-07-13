@@ -8,26 +8,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.pylaev.toDoProject.businessLogicLayer.State;
 import ru.pylaev.toDoProject.businessLogicLayer.StateService;
-import ru.pylaev.toDoProject.presentLayer.view.View;
+import ru.pylaev.toDoProject.presentLayer.BaseUI;
 
 @Controller
-public class HtmlController {
-    private final State state;
-    private final View view = new View();
+public class HtmlController extends BaseUI {
 
     @Autowired
     public HtmlController(State state) {
-        this.state = state;
+        super(state);
     }
 
     @GetMapping
-    public String showStartView (Model model) {
+    public String get(Model model) {
         model.addAttribute("view", view);
         return "home";
     }
 
     @PostMapping
-    public String processUserInput (@RequestParam String userInput) {
+    public String post(@RequestParam String userInput) {
         view.setTasks(StateService.processUserInput(userInput, state));
         view.setMessage(state.getStep().toString());
         return "redirect:/";

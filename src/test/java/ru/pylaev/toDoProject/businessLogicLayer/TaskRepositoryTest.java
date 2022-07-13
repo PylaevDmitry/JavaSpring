@@ -66,16 +66,16 @@ class TaskRepositoryTest {
 
     @Test
     void changeStatusOK() {
-        assertEquals(1, taskRepository.updateTaskStatus("user", "DONE", 1));
+        assertEquals(1, taskRepository.updateTask("user", "DONE", 1));
     }
 
     @Test
     void changeStatusBack() {
-        assertEquals(0, taskRepository.updateTaskStatus("user", "BACK", 1));
+        assertEquals(0, taskRepository.updateTask("user", "BACK", 1));
     }
 
     @Test
     void changeStatusReject() {
-        assertEquals(-1, taskRepository.updateTaskStatus("user", "invalidStatus", 1));
+        assertEquals(-1, taskRepository.updateTask("user", "invalidStatus", 1));
     }
 }

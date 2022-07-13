@@ -3,10 +3,10 @@ package ru.pylaev.toDoProject;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
-import ru.pylaev.toDoProject.presentLayer.ui.ConsoleUserInterface;
-import ru.pylaev.toDoProject.presentLayer.ui.TelegramBotUserInterface;
-import ru.pylaev.toDoProject.presentLayer.ui.UserInterfaceBase;
-import ru.pylaev.toDoProject.presentLayer.ui.WindowUserInterface;
+import ru.pylaev.toDoProject.presentLayer.runUi.ConsoleUserInterface;
+import ru.pylaev.toDoProject.presentLayer.runUi.TelegramUserInterface;
+import ru.pylaev.toDoProject.presentLayer.runUi.RunUI;
+import ru.pylaev.toDoProject.presentLayer.runUi.WindowUserInterface;
 import ru.pylaev.util.CustomProperties;
 
 import java.util.concurrent.ExecutorService;
@@ -21,22 +21,22 @@ public class ToDoMain {
         applicationContext = new SpringApplicationBuilder(ToDoMain.class).headless(false).run();
 
         ConsoleUserInterface consoleUserInterface = applicationContext.getBean("consoleUserInterface", ConsoleUserInterface.class);
-        TelegramBotUserInterface telegramBotUserInterface = applicationContext.getBean("telegramBotUserInterface", TelegramBotUserInterface.class);
+        TelegramUserInterface telegramUserInterface = applicationContext.getBean("telegramUserInterface", TelegramUserInterface.class);
         WindowUserInterface windowUserInterface = applicationContext.getBean("windowUserInterface", WindowUserInterface.class);
 
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.execute(new UserInterfaceRunner(consoleUserInterface));
-        executorService.execute(new UserInterfaceRunner(telegramBotUserInterface));
+        executorService.execute(new UserInterfaceRunner(telegramUserInterface));
         executorService.execute(new UserInterfaceRunner(windowUserInterface));
     }
 }
 
-record UserInterfaceRunner(UserInterfaceBase userInterfaceBase) implements Runnable {
+record UserInterfaceRunner(RunUI runUI) implements Runnable {
     @Override
     public void run() {
-        userInterfaceBase.showStartView();
+        runUI.showStartView();
         while (true) {
-            userInterfaceBase.processUserInput();
+            runUI.processUserInput();
         }
     }
 }
