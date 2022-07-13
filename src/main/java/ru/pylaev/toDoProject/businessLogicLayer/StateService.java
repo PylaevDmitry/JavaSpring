@@ -2,17 +2,16 @@ package ru.pylaev.toDoProject.businessLogicLayer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
 import ru.pylaev.util.InputChecker;
 import ru.pylaev.util.ListToNumberingArrayConverter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class StateService {
     private static TaskRepository taskRepository;
-    private static List<Task> tasks = new ArrayList<>();
 
     @Autowired
     public void setTaskRepository (TaskRepository t) {
@@ -23,15 +22,13 @@ public class StateService {
         if (userInput==null) {
             return new String[]{};
         }
-        else if (userInput.equals("EXIT")) {
+        else if (userInput.equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("commandExit"))) {
             state.reset();
             return new String[]{};
         }
-
         if (state.getOwner()==null) {
             state.setCorrectOwner(userInput);
         }
-
         return  getStepResult(userInput, state);
     }
 
@@ -40,39 +37,38 @@ public class StateService {
             case askNumber -> {
                 List<Task> tasksList = taskRepository.findByOwner(state.getOwner());
                 int index = validateIndex(userInput, tasksList.size());
-                if (index == 0) state.setStep(Step.askNew);
+                if (index == 0) {
+                    state.setStep(Step.askNew);
+                }
                 else if (index > 0) {
                     state.setStep(Step.askStatus);
                     state.setCurrentTaskIndex(index);
                 }
-                tasks = tasksList;
             }
             case askNew -> {
-                int saveNewResult = taskRepository.saveNewTask(state.getOwner(), userInput);
+                taskRepository.saveNewTask(state.getOwner(), userInput);
                 state.setStep(Step.askNumber);
-                if (saveNewResult>0) tasks = taskRepository.findByOwner(state.getOwner());
             }
             case askStatus -> {
                 int changeStatusResult = taskRepository.updateTaskStatus(state.getOwner(), userInput, state.getCurrentTaskIndex());
                 if (changeStatusResult>0) {
                     state.setStep(Step.askNumber);
-                    tasks = taskRepository.findByOwner(state.getOwner());
                 }
-                else if (changeStatusResult==0) state.setStep(Step.askNumber);
+                else if (changeStatusResult==0) {
+                    state.setStep(Step.askNumber);
+                }
             }
         }
-        return ListToNumberingArrayConverter.convert(tasks);
+        return ListToNumberingArrayConverter.convert(taskRepository.findByOwner(state.getOwner()));
     }
 
     private static int validateIndex(String userInput, int size) {
-        if (size==0 || userInput.equals("NEW")) {
+        if (size==0 || userInput.equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("commandNew"))) {
             return 0;
         }
-        else if (!userInput.equals("BACK")) {
+        else if (!userInput.equals(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("commandBack"))) {
             var taskIndex = InputChecker.isValidIndex(userInput, size);
-            if (taskIndex>-1) {
-                return taskIndex;
-            }
+            if (taskIndex>-1) return taskIndex;
         }
         return -1;
     }
