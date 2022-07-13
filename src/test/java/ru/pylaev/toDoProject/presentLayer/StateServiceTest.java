@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
-import ru.pylaev.toDoProject.businessLogicLayer.UiStateService;
+import ru.pylaev.toDoProject.businessLogicLayer.StateService;
 import ru.pylaev.toDoProject.businessLogicLayer.Step;
 import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
 import ru.pylaev.toDoProject.dataAccessLayer.DAO;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
-import ru.pylaev.toDoProject.businessLogicLayer.UiState;
+import ru.pylaev.toDoProject.businessLogicLayer.State;
 import ru.pylaev.util.HeadlessSpringBootContextLoader;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.stream.IntStream;
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration(loader = HeadlessSpringBootContextLoader.class)
-class UiUiStateServiceTest {
+class StateServiceTest {
     @MockBean
     private DAO tasksDAO;
 
@@ -69,163 +69,163 @@ class UiUiStateServiceTest {
 
     @Test
     void processOwnerIsOk () {
-        UiState uiState = new UiState();
+        State state = new State();
 
-        UiState expectedUiState = new UiState();
-        expectedUiState.setCorrectOwner("user");
+        State expectedState = new State();
+        expectedState.setCorrectOwner("user");
         String[] expectedTasks = tasks.stream().map(Task::toString).toArray(String[]::new);
         IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
 
-        String[] actualTasks = UiStateService.processUserInput("user", uiState);
+        String[] actualTasks = StateService.processUserInput("user", state);
 
         Assertions.assertArrayEquals(expectedTasks, actualTasks);
-        Assertions.assertEquals(expectedUiState, uiState);
+        Assertions.assertEquals(expectedState, state);
     }
 
     @Test
     void processOwnerInvalidSymbol () {
-        UiState uiState = new UiState();
+        State state = new State();
 
-        UiState expectedUiState = new UiState();
+        State expectedState = new State();
 
-        UiStateService.processUserInput( "???", uiState);
+        StateService.processUserInput( "???", state);
 
-        Assertions.assertEquals(expectedUiState, uiState);
+        Assertions.assertEquals(expectedState, state);
     }
 
     @Test
     void processOwnerNull () {
-        UiState uiState = new UiState();
+        State state = new State();
 
-        UiState expectedUiState = new UiState();
+        State expectedState = new State();
 
-        UiStateService.processUserInput( null, uiState);
+        StateService.processUserInput( null, state);
 
-        Assertions.assertEquals(expectedUiState, uiState);
+        Assertions.assertEquals(expectedState, state);
     }
 
     @Test
     void processAskNumberOk () {
-        UiState uiState = new UiState();
-        uiState.setCorrectOwner("user");
+        State state = new State();
+        state.setCorrectOwner("user");
 
-        UiState expectedUiState = new UiState();
-        expectedUiState.setCorrectOwner("user");
-        expectedUiState.setCurrentTaskIndex(1);
-        expectedUiState.setStep(Step.askStatus);
+        State expectedState = new State();
+        expectedState.setCorrectOwner("user");
+        expectedState.setCurrentTaskIndex(1);
+        expectedState.setStep(Step.askStatus);
         String[] expectedTasks = tasks.stream().map(Task::toString).toArray(String[]::new);
         IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
 
-        String[] actualTasks = UiStateService.processUserInput( "1", uiState);
+        String[] actualTasks = StateService.processUserInput( "1", state);
 
         Assertions.assertArrayEquals(expectedTasks, actualTasks);
-        Assertions.assertEquals(expectedUiState, uiState);
+        Assertions.assertEquals(expectedState, state);
     }
 
     @Test
     void processAskNumberOutRange () {
-        UiState uiState = new UiState();
-        uiState.setCorrectOwner("user");
+        State state = new State();
+        state.setCorrectOwner("user");
 
-        UiState expectedUiState = new UiState();
-        expectedUiState.setCorrectOwner("user");
+        State expectedState = new State();
+        expectedState.setCorrectOwner("user");
         String[] expectedTasks = tasks.stream().map(Task::toString).toArray(String[]::new);
         IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
 
-        String[] actualTasks = UiStateService.processUserInput( "10", uiState);
+        String[] actualTasks = StateService.processUserInput( "10", state);
 
         Assertions.assertArrayEquals(expectedTasks, actualTasks);
-        Assertions.assertEquals(expectedUiState, uiState);
+        Assertions.assertEquals(expectedState, state);
     }
 
     @Test
     void processAskNumberNull () {
-        UiState uiState = new UiState();
-        uiState.setCorrectOwner("user");
+        State state = new State();
+        state.setCorrectOwner("user");
 
-        UiState expectedUiState = new UiState();
-        expectedUiState.setCorrectOwner("user");
+        State expectedState = new State();
+        expectedState.setCorrectOwner("user");
 
-        UiStateService.processUserInput( null, uiState);
+        StateService.processUserInput( null, state);
 
-        Assertions.assertEquals(expectedUiState, uiState);
+        Assertions.assertEquals(expectedState, state);
     }
 
     @Test
     void processAskNewOk () {
-        UiState uiState = new UiState();
-        uiState.setCorrectOwner("user");
-        uiState.setStep(Step.askNew);
+        State state = new State();
+        state.setCorrectOwner("user");
+        state.setStep(Step.askNew);
 
         Task task = new Task("33", "user", "note4", "Wed Mar 25 16:01", "WAIT");
         tasks.add(task);
 
-        UiState expectedUiState = new UiState();
-        expectedUiState.setCorrectOwner("user");
+        State expectedState = new State();
+        expectedState.setCorrectOwner("user");
         String[] expectedTasks = tasks.stream().map(Task::toString).toArray(String[]::new);
         IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
 
-        String[] actualTasks = UiStateService.processUserInput( "note4", uiState);
+        String[] actualTasks = StateService.processUserInput( "note4", state);
 
         Assertions.assertArrayEquals(expectedTasks, actualTasks);
-        Assertions.assertEquals(expectedUiState, uiState);
+        Assertions.assertEquals(expectedState, state);
     }
 
     @Test
     void processAskStatusDone () {
-        UiState uiState = new UiState();
-        uiState.setCorrectOwner("user");
-        uiState.setCurrentTaskIndex(1);
-        uiState.setStep(Step.askStatus);
+        State state = new State();
+        state.setCorrectOwner("user");
+        state.setCurrentTaskIndex(1);
+        state.setStep(Step.askStatus);
 
-        UiState expectedUiState = new UiState();
-        expectedUiState.setCorrectOwner("user");
-        expectedUiState.setCurrentTaskIndex(1);
+        State expectedState = new State();
+        expectedState.setCorrectOwner("user");
+        expectedState.setCurrentTaskIndex(1);
         List <Task> expectList = new ArrayList<>(tasks);
         expectList.set(0, new Task("3", "user", "note3", "Wed Mar 25 16:01", "DONE"));
         String[] expectedTasks = expectList.stream().map(Task::toString).toArray(String[]::new);
         IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
 
-        String[] actualTasks = UiStateService.processUserInput( "DONE", uiState);
+        String[] actualTasks = StateService.processUserInput( "DONE", state);
 
         Assertions.assertArrayEquals(expectedTasks, actualTasks);
-        Assertions.assertEquals(expectedUiState, uiState);
+        Assertions.assertEquals(expectedState, state);
     }
 
     @Test
     void processAskStatusArch () {
-        UiState uiState = new UiState();
-        uiState.setCorrectOwner("user");
-        uiState.setCurrentTaskIndex(3);
-        uiState.setStep(Step.askStatus);
+        State state = new State();
+        state.setCorrectOwner("user");
+        state.setCurrentTaskIndex(3);
+        state.setStep(Step.askStatus);
 
-        UiState expectedUiState = new UiState();
-        expectedUiState.setCorrectOwner("user");
-        expectedUiState.setCurrentTaskIndex(3);
+        State expectedState = new State();
+        expectedState.setCorrectOwner("user");
+        expectedState.setCurrentTaskIndex(3);
         List <Task> expectList = new ArrayList<>(tasks);
         expectList.remove(2);
         String[] expectedTasks = expectList.stream().map(Task::toString).toArray(String[]::new);
         IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
 
-        String[] actualTasks = UiStateService.processUserInput("ARCH", uiState);
+        String[] actualTasks = StateService.processUserInput("ARCH", state);
 
         Assertions.assertArrayEquals(expectedTasks, actualTasks);
-        Assertions.assertEquals(expectedUiState, uiState);
+        Assertions.assertEquals(expectedState, state);
     }
 
     @Test
     void processAskStatusInvalid () {
-        UiState uiState = new UiState();
-        uiState.setCorrectOwner("user");
+        State state = new State();
+        state.setCorrectOwner("user");
 
-        UiState expectedUiState = new UiState();
-        expectedUiState.setCorrectOwner("user");
+        State expectedState = new State();
+        expectedState.setCorrectOwner("user");
         String[] expectedTasks = tasks.stream().map(Task::toString).toArray(String[]::new);
         IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
 
-        String[] actualTasks = UiStateService.processUserInput( "arc", uiState);
+        String[] actualTasks = StateService.processUserInput( "arc", state);
 
         Assertions.assertArrayEquals(expectedTasks, actualTasks);
-        Assertions.assertEquals(expectedUiState, uiState);
+        Assertions.assertEquals(expectedState, state);
     }
 }

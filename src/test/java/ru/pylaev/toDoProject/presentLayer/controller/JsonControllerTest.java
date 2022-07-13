@@ -10,18 +10,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.pylaev.toDoProject.ToDoMain;
-import ru.pylaev.toDoProject.dataAccessLayer.Task;
 import ru.pylaev.toDoProject.businessLogicLayer.Step;
-import ru.pylaev.toDoProject.businessLogicLayer.UiState;
+import ru.pylaev.toDoProject.dataAccessLayer.Task;
 import ru.pylaev.util.DBDataSupplier;
 import ru.pylaev.util.HeadlessSpringBootContextLoader;
+import ru.pylaev.util.ListToNumberingArrayConverter;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -55,22 +55,16 @@ class JsonControllerTest {
         tasks.add(task2);
         tasks.add(task3);
 
-        UiState expectedUiState = new UiState();
-        expectedUiState.setCorrectOwner("user");
-        expectedUiState.setStep(Step.askNumber);
-        String[] expectedTasks = tasks.stream().map(Task::toString).toArray(String[]::new);
-        IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
+        String[] expectedTasks = ListToNumberingArrayConverter.convert(tasks);
         StringBuilder stringBuilder = new StringBuilder();
-        for (String s : expectedTasks) {
-            stringBuilder.append(s).append("\n");
-        }
+        Arrays.stream(expectedTasks).forEach(task -> stringBuilder.append(task).append("\n"));
 
-        String expectedResult = stringBuilder + expectedUiState.getStep().toString();
+        stringBuilder.append(Step.askNumber);
 
         this.mvc.perform(post("/sendJson")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"content\": \"user\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(expectedResult));
+                .andExpect(content().string(String.valueOf(stringBuilder)));
     }
 }

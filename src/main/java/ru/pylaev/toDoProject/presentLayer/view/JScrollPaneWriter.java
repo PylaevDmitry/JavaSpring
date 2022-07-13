@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class ViewToJScrollPaneWriter {
+public class JScrollPaneWriter {
     public static JScrollPane write (String message, String[] tasks) {
         List<String> list = new ArrayList<>();
         if (Objects.nonNull(tasks)) {

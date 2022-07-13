@@ -9,8 +9,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.pylaev.toDoProject.dataAccessLayer.Task;
 import ru.pylaev.toDoProject.businessLogicLayer.Step;
+import ru.pylaev.toDoProject.dataAccessLayer.Task;
+import ru.pylaev.toDoProject.presentLayer.view.View;
 import ru.pylaev.util.DBDataSupplier;
 import ru.pylaev.util.HeadlessSpringBootContextLoader;
 
@@ -44,8 +45,8 @@ class HtmlControllerTest {
     void show() throws Exception {
         this.mvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("message"))
-                .andExpect(model().attribute("message", Step.askOwner));
+                .andExpect(model().attributeExists("view"))
+                .andExpect(model().attribute("view", new View()));
     }
 
     @Test
@@ -59,17 +60,19 @@ class HtmlControllerTest {
         tasks.add(task2);
         tasks.add(task3);
 
+
         String[] expectedTasks = tasks.stream().map(Task::toString).toArray(String[]::new);
         IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
+        View expectedView = new View();
+        expectedView.setTasks(expectedTasks);
+        expectedView.setMessage(Step.askNumber.toString());
 
         this.mvc.perform(post("/").param("userInput", "user"))
                 .andExpect(status().is(302));
 
         this.mvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("message"))
-                .andExpect(model().attribute("message", Step.askNumber))
-                .andExpect(model().attributeExists("tasks"))
-                .andExpect(model().attribute("tasks", expectedTasks));
+                .andExpect(model().attributeExists("view"))
+                .andExpect(model().attribute("view", expectedView));
     }
 }

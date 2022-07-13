@@ -6,31 +6,30 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.pylaev.toDoProject.businessLogicLayer.UiState;
-import ru.pylaev.toDoProject.businessLogicLayer.UiStateService;
+import ru.pylaev.toDoProject.businessLogicLayer.State;
+import ru.pylaev.toDoProject.businessLogicLayer.StateService;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
 @Controller
 public class HtmlController {
-    private final UiState uiState;
+    private final State state;
     private final View view = new View();
 
     @Autowired
-    public HtmlController(UiState uiState) {
-        this.uiState = uiState;
+    public HtmlController(State state) {
+        this.state = state;
     }
 
     @GetMapping
     public String showStartView (Model model) {
-        model.addAttribute("message", uiState.getStep());
-        model.addAttribute("tasks", view.getTasks());
+        model.addAttribute("view", view);
         return "home";
     }
 
     @PostMapping
     public String processUserInput (@RequestParam String userInput) {
-        view.setTasks(UiStateService.processUserInput(userInput, uiState));
-        view.setMessage(uiState.getStep().toString());
+        view.setTasks(StateService.processUserInput(userInput, state));
+        view.setMessage(state.getStep().toString());
         return "redirect:/";
     }
 }

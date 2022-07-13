@@ -9,15 +9,15 @@
 <header th:insert="blocks/header::header"></header>
 
 <div class="container mt-5">
-    <div th:each="element: ${tasks}" class="alert alert-info mt-2">
+    <div th:each="element: ${view.getTasks}" class="alert alert-info mt-2">
         <p th:text="${element}"></p>
     </div>
 </div>
 
-<p th:text="${message}" align="center"></p>
+<p th:text="${view.getMessage}" align="center"></p>
 
 <form method="post">
-    <input type="text" name="userInput" class="form-control">
+    <input type="text" name="jsonInput" class="form-control">
 </form>
 
 <!--<form th:method="POST" th:action="@{/}" th:object="${state}">-->

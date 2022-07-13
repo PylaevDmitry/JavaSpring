@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.pylaev.toDoProject.businessLogicLayer.UiState;
-import ru.pylaev.toDoProject.businessLogicLayer.UiStateService;
+import ru.pylaev.toDoProject.businessLogicLayer.State;
+import ru.pylaev.toDoProject.businessLogicLayer.StateService;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -17,8 +17,8 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
     private final TelegramBot bot;
 
     @Autowired
-    public TelegramBotUserInterface(UiState uiState, @Value("${botToken}") String token){
-        super(uiState);
+    public TelegramBotUserInterface(State state, @Value("${botToken}") String token){
+        super(state);
         bot = new TelegramBot(token, 1249988927);
     }
 
@@ -29,7 +29,7 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-        bot.send(uiState.getStep().toString());
+        bot.send(state.getStep().toString());
     }
 
     @Override
@@ -40,8 +40,8 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        view.setTasks(UiStateService.processUserInput(bot.Input, uiState));
-        view.setMessage(uiState.getStep().toString());
+        view.setTasks(StateService.processUserInput(bot.Input, state));
+        view.setMessage(state.getStep().toString());
         if (view.getTasks().length>0) {
             bot.send(Arrays.toString(view.getTasks()));
         }

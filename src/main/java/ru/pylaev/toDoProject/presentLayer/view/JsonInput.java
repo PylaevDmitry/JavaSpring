@@ -1,6 +1,6 @@
 package ru.pylaev.toDoProject.presentLayer.view;
 
-public class UserInput {
+public class JsonInput {
     private String content;
 
     public String getContent ( ) {

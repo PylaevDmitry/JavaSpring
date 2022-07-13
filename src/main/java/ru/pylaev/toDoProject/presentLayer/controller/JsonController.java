@@ -6,26 +6,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
-import ru.pylaev.toDoProject.businessLogicLayer.UiStateService;
-import ru.pylaev.toDoProject.businessLogicLayer.UiState;
-import ru.pylaev.toDoProject.presentLayer.view.UserInput;
+import ru.pylaev.toDoProject.businessLogicLayer.StateService;
+import ru.pylaev.toDoProject.businessLogicLayer.State;
+import ru.pylaev.toDoProject.presentLayer.view.JsonInput;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
 @Controller
 public class JsonController {
-    private final UiState uiState;
+    private final State state;
     private final View view = new View();
 
     @Autowired
-    public JsonController(UiState uiState, TaskRepository taskRepository) {
-        this.uiState = uiState;
+    public JsonController(State state, TaskRepository taskRepository) {
+        this.state = state;
     }
 
     @PostMapping("/sendJson")
-    public ResponseEntity<String> processUserInput (@RequestBody UserInput userInput) {
+    public ResponseEntity<String> processUserInput (@RequestBody JsonInput jsonInput) {
         try {
-            view.setTasks(UiStateService.processUserInput(userInput.getContent(), uiState));
-            view.setMessage(uiState.getStep().toString());
+            view.setTasks(StateService.processUserInput(jsonInput.getContent(), state));
+            view.setMessage(state.getStep().toString());
 
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : view.getTasks()) {

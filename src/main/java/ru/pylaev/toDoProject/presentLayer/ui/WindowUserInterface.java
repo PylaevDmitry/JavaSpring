@@ -2,9 +2,9 @@ package ru.pylaev.toDoProject.presentLayer.ui;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.pylaev.toDoProject.businessLogicLayer.UiState;
-import ru.pylaev.toDoProject.businessLogicLayer.UiStateService;
-import ru.pylaev.toDoProject.presentLayer.view.ViewToJScrollPaneWriter;
+import ru.pylaev.toDoProject.businessLogicLayer.State;
+import ru.pylaev.toDoProject.businessLogicLayer.StateService;
+import ru.pylaev.toDoProject.presentLayer.view.JScrollPaneWriter;
 
 import javax.swing.*;
 import java.util.concurrent.TimeUnit;
@@ -25,8 +25,8 @@ public class WindowUserInterface extends UserInterfaceBase {
     private MainWindow mainWindow;
 
     @Autowired
-    public WindowUserInterface(UiState uiState) {
-        super(uiState);
+    public WindowUserInterface(State state) {
+        super(state);
     }
 
     @Override
@@ -35,8 +35,8 @@ public class WindowUserInterface extends UserInterfaceBase {
         mainWindow.add(panel);
         textField.setHorizontalAlignment(JTextField.CENTER);
         textField.addActionListener(e -> {
-            view.setTasks(UiStateService.processUserInput(textField.getText(), uiState));
-            view.setMessage(uiState.getStep().toString());
+            view.setTasks(StateService.processUserInput(textField.getText(), state));
+            view.setMessage(state.getStep().toString());
             refreshPanel();
             textField.setText("");
         });
@@ -55,7 +55,7 @@ public class WindowUserInterface extends UserInterfaceBase {
 
     private void refreshPanel() {
         panel.removeAll();
-        panel.add(ViewToJScrollPaneWriter.write(view.getMessage(), view.getTasks()));
+        panel.add(JScrollPaneWriter.write(view.getMessage(), view.getTasks()));
         panel.add(textField);
         panel.repaint();
         mainWindow.setVisible(true);

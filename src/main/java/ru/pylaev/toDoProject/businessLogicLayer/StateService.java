@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UiStateService {
+public class StateService {
     private static TaskRepository taskRepository;
     private static List<Task> tasks = new ArrayList<>();
 
@@ -19,46 +19,46 @@ public class UiStateService {
         taskRepository = t;
     }
 
-    public static String[] processUserInput(String userInput, UiState uiState) {
+    public static String[] processUserInput(String userInput, State state) {
         if (userInput==null) {
             return new String[]{};
         }
         else if (userInput.equals("EXIT")) {
-            uiState.reset();
+            state.reset();
             return new String[]{};
         }
 
-        if (uiState.getOwner()==null) {
-            uiState.setCorrectOwner(userInput);
+        if (state.getOwner()==null) {
+            state.setCorrectOwner(userInput);
         }
 
-        return  getStepResult(userInput, uiState);
+        return  getStepResult(userInput, state);
     }
 
-    private static String[] getStepResult(String userInput, UiState uiState) {
-        switch (uiState.getStep()) {
+    private static String[] getStepResult(String userInput, State state) {
+        switch (state.getStep()) {
             case askNumber -> {
-                List<Task> tasksList = taskRepository.findByOwner(uiState.getOwner());
+                List<Task> tasksList = taskRepository.findByOwner(state.getOwner());
                 int index = validateIndex(userInput, tasksList.size());
-                if (index == 0) uiState.setStep(Step.askNew);
+                if (index == 0) state.setStep(Step.askNew);
                 else if (index > 0) {
-                    uiState.setStep(Step.askStatus);
-                    uiState.setCurrentTaskIndex(index);
+                    state.setStep(Step.askStatus);
+                    state.setCurrentTaskIndex(index);
                 }
                 tasks = tasksList;
             }
             case askNew -> {
-                int saveNewResult = taskRepository.saveNewTask(uiState.getOwner(), userInput);
-                uiState.setStep(Step.askNumber);
-                if (saveNewResult>0) tasks = taskRepository.findByOwner(uiState.getOwner());
+                int saveNewResult = taskRepository.saveNewTask(state.getOwner(), userInput);
+                state.setStep(Step.askNumber);
+                if (saveNewResult>0) tasks = taskRepository.findByOwner(state.getOwner());
             }
             case askStatus -> {
-                int changeStatusResult = taskRepository.updateTaskStatus(uiState.getOwner(), userInput, uiState.getCurrentTaskIndex());
+                int changeStatusResult = taskRepository.updateTaskStatus(state.getOwner(), userInput, state.getCurrentTaskIndex());
                 if (changeStatusResult>0) {
-                    uiState.setStep(Step.askNumber);
-                    tasks = taskRepository.findByOwner(uiState.getOwner());
+                    state.setStep(Step.askNumber);
+                    tasks = taskRepository.findByOwner(state.getOwner());
                 }
-                else if (changeStatusResult==0) uiState.setStep(Step.askNumber);
+                else if (changeStatusResult==0) state.setStep(Step.askNumber);
             }
         }
         return ListToNumberingArrayConverter.convert(tasks);

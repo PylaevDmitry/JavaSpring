@@ -9,7 +9,7 @@ import static ru.pylaev.util.InputChecker.inputInArray;
 
 @Component
 @Scope("prototype")
-public class UiState {
+public class State {
     public static final String[] invalidNameSymbols = new String[] {" ", "\\", "|", "/", ":", "?", "\"", "<", ">"};
 
     private Step step = Step.askOwner;
@@ -54,11 +54,11 @@ public class UiState {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UiState uiState = (UiState) o;
+        State state = (State) o;
 
-        if (currentTaskIndex != uiState.currentTaskIndex) return false;
-        if (!Objects.equals(step, uiState.step)) return false;
-        return Objects.equals(owner, uiState.owner);
+        if (currentTaskIndex != state.currentTaskIndex) return false;
+        if (!Objects.equals(step, state.step)) return false;
+        return Objects.equals(owner, state.owner);
     }
 
     @Override
