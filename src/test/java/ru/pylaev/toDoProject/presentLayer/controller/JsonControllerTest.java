@@ -11,8 +11,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.pylaev.toDoProject.ToDoMain;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
-import ru.pylaev.toDoProject.presentLayer.Messages;
-import ru.pylaev.toDoProject.presentLayer.view.View;
+import ru.pylaev.toDoProject.businessLogicLayer.Step;
+import ru.pylaev.toDoProject.businessLogicLayer.UiState;
 import ru.pylaev.util.DBDataSupplier;
 import ru.pylaev.util.HeadlessSpringBootContextLoader;
 
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -54,16 +55,17 @@ class JsonControllerTest {
         tasks.add(task2);
         tasks.add(task3);
 
-        View expectedView = new View();
-        expectedView.setOwner("user");
-        expectedView.setMessage(Messages.askNumber);
-
+        UiState expectedUiState = new UiState();
+        expectedUiState.setCorrectOwner("user");
+        expectedUiState.setStep(Step.askNumber);
+        String[] expectedTasks = tasks.stream().map(Task::toString).toArray(String[]::new);
+        IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
         StringBuilder stringBuilder = new StringBuilder();
-        for (String s : tasks.stream().map(Task::toString).toList()) {
+        for (String s : expectedTasks) {
             stringBuilder.append(s).append("\n");
         }
 
-        String expectedResult = stringBuilder + expectedView.getMessage().toString();
+        String expectedResult = stringBuilder + expectedUiState.getStep().toString();
 
         this.mvc.perform(post("/sendJson")
                         .contentType(MediaType.APPLICATION_JSON)

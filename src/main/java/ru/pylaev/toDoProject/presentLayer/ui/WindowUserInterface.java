@@ -2,14 +2,12 @@ package ru.pylaev.toDoProject.presentLayer.ui;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
-import ru.pylaev.toDoProject.dataAccessLayer.Task;
-import ru.pylaev.toDoProject.presentLayer.ViewHandler;
-import ru.pylaev.toDoProject.presentLayer.view.View;
+import ru.pylaev.toDoProject.businessLogicLayer.UiState;
+import ru.pylaev.toDoProject.businessLogicLayer.UiStateService;
 import ru.pylaev.toDoProject.presentLayer.view.ViewToJScrollPaneWriter;
 
 import javax.swing.*;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class WindowUserInterface extends UserInterfaceBase {
@@ -25,11 +23,10 @@ public class WindowUserInterface extends UserInterfaceBase {
     private final JTextField textField = new JTextField(72);
     private final JPanel panel = new JPanel();
     private MainWindow mainWindow;
-    private List<Task> tasks;
 
     @Autowired
-    public WindowUserInterface(View view, TaskRepository taskRepository) {
-        super(view, taskRepository);
+    public WindowUserInterface(UiState uiState) {
+        super(uiState);
     }
 
     @Override
@@ -38,7 +35,8 @@ public class WindowUserInterface extends UserInterfaceBase {
         mainWindow.add(panel);
         textField.setHorizontalAlignment(JTextField.CENTER);
         textField.addActionListener(e -> {
-            tasks = ViewHandler.processUserInput(textField.getText(), view, taskRepository);
+            view.setTasks(UiStateService.processUserInput(textField.getText(), uiState));
+            view.setMessage(uiState.getStep().toString());
             refreshPanel();
             textField.setText("");
         });
@@ -48,7 +46,7 @@ public class WindowUserInterface extends UserInterfaceBase {
     @Override
     public void processUserInput() {
         try {
-            Thread.sleep(250);
+            TimeUnit.MILLISECONDS.sleep(250);
         }
         catch (InterruptedException e) {
             e.printStackTrace();
@@ -57,7 +55,7 @@ public class WindowUserInterface extends UserInterfaceBase {
 
     private void refreshPanel() {
         panel.removeAll();
-        panel.add(ViewToJScrollPaneWriter.write(view, tasks));
+        panel.add(ViewToJScrollPaneWriter.write(view.getMessage(), view.getTasks()));
         panel.add(textField);
         panel.repaint();
         mainWindow.setVisible(true);

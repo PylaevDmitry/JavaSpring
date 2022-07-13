@@ -9,20 +9,20 @@
 <header th:insert="blocks/header::header"></header>
 
 <div class="container mt-5">
-    <div th:each="element: ${arrTasks}" class="alert alert-info mt-2">
+    <div th:each="element: ${tasks}" class="alert alert-info mt-2">
         <p th:text="${element}"></p>
     </div>
 </div>
 
-<p th:text="${view.getMessage()}" align="center"></p>
+<p th:text="${message}" align="center"></p>
 
 <form method="post">
     <input type="text" name="userInput" class="form-control">
 </form>
 
-<!--<form th:method="POST" th:action="@{/}" th:object="${view}">-->
+<!--<form th:method="POST" th:action="@{/}" th:object="${state}">-->
 <!--    <label for="inputField">Enter input:</label>-->
-<!--    <input id="inputField" type="text" th:field="${view.answer}"/>-->
+<!--    <input id="inputField" type="text" th:field="${state.answer}"/>-->
 <!--    <br/>-->
 <!--    <input type="submit" value="send"/>-->
 <!--</form>-->

@@ -51,31 +51,31 @@ class TaskRepositoryTest {
 
     @Test
     void getActualTasks() {
-        assertEquals(taskRepository.findByOwner("user"), tasks);
+        assertEquals(tasks, taskRepository.findByOwner("user"));
     }
 
     @Test
     void saveNewIsOk() {
-        assertEquals(taskRepository.saveNewTask("user", "note1"), 1);
+        assertEquals(1, taskRepository.saveNewTask("user", "note1"));
     }
 
     @Test
     void saveNewIsRejected() {
-        assertEquals(taskRepository.saveNewTask("user", "BACK"), 0);
+        assertEquals(0, taskRepository.saveNewTask("user", "BACK"));
     }
 
     @Test
     void changeStatusOK() {
-        assertEquals(taskRepository.updateTaskStatus("user", "DONE", 1), 1);
+        assertEquals(1, taskRepository.updateTaskStatus("user", "DONE", 1));
     }
 
     @Test
     void changeStatusBack() {
-        assertEquals(taskRepository.updateTaskStatus("user", "BACK", 1), 0);
+        assertEquals(0, taskRepository.updateTaskStatus("user", "BACK", 1));
     }
 
     @Test
     void changeStatusReject() {
-        assertEquals(taskRepository.updateTaskStatus("user", "invalidStatus", 1), -1);
+        assertEquals(-1, taskRepository.updateTaskStatus("user", "invalidStatus", 1));
     }
 }

@@ -10,8 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
-import ru.pylaev.toDoProject.presentLayer.Messages;
-import ru.pylaev.toDoProject.presentLayer.view.View;
+import ru.pylaev.toDoProject.businessLogicLayer.Step;
 import ru.pylaev.util.DBDataSupplier;
 import ru.pylaev.util.HeadlessSpringBootContextLoader;
 
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,12 +42,10 @@ class HtmlControllerTest {
 
     @Test
     void show() throws Exception {
-        View expectedView = new View();
-
         this.mvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("view"))
-                .andExpect(model().attribute("view", expectedView));
+                .andExpect(model().attributeExists("message"))
+                .andExpect(model().attribute("message", Step.askOwner));
     }
 
     @Test
@@ -61,17 +59,17 @@ class HtmlControllerTest {
         tasks.add(task2);
         tasks.add(task3);
 
-        View expectedView = new View();
-        expectedView.setOwner("user");
-        expectedView.setMessage(Messages.askNumber);
+        String[] expectedTasks = tasks.stream().map(Task::toString).toArray(String[]::new);
+        IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
 
         this.mvc.perform(post("/").param("userInput", "user"))
                 .andExpect(status().is(302));
 
         this.mvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("view"))
-                .andExpect(model().attribute("view", expectedView))
-                .andExpect(model().attribute("arrTasks", tasks));
+                .andExpect(model().attributeExists("message"))
+                .andExpect(model().attribute("message", Step.askNumber))
+                .andExpect(model().attributeExists("tasks"))
+                .andExpect(model().attribute("tasks", expectedTasks));
     }
 }

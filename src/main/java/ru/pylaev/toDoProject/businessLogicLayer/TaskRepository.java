@@ -2,7 +2,7 @@ package ru.pylaev.toDoProject.businessLogicLayer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import ru.pylaev.toDoProject.dataAccessLayer.DAO;
 import ru.pylaev.toDoProject.dataAccessLayer.Task;
 import ru.pylaev.util.InputChecker;
@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Repository
 @Scope("prototype")
 public class TaskRepository {
     private static final String[] tasksStates = new String[] {"ARCH", "DONE", "WAIT"};

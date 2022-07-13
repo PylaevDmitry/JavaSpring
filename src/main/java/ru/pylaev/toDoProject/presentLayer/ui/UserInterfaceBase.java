@@ -1,15 +1,14 @@
 package ru.pylaev.toDoProject.presentLayer.ui;
 
-import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
+import ru.pylaev.toDoProject.businessLogicLayer.UiState;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
 public abstract class UserInterfaceBase {
     protected View view;
-    protected final TaskRepository taskRepository;
+    protected UiState uiState;
 
-    public UserInterfaceBase(View view, TaskRepository taskRepository) {
-        this.view = view;
-        this.taskRepository = taskRepository;
+    public UserInterfaceBase(UiState uiState) {
+        this.uiState = uiState;
     }
 
     public abstract void showStartView();

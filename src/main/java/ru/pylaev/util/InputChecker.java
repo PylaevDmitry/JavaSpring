@@ -22,8 +22,4 @@ public class InputChecker {
         }
         else return 0;
     }
-
-    public static boolean checkInput(String input, String userInput, String[] invalidNameSymbols) {
-        return input == null && (inputInArray(userInput, invalidNameSymbols) < 0);
-    }
 }

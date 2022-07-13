@@ -1,8 +1,8 @@
-package ru.pylaev.toDoProject.presentLayer;
+package ru.pylaev.toDoProject.businessLogicLayer;
 
 import ru.pylaev.toDoProject.ToDoMain;
 
-public enum Messages {
+public enum Step {
     askOwner(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askOwner")),
     askNumber(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNumber")),
     askNew(ToDoMain.CUSTOM_PROPERTIES.getPropertyContent("askNew")),
@@ -10,7 +10,7 @@ public enum Messages {
 
     private final String content;
 
-    Messages(String content) {
+    Step(String content) {
         this.content = content;
     }
 

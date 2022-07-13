@@ -6,34 +6,32 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
-import ru.pylaev.toDoProject.dataAccessLayer.Task;
-import ru.pylaev.toDoProject.presentLayer.ViewHandler;
+import ru.pylaev.toDoProject.businessLogicLayer.UiStateService;
+import ru.pylaev.toDoProject.businessLogicLayer.UiState;
 import ru.pylaev.toDoProject.presentLayer.view.UserInput;
 import ru.pylaev.toDoProject.presentLayer.view.View;
 
-import java.util.List;
-
 @Controller
 public class JsonController {
-    private final View view;
-    private final TaskRepository taskRepository;
+    private final UiState uiState;
+    private final View view = new View();
 
     @Autowired
-    public JsonController(View view, TaskRepository taskRepository) {
-        this.view = view;
-        this.taskRepository = taskRepository;
+    public JsonController(UiState uiState, TaskRepository taskRepository) {
+        this.uiState = uiState;
     }
 
     @PostMapping("/sendJson")
     public ResponseEntity<String> processUserInput (@RequestBody UserInput userInput) {
         try {
-            List<Task> tasks = ViewHandler.processUserInput(userInput.getContent(), view, taskRepository);
+            view.setTasks(UiStateService.processUserInput(userInput.getContent(), uiState));
+            view.setMessage(uiState.getStep().toString());
 
             StringBuilder stringBuilder = new StringBuilder();
-            for (String s : tasks.stream().map(Task::toString).toList()) {
+            for (String s : view.getTasks()) {
                 stringBuilder.append(s).append("\n");
             }
-            return ResponseEntity.ok(stringBuilder + view.getMessage().toString());
+            return ResponseEntity.ok(stringBuilder + view.getMessage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Произошла ошибка: " + e.getMessage());
         }

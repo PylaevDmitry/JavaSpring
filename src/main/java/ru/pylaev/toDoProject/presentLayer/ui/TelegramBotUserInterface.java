@@ -6,12 +6,10 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.pylaev.toDoProject.businessLogicLayer.TaskRepository;
-import ru.pylaev.toDoProject.dataAccessLayer.Task;
-import ru.pylaev.toDoProject.presentLayer.ViewHandler;
-import ru.pylaev.toDoProject.presentLayer.view.View;
+import ru.pylaev.toDoProject.businessLogicLayer.UiState;
+import ru.pylaev.toDoProject.businessLogicLayer.UiStateService;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -19,8 +17,8 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
     private final TelegramBot bot;
 
     @Autowired
-    public TelegramBotUserInterface(View view, TaskRepository taskRepository, @Value("${botToken}") String token){
-        super(view, taskRepository);
+    public TelegramBotUserInterface(UiState uiState, @Value("${botToken}") String token){
+        super(uiState);
         bot = new TelegramBot(token, 1249988927);
     }
 
@@ -31,7 +29,7 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-        bot.send(view.getMessage().toString());
+        bot.send(uiState.getStep().toString());
     }
 
     @Override
@@ -42,11 +40,11 @@ public class TelegramBotUserInterface extends UserInterfaceBase {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        List<Task> tasks = ViewHandler.processUserInput(bot.Input, view, taskRepository);
-        if (tasks.size()>0) {
-            bot.send(String.valueOf(tasks));
+        view.setTasks(UiStateService.processUserInput(bot.Input, uiState));
+        view.setMessage(uiState.getStep().toString());
+        if (view.getTasks().length>0) {
+            bot.send(Arrays.toString(view.getTasks()));
         }
-
-        bot.send(view.getMessage().toString());
+        bot.send(view.getMessage());
     }
 }
