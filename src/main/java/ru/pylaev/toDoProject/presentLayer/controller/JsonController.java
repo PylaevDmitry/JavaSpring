@@ -10,13 +10,14 @@ import ru.pylaev.toDoProject.businessLogicLayer.State;
 import ru.pylaev.toDoProject.businessLogicLayer.StateService;
 import ru.pylaev.toDoProject.presentLayer.BaseUI;
 import ru.pylaev.toDoProject.presentLayer.view.JsonInput;
+import ru.pylaev.toDoProject.presentLayer.view.View;
 
 @Controller
 public class JsonController extends BaseUI {
 
     @Autowired
-    public JsonController(State state) {
-        super(state);
+    public JsonController(State state, View view) {
+        super(state, view);
     }
 
     @PostMapping("/sendJson")

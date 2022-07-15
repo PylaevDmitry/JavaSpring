@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.businessLogicLayer.State;
 import ru.pylaev.toDoProject.businessLogicLayer.StateService;
+import ru.pylaev.toDoProject.presentLayer.view.View;
 
 import javax.swing.*;
 import java.util.concurrent.TimeUnit;
@@ -24,8 +25,8 @@ public class WindowUserInterface extends RunUI {
     private MainWindow mainWindow;
 
     @Autowired
-    public WindowUserInterface(State state) {
-        super(state);
+    public WindowUserInterface(State state, View view) {
+        super(state, view);
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.pylaev.toDoProject.businessLogicLayer.State;
 import ru.pylaev.toDoProject.businessLogicLayer.StateService;
+import ru.pylaev.toDoProject.presentLayer.view.View;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -17,8 +18,8 @@ public class TelegramUserInterface extends RunUI {
     private final TelegramBot bot;
 
     @Autowired
-    public TelegramUserInterface(State state, @Value("${botToken}") String token){
-        super(state);
+    public TelegramUserInterface(State state, View view, @Value("${botToken}") String token){
+        super(state, view);
         bot = new TelegramBot(token, 1249988927);
     }
 

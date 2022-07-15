@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.businessLogicLayer.State;
 import ru.pylaev.toDoProject.businessLogicLayer.StateService;
+import ru.pylaev.toDoProject.presentLayer.view.View;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -13,8 +14,8 @@ public class ConsoleUserInterface extends RunUI {
     private final Scanner scanner = new Scanner((System.in)).useDelimiter("\n");
 
     @Autowired
-    public ConsoleUserInterface (State state) {
-        super(state);
+    public ConsoleUserInterface(State state, View view) {
+        super(state, view);
     }
 
     @Override

@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 //@Component
 public class ConnectionBuilder {
-
     private static final CustomProperties APPLICATION_PROPERTIES = new CustomProperties("application");
     private static final String dbUser = APPLICATION_PROPERTIES.getPropertyContent("spring.datasource.username");
     private static final String dbPass = APPLICATION_PROPERTIES.getPropertyContent("spring.datasource.password");

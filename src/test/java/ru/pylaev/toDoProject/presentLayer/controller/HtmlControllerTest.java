@@ -60,7 +60,6 @@ class HtmlControllerTest {
         tasks.add(task2);
         tasks.add(task3);
 
-
         String[] expectedTasks = tasks.stream().map(Task::toString).toArray(String[]::new);
         IntStream.range(0, expectedTasks.length).forEach(i -> expectedTasks[i] = i + 1 + " " + expectedTasks[i]);
         View expectedView = new View();

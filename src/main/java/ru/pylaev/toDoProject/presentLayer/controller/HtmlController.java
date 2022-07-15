@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.pylaev.toDoProject.businessLogicLayer.State;
 import ru.pylaev.toDoProject.businessLogicLayer.StateService;
 import ru.pylaev.toDoProject.presentLayer.BaseUI;
+import ru.pylaev.toDoProject.presentLayer.view.View;
 
 @Controller
 public class HtmlController extends BaseUI {
 
     @Autowired
-    public HtmlController(State state) {
-        super(state);
+    public HtmlController(State state, View view) {
+        super(state, view);
     }
 
     @GetMapping

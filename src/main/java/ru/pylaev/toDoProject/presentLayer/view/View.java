@@ -1,10 +1,14 @@
 package ru.pylaev.toDoProject.presentLayer.view;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import ru.pylaev.toDoProject.businessLogicLayer.Step;
 
 import java.util.Arrays;
 import java.util.Objects;
 
+@Component
+@Scope("prototype")
 public class View {
     private String owner;
     private String[] tasks;
